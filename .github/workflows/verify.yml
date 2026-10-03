@@ -15,3 +15,7 @@ jobs:
         run: bash tools/synth.sh
       - name: ROM component lint
         run: verilator --lint-only --top-module starcastle_rom -Wall -Wno-UNUSEDSIGNAL rtl/games/starcastle_rom.sv
+      - name: Vector rasterizer, framebuffer and video integration tests
+        run: bash sim/run_vector.sh
+      - name: Vector component synthesis
+        run: bash tools/synth_vector.sh

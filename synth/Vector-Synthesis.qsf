@@ -1,0 +1,10 @@
+# Component analysis/synthesis only; not a loadable MiSTer project.
+set_global_assignment -name FAMILY "Cyclone V"
+set_global_assignment -name DEVICE 5CSEBA6U23I7
+set_global_assignment -name TOP_LEVEL_ENTITY vector_video
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY ../build/quartus-vector
+set_global_assignment -name SYSTEMVERILOG_FILE ../rtl/vector/vector_line.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../rtl/vector/vector_framebuffer.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../rtl/vector/vector_video.sv
+set_global_assignment -name SDC_FILE CCPU-Synthesis.sdc
+set_global_assignment -name NUM_PARALLEL_PROCESSORS 4

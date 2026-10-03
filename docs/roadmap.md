@@ -4,6 +4,8 @@
    component synthesis. Add regression tests before changing CPU semantics.
 2. **Vector output**: capture complete game frames, implement clipped raster
    lines and a framebuffer, compare simulation output to reference frames.
+   Baseline completed: end-to-end frame pixels match the integer raster model.
+   Display calibration, persistence and live machine timing remain follow-ups.
 3. **Star Castle machine**: clock and frame timers, coin latch, DIP switches,
    controls, watchdog, reset and vector intensity.
 4. **MiSTer build**: import a pinned platform framework with licenses, add

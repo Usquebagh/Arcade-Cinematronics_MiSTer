@@ -5,7 +5,7 @@ The intended progression is Star Castle, Rip Off, Armor Attack, Solar Quest,
 then the other CCPU games after their controls, sound and board differences
 have been implemented and checked.
 
-**Current milestone: instruction-functional CCPU baseline. There is no
+**Current milestone: tested CCPU and vector framebuffer. There is no
 playable MiSTer core or installable RBF yet.**
 
 Implemented:
@@ -19,15 +19,19 @@ Implemented:
   BSD-licensed MAME reference. Tests include every opcode and an optional run
   with the locally supplied game ROM.
 - Component synthesis checks for Yosys and Quartus Lite 17.0.2.
+- Clipped line rasterizer and double-buffered 512x384, 16-level grayscale
+  framebuffer with synchronous scanout and overlap intensity preservation.
+- End-to-end captured-frame tests and a reproducible simulation preview.
 
 The MAME-compatible CPU behavior is a starting point. Physical CPU timing,
-draw-busy timing, watchdog integration, the vector framebuffer, sound,
+draw-busy timing, watchdog integration, calibrated intensity/persistence, sound,
 MiSTer platform integration and on-device gameplay remain to be established.
 QB-3's banking and video differences are outside this baseline.
 
 ## Run the tests
 
-From Linux or WSL, with Python 3, Verilator, GNU Make and a C++ compiler:
+From Linux or WSL, with Python 3, Verilator, Icarus Verilog, Yosys, GNU Make
+and a C++ compiler:
 
 ```sh
 bash sim/run.sh
@@ -35,6 +39,11 @@ python3 tools/prepare_starcastle.py games/mame/starcas.zip
 bash sim/run.sh build/roms/starcastle.bin
 bash tools/synth.sh
 bash tools/synth.sh --quartus
+bash sim/run_vector.sh
+bash sim/run.sh build/roms/starcastle.bin build/vectors.csv
+bash sim/run_vector.sh build/vectors.csv build/vector/starcastle.pgm
+python3 tools/preview_vector.py build/vector/starcastle.pgm build/vector/starcastle.png
+bash tools/synth_vector.sh --quartus
 ```
 
 The optional Quartus check uses the Docker image

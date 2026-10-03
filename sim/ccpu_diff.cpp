@@ -143,11 +143,26 @@ int main(int argc,char** argv) {
                   << " vectors, " << frames << " frame wakes\n";
         if(argc>1) {
             Test test;
+            // Star Castle's service switch is active-high (switch input 6).
+            // Leave controls/coin idle, but service OFF for attract mode.
+            test.ref.inputs=0xbfffff;
+            std::ofstream capture;
+            if(argc>2) {
+                capture.open(argv[2]);
+                if(!capture) throw std::runtime_error("Cannot open vector capture output");
+                capture << "frame,x0,y0,x1,y1,intensity\n";
+            }
             std::ifstream in(argv[1],std::ios::binary);
             if(!in || !in.read(reinterpret_cast<char*>(test.ref.rom.data()),8192))
                 throw std::runtime_error("Expected an 8192-byte Star Castle ROM image");
             test.reset();unsigned long before=total,initial_vectors=vectors,initial_frames=frames;
-            for(unsigned count=0;count<250000;++count) test.step();
+            for(unsigned count=0;count<2000000;++count) {
+                test.step();
+                if(capture && test.ref.vector)
+                    capture << frames-initial_frames << ',' << test.ref.line[0] << ','
+                            << test.ref.line[1] << ',' << test.ref.line[2] << ','
+                            << test.ref.line[3] << ',' << ((test.cpu.outputs&64)?128:255) << '\n';
+            }
             if(vectors-initial_vectors<100 || frames-initial_frames<2)
                 throw std::runtime_error("Star Castle did not produce expected vector/frame activity");
             std::cout << "PASS: Star Castle " << total-before << " retirements, "

@@ -1,7 +1,8 @@
 # Initial architecture
 
-The CCPU executes game code and emits vector segments. A future renderer will
-convert those segments into a framebuffer for MiSTer video. Game I/O and sound
+The CCPU executes game code and emits vector segments. The vector renderer
+converts those segments into a framebuffer with a synchronous grayscale scanout.
+Game I/O and sound
 sit alongside the CPU, selected by game configuration.
 
 ## CPU component contract
@@ -51,11 +52,42 @@ expanding the game family.
   thrust/fire at 10/12, switch shuffle and latched coin detection.
 - Output bit 6 selects normal/bright vector intensity; other outputs feed
   game-specific sound and the coin reset latch.
-- Segment FIFO, clipped line rasterizer and framebuffer presentation, followed
-  by persistence, intensity calibration and optional cabinet overlay.
+- Connect the renderer to machine frames and video timing; add persistence,
+  point-intensity handling, intensity calibration and optional cabinet overlay.
 - MiSTer `emu` wrapper, HPS ROM download, OSD controls, reset and platform video.
 - Sound modeled from the supplied Star Castle circuitry, with comparison to
   the reference circuit model and on-device testing.
 
 The existing Jedi and Fire Trap repositories are build/platform examples.
 Their raster video and CPU designs do not implement this vector architecture.
+
+## Vector video component
+
+`rtl/vector/vector_video.sv` connects the line rasterizer to the framebuffer.
+Signed CCPU coordinates are divided by two using arithmetic shift, giving a
+512x384 viewport. Bresenham steps retain the line's slope through clipped
+regions; writes outside the viewport are suppressed and segments wholly on
+one outside side are rejected. Off-screen crossing segments still consume
+step cycles. Endpoints are inclusive; a zero-length vector emits one pixel.
+Visible pixels remain stable while the framebuffer stalls them.
+
+Each framebuffer bank has 65,536 16-bit words, with four adjacent 4-bit pixels
+per word. Only the first 384 rows are displayed. Two explicit banks allow a
+single read port per bank: the draw port reads one bank while scanout reads
+the other. Pixel updates use read/modify/write, keeping the brighter value
+where vectors overlap. Intensity is quantized to the upper nibble and scanout
+expands it by multiplication by 17; 128 becomes 136 and 255 stays 255.
+
+Reset clears both physical banks before accepting segments. A `frame_valid`
+request drains the active line and pending framebuffer write, swaps the banks,
+and pulses `frame_presented`. The new drawing bank's visible area is then
+cleared before accepting more lines. Scanout remains independent while clearing.
+`scan_gray` corresponds to `scan_x/scan_y` sampled on the preceding rising
+edge. Y inversion belongs to the scanout caller; the preview inverts it.
+
+This interface is not yet connected to a live CPU/machine wrapper or MiSTer
+video timing. The capture test replays retired, reference-checked CPU segments
+through the RTL video component. FRM groups the capture's frames; the final
+instruction-limited group is incomplete and excluded from framebuffer checks.
+Timing is not real-time in this capture path. No antialiasing, phosphor decay,
+cabinet overlay or normalization-dependent point brightness is implemented yet.
