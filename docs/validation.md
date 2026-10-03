@@ -1,0 +1,47 @@
+# Validation record - 2026-10-03
+
+Development baseline; not an on-device gameplay result.
+
+## Executed locally
+
+Environment: Ubuntu 24.04 through WSL; Verilator 5.020; Icarus Verilog;
+Yosys; Docker image `theypsilon/quartus-lite-c5:17.0.2`.
+
+| Check | Result |
+| --- | --- |
+| All 256 opcode values, 12 setup variations each | Pass |
+| Differential register, flag, RAM-write, output and vector checks | 910,862 synthetic instruction retirements pass |
+| Vector output holds during backpressure and stalls the next draw | Pass |
+| Signed vector normalization | Pass |
+| Duplicate E5/F5 frame-wait bytes and frame wake | Pass |
+| Star Castle v3 chip size, CRC32, SHA-1 and interleave | Pass |
+| Real-ROM execution against pinned reference | 250,000 retirements pass; 823 vectors; 30 frame wakes |
+| Synchronous ROM writes and all 65,536 logical read addresses | Pass |
+| Verilator CPU lint during build | Pass; intentional unused-bit warnings suppressed |
+| Verilator ROM lint | Pass |
+| Yosys CPU synthesis and netlist check | Pass; no latches or structural errors |
+| Quartus 17.0.2 component analysis and synthesis, Cyclone V | Pass; 5,519 logic cells; zero errors |
+
+Quartus reports three warnings: unspecified parallel processor count and a
+two-message warning for unused `external_input`. The latter is expected because
+the Star Castle JMI configuration selects the internal delayed minus flag.
+
+The differential oracle is the original pinned MAME instruction function.
+Agreement establishes compatibility with that reference, not independent
+proof of every behavior of the physical board. The generic non-JMI variant
+has not been separately tested. Synthetic tests initialize data RAM through
+software. The real-ROM simulation starts with Verilator's zero-valued RAM;
+physical startup RAM contents remain an integration check.
+
+## Still unverified or unimplemented
+
+- Quartus fitting, resource use of a complete machine, and timing closure.
+- Full MiSTer top-level project, HPS downloads, MRA and an installable RBF.
+- Framebuffer/rasterizer, physical vector timing, intensity and persistence.
+- Controls, coin latch, watchdog, exact machine/frame clocks and sound.
+- Playability and sustained operation on a DE10-Nano.
+- Other games and special memory configurations, including QB-3.
+
+To reproduce the game run, provide the local `starcas.zip` and execute the
+commands in the README. No game ROMs are available in the repository or CI.
+Build logs and generated images live under ignored `build/`.

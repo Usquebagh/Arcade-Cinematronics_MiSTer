@@ -1,0 +1,16 @@
+# User-supplied archival material and ROMs stay local.
+/Documentation/
+/games/
+/*.url
+/Project Brief for MiSTer FPGA .rbf core build.txt
+/tmp/
+/build/
+/output_files/
+db/
+incremental_db/
+*.qws
+*.rbf
+*.sof
+*.vcd
+__pycache__/
+*.pyc

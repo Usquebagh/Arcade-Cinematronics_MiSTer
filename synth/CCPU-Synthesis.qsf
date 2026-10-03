@@ -1,0 +1,8 @@
+# Component synthesis target only; this is not a loadable MiSTer project.
+set_global_assignment -name FAMILY "Cyclone V"
+set_global_assignment -name DEVICE 5CSEBA6U23I7
+set_global_assignment -name TOP_LEVEL_ENTITY ccpu
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY ../build/quartus
+set_global_assignment -name SYSTEMVERILOG_FILE ../rtl/ccpu/ccpu.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../rtl/games/starcastle_rom.sv
+set_global_assignment -name SDC_FILE CCPU-Synthesis.sdc

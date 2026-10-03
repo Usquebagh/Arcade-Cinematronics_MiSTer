@@ -1,0 +1,17 @@
+name: Verify CPU foundation
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  simulation:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install HDL tools
+        run: sudo apt-get update && sudo apt-get install -y verilator iverilog yosys
+      - name: CPU differential tests without game ROMs
+        run: bash sim/run.sh
+      - name: Component synthesis
+        run: bash tools/synth.sh
+      - name: ROM component lint
+        run: verilator --lint-only --top-module starcastle_rom -Wall -Wno-UNUSEDSIGNAL rtl/games/starcastle_rom.sv
