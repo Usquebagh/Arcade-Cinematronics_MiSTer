@@ -108,6 +108,9 @@ existing references while capturing the game's own sound commands. The
 6,392. The optional game WAV is local only and is not uploaded. The MRA and
 program ROM layout are unchanged by sound integration.
 
-Hardware listening validation is pending for the sound-enabled RBF. Test
+The sound-enabled RBF passes full Quartus fitting and the timing gate, with
+worst setup slack +0.268 ns and zero reported TNS. It has been installed with
+its matching MRA and launched on MiSTer Main version 260912; Main identifies
+the core as `starcas`. Hardware listening validation remains pending. Test
 thrust, player fire, shield hits, castle cannon, destruction and background
 pitch progression; check mono output on both channels, OSD reset and reload.

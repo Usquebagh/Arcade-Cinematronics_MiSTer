@@ -1,18 +1,19 @@
 # Star Castle development build
 
-This is the first MiSTer integration build, intended for initial hardware tests.
-It has grayscale video and coin/start/gameplay controls. Audio is silent; frame
+The current `_sound` revision adds eight synthesized sound effects to the
+grayscale video and coin/start/gameplay controls. It passes simulation, fitting
+and reported internal timing, and has launched on MiSTer Main version 260912.
+Hardware listening is pending. The sound model is a behavioral approximation;
+its fidelity and channel balance still need calibration. Frame
 tearing is possible because game-frame presentation is not yet synchronized
-to display blanking. Attract mode and gameplay have been checked in simulation.
-FPGA configuration and core identification have now passed on a MiSTer with
-Main version 260912. The user completed a full game on hardware successfully,
-with grayscale video and silent audio as expected for this build.
+to display blanking. The original silent build is retained for rollback; the
+user completed a full game with that build on hardware.
 
 Copy these files to your MiSTer SD card:
 
 | File | Destination |
 | --- | --- |
-| `Arcade-Cinematronics_20261004.rbf` | `_Arcade/cores/` |
+| `Arcade-Cinematronics_20261004_sound.rbf` | `_Arcade/cores/` |
 | `Star Castle (version 3).mra` | `_Arcade/` |
 | Your own `starcas.zip` | `_Arcade/mame/` |
 
@@ -26,12 +27,13 @@ That caused the first reported launch failure: both installed files were HTML.
 Replacing them with the verified XML and bitstream allowed the core to start.
 
 The build/source identity and RBF SHA-256 are in
-`Arcade-Cinematronics_20261004.json`. No game ROM bytes are embedded in the
+`Arcade-Cinematronics_20261004_sound.json`. No game ROM bytes are embedded in the
 RBF or included in this repository; the MRA downloads your ROM at launch.
 See [integration and validation](../docs/mister-integration.md) for details.
 
 For hardware feedback, record the RBF hash and whether the picture, attract
-mode, coin/start, controls, OSD reset and extended runs behave correctly.
+mode, coin/start, controls, thrust/fire/explosion/shield/background sounds,
+OSD reset and extended runs behave correctly.
 
 If launching the MRA immediately returns to the MiSTer menu, copy
 [`check_mister_install.sh`](../tools/check_mister_install.sh) to `Scripts/`

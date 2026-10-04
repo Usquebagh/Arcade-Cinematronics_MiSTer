@@ -6,8 +6,8 @@ then the other CCPU games after their controls, sound and board differences
 have been implemented and checked.
 
 **Current milestone: Star Castle has passed a full-game hardware test.
-The sound board is now connected and passes simulation; the sound-enabled
-hardware build and listening test are the next validation steps.**
+The sound-enabled build passes simulation, fitting and reported timing, and
+has been installed and launched on MiSTer. Hardware listening is pending.**
 
 Implemented:
 

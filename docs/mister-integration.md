@@ -154,3 +154,24 @@ updates its RC/VCO/noise model at 96 kHz. It resets on hard reset or ROM downloa
 but does not reset on the CPU watchdog's soft recovery. There are no extra
 MRA downloads or sound ROMs. The OSD version suffix `sound` identifies this
 revision. Model fidelity and listening checks are described in [sound](sound.md).
+
+### Sound-enabled build evidence, 2026-10-04
+
+Source commit `1907fda98204c52f688d595b34081df00fe3bd7d` builds successfully
+with zero errors, 70 warnings and zero critical warnings. The sound-enabled
+RBF is 3,298,884 bytes; its SHA-256 is
+`67a87985d6c6713c9b83ea7a1652b8b3b101c97d6612f434a794101c47a297e1`.
+The manifest and fit/timing summaries are packaged alongside it in `releases/`.
+
+The fitter uses 11,056 ALMs (26%), 15,941 registers, 322 RAM blocks (58%),
+77 DSP blocks (69%) and three PLLs. Worst reported slack is +0.268 ns setup,
++0.243 ns hold, +3.744 ns recovery, +0.933 ns removal and +1.122 ns minimum
+pulse width. All reported TNS is zero, with no illegal or unconstrained clocks.
+The external-interface constraint limitations above still apply.
+
+Sound control/sample tests, connected machine synthesis, MiSTer platform tests
+and the real-game 28-frame machine regression pass. ROM-free GitHub CI passes.
+On the analogue-I/O MiSTer running Main 260912, the installed RBF and MRA
+hashes match the package. Main launches the `_sound.rbf` through the MRA and
+identifies `starcas`. Hardware listening is pending; startup alone does not
+establish audible output or analog fidelity.

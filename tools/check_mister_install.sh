@@ -5,7 +5,8 @@
 set -u
 export LC_ALL=C
 card_root=${1:-/media/fat}
-expected_sha=393ca1aad7d80ac1e8c15a98ed8d38ff12780041dba9b6fff4948d9753221c0d
+expected_sha=67a87985d6c6713c9b83ea7a1652b8b3b101c97d6612f434a794101c47a297e1
+silent_sha=393ca1aad7d80ac1e8c15a98ed8d38ff12780041dba9b6fff4948d9753221c0d
 
 printf 'Cinematronics installation check\nStorage: %s\n' "$card_root"
 if [ ! -d "$card_root" ]; then
@@ -65,9 +66,11 @@ check_mra() {
         printf 'Download the raw file from GitHub; saving the file page saves HTML.\n'
     fi
     if [ "$actual_sha" = "$expected_sha" ]; then
-        printf 'PASS: identical to development build 20261004\n'
+        printf 'PASS: identical to sound-enabled development build 20261004\n'
+    elif [ "$actual_sha" = "$silent_sha" ]; then
+        printf 'PASS: identical to original silent development build 20261004\n'
     else
-        printf 'FAIL: not identical to development build 20261004\n'
+        printf 'FAIL: not identical to either verified development build 20261004\n'
     fi
 }
 
