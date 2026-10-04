@@ -120,8 +120,11 @@ module starcastle_sound #(
     wire signed [24:0] fireball_product = fireball_source * $signed({1'b0,fireball_env[23:16]});
     wire signed [31:0] shield_voice = !sound_latch[1] && square_phase[23] ?
                                         (noise_source >>> 11) + ($signed({{16{square_wave[15]}},square_wave}) >>> 3) : 32'sd0;
-    wire signed [31:0] noise_mix = ($signed({{7{soft_product[24]}},soft_product}) >>> 11) +
-                                    ($signed({{7{loud_product[24]}},loud_product}) >>> 10) +
+    // The heavily low-pass-filtered explosion noise needs more gain than
+    // the tonal voices. The previous shifts buried short blasts under the
+    // laser/drone: soft +24 dB, loud +12 dB, with mixer headroom checked.
+    wire signed [31:0] noise_mix = ($signed({{7{soft_product[24]}},soft_product}) >>> 7) +
+                                    ($signed({{7{loud_product[24]}},loud_product}) >>> 8) +
                                     ($signed({{7{thrust_product[24]}},thrust_product}) >>> 9) +
                                     ($signed({{7{fireball_product[24]}},fireball_product}) >>> 11) + shield_voice;
     wire signed [31:0] bg_source = sound_latch[4] ? 32'sd0 :

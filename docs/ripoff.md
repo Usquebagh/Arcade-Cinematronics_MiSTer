@@ -1,5 +1,9 @@
 # Rip Off
 
+**Hardware status: bootable but otherwise untested/WIP.** The user confirmed
+it boots and plays on MiSTer. Gameplay, two-player operation and sound have
+not been validated; no conclusion about sound fidelity is implied.
+
 Rip Off shares the JMI CCPU configuration and mirrored 8 KiB program map with
 Star Castle. The CPU, timing, watchdog, ROM RAM, vector queue and renderer are
 shared in `cinemat_machine`. Compatibility wrappers keep the existing Star
@@ -59,6 +63,10 @@ OTA gains, mixer levels, loading, nonlinearities and analog coupling need
 calibration against recordings or an original board. MAME's netlist also
 contains explicitly documented switching/gain workarounds; no claim of exact
 netlist waveform agreement is made. No audio samples or sound ROMs are used.
+The filtered explosion was raised by 12 dB alongside the Star Castle fix;
+its isolated RMS is about 1635, comparable to the laser and beep. Short
+triggers and simultaneous-voice headroom pass simulation. Rip Off sound
+remains untested on hardware.
 
 ## References and Verification
 

@@ -53,12 +53,15 @@ int main(int argc,char** argv) {
             }
             require(samples==4800,"50MHz sample enable rate is wrong");
             std::cout<<"PASS: 50 MHz -> exact-average 96 kHz, 4800 samples and 520/521-clock intervals\n";
-            t.reset();t.rtl.outputs&=~2;t.tick();require(!t.sample,"Pulse test coincides with audio enable");
-            t.rtl.outputs|=2;t.tick();require(!t.sample,"Pulse test spans an audio enable");
-            std::vector<int16_t> pulse;
-            while(pulse.size()<9600) {auto s=t.tick();if(t.sample)pulse.push_back(s);}
-            require(rms(pulse)>20,"20ns trigger between audio enables was lost");
-            std::cout<<"PASS: 20 ns explosion trigger survives between audio samples\n";return 0;
+            for(unsigned bit : {2U,1U}) {
+                t.reset();t.rtl.outputs&=~(1U<<bit);t.tick();require(!t.sample,"Pulse test coincides with audio enable");
+                t.rtl.outputs|=1U<<bit;t.tick();require(!t.sample,"Pulse test spans an audio enable");
+                std::vector<int16_t> pulse;
+                while(pulse.size()<9600) {auto s=t.tick();if(t.sample)pulse.push_back(s);}
+                require(rms(pulse)>(bit==2?400:800),"Short explosion is inaudible in the mix");
+                std::cout<<"PASS: 20 ns "<<(bit==2?"soft":"loud")<<" explosion, burst RMS "<<rms(pulse)<<'\n';
+            }
+            return 0;
         }
         Test t;t.reset();
         for(unsigned value=0;value<256;++value) {
@@ -79,6 +82,8 @@ int main(int argc,char** argv) {
             auto active=t.capture(96000);
             double energy=rms(active);
             require(energy>8,"A sound channel produced no useful output");
+            if(channel==1) require(energy>600,"Soft explosion buried below tonal voices");
+            if(channel==2) require(energy>1200,"Loud explosion buried below tonal voices");
             auto bounds=std::minmax_element(active.begin(),active.end());
             require(*bounds.first<0&&*bounds.second>0,"Sound channel has no bipolar waveform");
             require(*bounds.first>-32768&&*bounds.second<32767,"Individual voice clips");

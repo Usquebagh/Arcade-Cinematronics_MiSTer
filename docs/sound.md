@@ -80,6 +80,12 @@ filter loading, star output shaping and channel balance need listening and
 measurement against an original board or the full reference netlist. It has
 not been waveform-matched to MAME. Independent channel gains provide an
 initial listening balance rather than calibrated resistor-network gains.
+The explosion balance was corrected after the user reported missing crash
+and destruction sounds: soft explosion gain increased by 24 dB and loud by
+12 dB. Their isolated one-second RMS levels are now about 842 and 1664,
+compared with 1415 for the laser; previously they were 53 and 416.
+The filters, control wiring and decay constants are unchanged. This is an
+audibility correction, with physical-board balance still requiring listening.
 Do not describe passing logic tests as proof of analog sound accuracy.
 
 Reference sources are pinned to the same MAME commit as the CPU:
@@ -99,6 +105,10 @@ voices, bipolar output, approximate oscillator ranges, envelope decay,
 simultaneous effects without clipping, sample rate and short triggers between
 sample enables. Individual synthetic WAV files remain ignored under
 `build/sound/` for listening.
+Both 20 ns explosion triggers are checked at 50 MHz, including burst-level
+floors that reject the previously inaudible mix. Their first 100 ms RMS
+levels are approximately 498 (soft) and 1350 (loud). All voices together
+remain below saturation in the directed mixer test.
 
 `bash sim/run_machine.sh build/roms/starcastle.bin
 build/machine/starcastle-sound.pgm build/sound/starcastle-game.wav` additionally
@@ -114,5 +124,7 @@ On 2026-10-04 the user confirmed audible sound on MiSTer,
 reporting "sound is good in comparison" to
 [this Star Castle gameplay recording](https://www.youtube.com/watch?v=S_DojyqJXKE).
 This passes the initial subjective listening check; no measured waveform or
-individual channel calibration is implied. Further checks can cover each
+individual channel calibration is implied. The user subsequently reported
+missing explosion sounds; the revised levels need hardware listening.
+Further checks can cover each
 effect, background pitch progression, both output channels, OSD reset and reload.

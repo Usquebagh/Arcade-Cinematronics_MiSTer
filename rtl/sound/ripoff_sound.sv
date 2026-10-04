@@ -86,7 +86,9 @@ module ripoff_sound #(
     wire signed [31:0] motor_voice = sound_latch[5] ? 32'sd0 :
                         (motor1_phase[23] ? 32'sd1200 : -32'sd1200) +
                         (motor2_phase[23] ? 32'sd800 : -32'sd800);
-    wire signed [31:0] mixed = ($signed({{7{explosion_product[24]}},explosion_product}) >>> 8) +
+    // Raise the filtered explosion by 12 dB relative to the tonal voices;
+    // it must remain audible during firing, with all-voice headroom checked.
+    wire signed [31:0] mixed = ($signed({{7{explosion_product[24]}},explosion_product}) >>> 6) +
                               laser_voice + torpedo_voice + bg_voice + beep_voice + motor_voice;
     // Break the multiplier/mixer/DC-filter chain at the system clock. This
     // stage runs every clock, so it settles long before the next 96 kHz sample

@@ -55,7 +55,7 @@ int main(int argc,char** argv) {
             t.reset();t.rtl.outputs&=~128;t.tick();require(!t.sample,"Short trigger timing");t.rtl.outputs|=128;t.tick();
             std::vector<int16_t> pulse;
             while(pulse.size()<9600) {auto v=t.tick();if(t.sample)pulse.push_back(v);}
-            require(rms(pulse)>20,"Short explosion trigger lost");
+            require(rms(pulse)>800,"Short explosion is inaudible in the mix");
             std::cout<<"PASS: Rip Off 50 MHz / 96 kHz spacing and short OUT7 explosion capture\n";return 0;
         }
         Test t;t.reset();
@@ -78,6 +78,7 @@ int main(int argc,char** argv) {
             if(voice==5) t.latch(0x37);
             auto a=t.capture(96000);
             require(rms(a)>8,"Silent voice");
+            if(voice==0)require(rms(a)>1200,"Explosion buried below tonal voices");
             auto bounds=std::minmax_element(a.begin(),a.end());
             require(*bounds.first<0&&*bounds.second>0,"Voice lacks bipolar waveform");
             require(*bounds.first>-32768&&*bounds.second<32767,"Voice clips");
