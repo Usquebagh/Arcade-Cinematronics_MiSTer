@@ -36,6 +36,13 @@ The core runs at 50 MHz. A fractional enable produces exactly 96,000 samples
 per second with 520/521-clock spacing; MiSTer receives signed 16-bit mono on
 both audio channels through its existing audio framework.
 
+The SDC allows two system-clock cycles only between the named audio arithmetic
+registers that share this enable. Their actual minimum update spacing is 520
+clocks, as checked by simulation. The paired hold correction retains the
+original hold relationship. Serial latches, trigger capture, sample timing,
+CPU/HPS/video and paths into the MiSTer audio framework remain single-cycle.
+This follows [Intel's multicycle timing model](https://resources.altera.com/quartushelp/17.0/tafs/tafs/tcl_pkg_sdc_ver_1.5_cmd_set_multicycle_path.htm).
+
 The noise source uses the 17-bit MM5837/S2688 polynomial, seeded to all ones,
 and advances at 48 kHz. It is shared by the explosion, fireball, shield and
 thrust voices. The two-pole noise filters use the corresponding schematic
