@@ -43,7 +43,7 @@
     "installed_rbf_sha256_verified": true,
     "installed_mra_sha256": "7ea5499f7ae62f3acc657267b754a4642adaaade652f888caf55c7960dce5d3b",
     "mra_launch_and_core_identification": "passed; Main identifies starcas after configuring the verified RBF",
-    "on_screen_gameplay": "pending",
+    "on_screen_gameplay": "passed; user completed a full game on hardware with grayscale video and silent audio",
     "initial_launch_failure": "Installed MRA and RBF were GitHub HTML file pages; replaced with verified raw files."
   },
   "game_rom_embedded": false,
