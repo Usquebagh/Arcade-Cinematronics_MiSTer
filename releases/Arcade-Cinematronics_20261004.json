@@ -35,7 +35,17 @@
   "all_reported_tns_zero": true,
   "all_clocks_constrained": true,
   "external_io_constraints": "Inherited MiSTer framework; some external ports lack explicit delay constraints.",
-  "tested_on_hardware": false,
+  "tested_on_hardware": true,
+  "hardware_validation": {
+    "date": "2026-10-04",
+    "mister_main_version": "260912",
+    "io_board": "analogue",
+    "installed_rbf_sha256_verified": true,
+    "installed_mra_sha256": "7ea5499f7ae62f3acc657267b754a4642adaaade652f888caf55c7960dce5d3b",
+    "mra_launch_and_core_identification": "passed; Main identifies starcas after configuring the verified RBF",
+    "on_screen_gameplay": "pending",
+    "initial_launch_failure": "Installed MRA and RBF were GitHub HTML file pages; replaced with verified raw files."
+  },
   "game_rom_embedded": false,
   "limitations": [
     "Sound unimplemented",

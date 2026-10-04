@@ -3,8 +3,9 @@
 This is the first MiSTer integration build, intended for initial hardware tests.
 It has grayscale video and coin/start/gameplay controls. Audio is silent; frame
 tearing is possible because game-frame presentation is not yet synchronized
-to display blanking. Attract mode and gameplay have been checked in simulation,
-but this RBF has not been tested on a DE10-Nano.
+to display blanking. Attract mode and gameplay have been checked in simulation.
+FPGA configuration and core identification have now passed on a MiSTer with
+Main version 260912; on-screen gameplay validation is still pending.
 
 Copy these files to your MiSTer SD card:
 
@@ -17,6 +18,11 @@ Copy these files to your MiSTer SD card:
 Launch the MRA. Keyboard: 5 for coin, 1/2 for start, Left/Right to rotate,
 Up to thrust, Space to fire. Controller: directions to rotate, Fire/Thrust
 buttons, Start and Coin; button mapping can be changed through MiSTer.
+
+When downloading individual files from GitHub, use **Download raw file**.
+Saving the GitHub file webpage produces HTML with an `.mra` or `.rbf` name.
+That caused the first reported launch failure: both installed files were HTML.
+Replacing them with the verified XML and bitstream allowed the core to start.
 
 The build/source identity and RBF SHA-256 are in
 `Arcade-Cinematronics_20261004.json`. No game ROM bytes are embedded in the

@@ -16,6 +16,11 @@ fi
 check_mra() {
     local mra=$1 fragment prefix arcade_root cores selected candidate base actual_sha
     printf '\nMRA: %s\n' "$mra"
+    if head -c 1024 "$mra" | grep -qiE '<!DOCTYPE html|<html'; then
+        printf 'FAIL: this MRA is an HTML webpage, not an MRA XML file\n'
+        printf 'Download the raw file from GitHub; saving the file page saves HTML.\n'
+        return
+    fi
     fragment=$(sed -n 's/.*<rbf>\([^<]*\)<\/rbf>.*/\1/p' "$mra" | head -n 1)
     printf 'RBF tag: <%s>\n' "$fragment"
     if [ -z "$fragment" ]; then
@@ -55,6 +60,10 @@ check_mra() {
     wc -c < "$selected"
     actual_sha=$(sha256sum "$selected" | cut -d ' ' -f 1)
     printf 'SHA256: %s\n' "$actual_sha"
+    if head -c 1024 "$selected" | grep -qiE '<!DOCTYPE html|<html'; then
+        printf 'FAIL: this RBF is an HTML webpage, not an FPGA bitstream\n'
+        printf 'Download the raw file from GitHub; saving the file page saves HTML.\n'
+    fi
     if [ "$actual_sha" = "$expected_sha" ]; then
         printf 'PASS: identical to development build 20261004\n'
     else
