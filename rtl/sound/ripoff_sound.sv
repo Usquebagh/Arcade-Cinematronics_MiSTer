@@ -88,7 +88,16 @@ module ripoff_sound #(
                         (motor2_phase[23] ? 32'sd800 : -32'sd800);
     wire signed [31:0] mixed = ($signed({{7{explosion_product[24]}},explosion_product}) >>> 8) +
                               laser_voice + torpedo_voice + bg_voice + beep_voice + motor_voice;
-    wire signed [31:0] coupled = mixed - dc;
+    // Break the multiplier/mixer/DC-filter chain at the system clock. This
+    // stage runs every clock, so it settles long before the next 96 kHz sample
+    // (minimum 520 clocks). It adds one 20 ns clock of mixer latency, with no
+    // timing exception on the Rip Off arithmetic or its output path.
+    logic signed [31:0] mixed_pipe;
+    always_ff @(posedge clk) begin
+        if (reset) mixed_pipe <= 0;
+        else mixed_pipe <= mixed;
+    end
+    wire signed [31:0] coupled = mixed_pipe - dc;
     always_ff @(posedge clk) begin
         if (reset) begin
             audio <= 0; laser_phase <= 0; torpedo_phase <= 0;
@@ -120,7 +129,7 @@ module ripoff_sound #(
             noise_lp1 <= filter_step(noise_lp1,noise_source <<< 8,9);
             noise_lp2 <= filter_step(noise_lp2,noise_lp1,9);
             explosion_env <= explosion_count != 0 ? 16'hffff : slew(explosion_env,0,13);
-            dc <= filter_step(dc,mixed,8);
+            dc <= filter_step(dc,mixed_pipe,8);
             if (coupled > 32767) audio <= 16'sh7fff;
             else if (coupled < -32768) audio <= 16'sh8000;
             else audio <= coupled[15:0];
