@@ -12,14 +12,15 @@ MiSTer, but gameplay, two-player operation and sound have not been validated.
 
 | File | MiSTer SD-card destination |
 | --- | --- |
-| [Arcade-Cinematronics_20261004.rbf](Arcade-Cinematronics_20261004.rbf) | `_Arcade/cores/` |
-| [Star Castle (version 3).mra](Star%20Castle%20%28version%203%29.mra) | `_Arcade/` |
-| [Rip Off.mra](Rip%20Off.mra) | `_Arcade/` |
+| [Arcade-Cinematronics_20261004.rbf](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Arcade-Cinematronics_20261004.rbf) | `_Arcade/cores/` |
+| [Star Castle (version 3).mra](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Star%20Castle%20%28version%203%29.mra) | `_Arcade/` |
+| [Rip Off.mra](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Rip%20Off.mra) | `_Arcade/` |
 | Your own `starcas.zip` | `_Arcade/mame/` |
 | Your own `ripoff.zip` | `_Arcade/mame/` |
 
-Keep only the current Cinematronics RBF and launch the MRA. When downloading
-individual files from GitHub, use **Download raw file**.
+The links above download the actual files. Keep only the current Cinematronics
+RBF and launch the MRA. From a GitHub file page, use **Download raw file**;
+saving the webpage creates an unusable HTML file.
 Controls and video options are listed in the [README](../README.md).
 No game ROMs are embedded in the RBF or distributed here.
 

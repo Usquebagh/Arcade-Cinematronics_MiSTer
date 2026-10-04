@@ -57,18 +57,19 @@ Rip Off uses monochrome output with adjustable brightness.
 
 ## ROMs and Installation
 
-Copy the current files from [releases](releases/) to your MiSTer SD card:
+Download the actual files using the links below and copy them to your MiSTer SD card:
 
 | File | Destination |
 | --- | --- |
-| `Arcade-Cinematronics_20261004.rbf` | `_Arcade/cores/` |
-| `Star Castle (version 3).mra` | `_Arcade/` |
-| `Rip Off.mra` | `_Arcade/` |
+| [Arcade-Cinematronics_20261004.rbf](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Arcade-Cinematronics_20261004.rbf) | `_Arcade/cores/` |
+| [Star Castle (version 3).mra](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Star%20Castle%20%28version%203%29.mra) | `_Arcade/` |
+| [Rip Off.mra](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Rip%20Off.mra) | `_Arcade/` |
 | Your own `starcas.zip` | `_Arcade/mame/` |
 | Your own `ripoff.zip` | `_Arcade/mame/` |
 
-Launch either game through its MRA; both select the same RBF. For individual GitHub
-downloads, use **Download raw file**. Keep only the current Cinematronics RBF
+Launch either game through its MRA; both select the same RBF. From a GitHub
+file page, use **Download raw file**; saving the webpage creates an unusable HTML file.
+Keep only the current Cinematronics RBF
 in `cores/`. See [release details](releases/README.md) for build information
 and installation troubleshooting.
 
