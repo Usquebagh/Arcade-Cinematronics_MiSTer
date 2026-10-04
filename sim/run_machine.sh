@@ -10,7 +10,7 @@ cp -R rtl sim tools "$work_dir/"
 cd "$work_dir"
 mkdir -p build/sim "$root/build/machine"
 iverilog -g2012 -s machine_units_tb -o build/units \
-  rtl/machine/*.sv rtl/io/starcastle_io.sv sim/machine_units_tb.sv
+  rtl/machine/*.sv rtl/io/*.sv sim/machine_units_tb.sv
 vvp build/units | tee "$root/build/machine/results.txt"
 iverilog -g2012 -s vector_queue_tb -o build/queue rtl/vector/vector_queue.sv sim/vector_queue_tb.sv
 vvp build/queue | tee -a "$root/build/machine/results.txt"

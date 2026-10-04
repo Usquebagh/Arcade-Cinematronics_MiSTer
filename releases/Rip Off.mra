@@ -1,0 +1,31 @@
+<misterromdescription>
+    <name>Rip Off</name>
+    <year>1980</year>
+    <manufacturer>Cinematronics</manufacturer>
+    <category>Shooter</category>
+    <setname>ripoff</setname>
+    <rbf>Cinematronics</rbf>
+    <about author="Usquebagh" webpage="https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer">Shared CCPU core; synthesized discrete sound.</about>
+    <rotation>horizontal</rotation>
+    <players>2 (simultaneous)</players>
+    <joystick>2-way</joystick>
+    <num_buttons>2</num_buttons>
+    <buttons names="Fire,Thrust,Start 1,Coin,Start 2" default="A,B,Start,Select,X"/>
+    <switches default="13">
+        <dip bits="0,1" name="Fuel canisters" ids="12,4,16,8"/>
+        <dip bits="2,3" name="Coinage" ids="1C/1C,2C/1C,2C/3C,4C/3C"/>
+        <dip bits="4" name="Demo sounds" ids="Off,On"/>
+        <dip bits="5" name="Scores" ids="Individual,Combined"/>
+    </switches>
+    <rom index="1"><part>01</part></rom>
+    <rom index="0" zip="ripoff.zip" md5="none">
+        <interleave output="16">
+            <part name="ripoff.t7" crc="40c2c5b8" map="01"/>
+            <part name="ripoff.p7" crc="a9208afb" map="10"/>
+        </interleave>
+        <interleave output="16">
+            <part name="ripoff.u7" crc="29c13701" map="01"/>
+            <part name="ripoff.r7" crc="150bd4c8" map="10"/>
+        </interleave>
+    </rom>
+</misterromdescription>

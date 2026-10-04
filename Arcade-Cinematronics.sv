@@ -17,7 +17,7 @@ module emu (
         "-;R[0],Reset;",
         "J1,Fire,Thrust,Start 1,Coin,Start 2;",
         "jn,A,B,Start,Select,X;",
-        "V,v",`BUILD_DATE," colour"
+        "V,v",`BUILD_DATE
     };
     wire [127:0] status;
     wire [1:0] buttons;
@@ -40,6 +40,12 @@ module emu (
     );
     wire reset = RESET || status[0] || buttons[1] || !pll_locked;
     wire load_active, load_write, rom_loaded, load_error;
+    wire game_ripoff, profile_valid, profile_active;
+    cinemat_profile profile (
+        .clk(clk_sys), .cold_reset(!pll_locked), .downloading(ioctl_download),
+        .wr(ioctl_wr), .index(ioctl_index), .addr(ioctl_addr), .data(ioctl_dout),
+        .game_ripoff(game_ripoff), .valid(profile_valid), .active(profile_active)
+    );
     wire [12:0] load_addr;
     wire [7:0] load_data;
     starcastle_download download (
@@ -54,19 +60,24 @@ module emu (
     always_ff @(posedge clk_sys)
         if (ioctl_wr && ioctl_index == 16'd254 && ioctl_addr == 0) dips <= ioctl_dout;
     wire start1, start2, left, right, thrust, fire, coin;
-    starcastle_controls controls (
-        .clk(clk_sys), .reset(reset || load_active), .ps2_key(ps2_key),
+    wire left2, right2, thrust2, fire2;
+    cinemat_controls controls (
+        .clk(clk_sys), .reset(reset || load_active || profile_active || !profile_valid),
+        .game_ripoff(game_ripoff), .ps2_key(ps2_key),
         .joy0(joy0), .joy1(joy1), .start1(start1), .start2(start2),
-        .left(left), .right(right), .thrust(thrust), .fire(fire), .coin(coin)
+        .left(left), .right(right), .thrust(thrust), .fire(fire), .coin(coin),
+        .left2(left2), .right2(right2), .thrust2(thrust2), .fire2(fire2)
     );
     wire [8:0] scan_x, scan_y;
     wire [8:0] pixel_x, pixel_y;
     wire [7:0] scan_gray, gray;
     wire signed [15:0] mono_audio;
-    wire [7:0] display_gray = rom_loaded && !load_active && !reset ? gray : 8'd0;
+    wire [7:0] display_gray = rom_loaded && profile_valid && !profile_active && !load_active && !reset ? gray : 8'd0;
     wire ce_pix, hs, vs, hblank, vblank;
-    starcastle_machine machine (
-        .clk(clk_sys), .reset(reset), .load_active(load_active), .rom_loaded(rom_loaded),
+    cinemat_machine machine (
+        .clk(clk_sys), .reset(reset || profile_active || !profile_valid),
+        .game_ripoff(game_ripoff), .left2(left2), .right2(right2), .thrust2(thrust2), .fire2(fire2),
+        .load_active(load_active), .rom_loaded(rom_loaded),
         .load_write(load_write), .load_addr(load_addr), .load_data(load_data),
         .start1(start1), .start2(start2), .left(left), .right(right),
         .thrust(thrust), .fire(fire), .coin(coin), .service(status[6]), .dips(dips[5:0]),
@@ -84,7 +95,7 @@ module emu (
     wire colour_ce, colour_hs, colour_vs, colour_hblank, colour_vblank;
     vector_overlay #(.SPANS(STARCASTLE_OVERLAY_SPANS),
                      .GAINS(STARCASTLE_OVERLAY_GAINS)) overlay (
-        .clk(clk_sys), .reset(!pll_locked), .enabled(!status[7]),
+        .clk(clk_sys), .reset(!pll_locked), .enabled(!status[7] && !game_ripoff),
         .brightness(status[9:8]), .strength(status[11:10]),
         .x(pixel_x), .y(pixel_y), .rgb_in({display_gray,display_gray,display_gray}),
         .ce_in(ce_pix), .hs_in(hs), .vs_in(vs), .hblank_in(hblank), .vblank_in(vblank),
@@ -110,7 +121,7 @@ module emu (
     assign AUDIO_R = mono_audio;
     assign AUDIO_S = 1;
     assign AUDIO_MIX = 0;
-    assign LED_USER = load_active || load_error;
+    assign LED_USER = load_active || load_error || profile_active || !profile_valid;
     assign {LED_POWER,LED_DISK,BUTTONS} = 0;
     assign ADC_BUS = 'z;
     assign USER_OUT = '1;

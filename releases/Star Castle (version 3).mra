@@ -15,6 +15,7 @@
         <dip bits="0,1" name="Lives" ids="6,4,5,3"/>
         <dip bits="2,3" name="Coinage" ids="4C/3C,2C/1C,2C/3C,1C/1C"/>
     </switches>
+    <rom index="1"><part>00</part></rom>
     <rom index="0" zip="starcas.zip" md5="none">
         <interleave output="16">
             <part name="starcas3.t7" crc="b5838b5d" map="01"/>

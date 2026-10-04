@@ -23,6 +23,10 @@ jobs:
         run: bash sim/run_machine.sh
       - name: Sound board controls, voices, envelopes and sample rate
         run: bash sim/run_sound.sh
+      - name: Rip Off profiles, two-player controls and shared machine
+        run: bash sim/run_ripoff.sh
+      - name: Rip Off sound board controls, six effects and sample timing
+        run: bash sim/run_ripoff_sound.sh
       - name: Machine component synthesis
         run: bash tools/synth_machine.sh
       - name: MiSTer ROM download, controls, scanout and MRA tests

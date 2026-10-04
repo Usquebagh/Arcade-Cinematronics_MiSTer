@@ -13,7 +13,7 @@ CHIPS = (
     ('starcas3.r7', 0x1001, 'c367b69d', '98354d34ceb03e080b1846611d533be7bdff01cc'),
 )
 
-def assemble(archive):
+def assemble(archive, chips=CHIPS, game='Star Castle v3'):
     image = bytearray(8192)
     with zipfile.ZipFile(archive) as z:
         # No extraction to filesystem; reject ambiguous filenames.
@@ -23,9 +23,9 @@ def assemble(archive):
             if base in members:
                 raise ValueError(f'Duplicate archive filename: {base}')
             members[base] = name
-        for name, offset, crc, sha1 in CHIPS:
+        for name, offset, crc, sha1 in chips:
             if name not in members:
-                raise ValueError(f'Missing chip: {name}; expected MAME starcas version 3')
+                raise ValueError(f'Missing chip: {name}; expected {game}')
             member = members[name]
             if z.getinfo(member).file_size != 2048:
                 raise ValueError(f'{name}: expected 2048 bytes')

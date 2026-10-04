@@ -6,7 +6,7 @@ iverilog -g2012 -s mister_units_tb -o build/mister/units rtl/mister/*.sv sim/mis
 vvp build/mister/units | tee build/mister/results.txt
 python3 tools/check_mra.py "${1:-}"
 for top in starcastle_download starcastle_controls vector_scanout; do
-  verilator --lint-only --top-module "$top" -Wall -Wno-UNUSEDSIGNAL "rtl/mister/$top.sv"
+  verilator --lint-only --top-module "$top" -Wall -Wno-UNUSEDSIGNAL -Wno-PINCONNECTEMPTY rtl/mister/*.sv
 done
 root="$PWD"
 work_dir="$(mktemp -d /tmp/cinematronics-mister.XXXXXX)"
