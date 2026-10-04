@@ -108,7 +108,7 @@ path, which has gamma and scandoubling disabled.
 ## 2026-10-04 build evidence
 
 Full Quartus Prime Lite 17.0.2 compile: **successful, zero errors, 70 warnings**.
-The build creates a 3,372,200-byte RBF. Its exact source commit and SHA-256 are
+The build creates a 3,264,828-byte RBF. Its exact source commit and SHA-256 are
 recorded in `releases/Arcade-Cinematronics_20261004.json`, alongside copies of
 the fit and timing summaries. Only the final native-video configuration is
 packaged; intermediate builds are not release candidates.

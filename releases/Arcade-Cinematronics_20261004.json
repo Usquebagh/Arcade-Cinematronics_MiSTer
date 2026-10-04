@@ -1,0 +1,46 @@
+{
+  "source_commit": "33a85df42ae6929863d160e6f943b3b6db643c94",
+  "project": "Arcade-Cinematronics",
+  "target_game": "Star Castle (version 3)",
+  "build_date": "2026-10-04",
+  "build_id": "261004",
+  "quartus": "Quartus Prime Lite 17.0.2 Build 602",
+  "docker_image": "theypsilon/quartus-lite-c5:17.0.2",
+  "device": "5CSEBA6U23I7",
+  "rbf": {
+    "file": "Arcade-Cinematronics_20261004.rbf",
+    "bytes": 3264828,
+    "sha256": "393ca1aad7d80ac1e8c15a98ed8d38ff12780041dba9b6fff4948d9753221c0d"
+  },
+  "compilation": {
+    "errors": 0,
+    "warnings": 70,
+    "critical_warnings": 0
+  },
+  "resources": {
+    "alms": 9648,
+    "registers": 15107,
+    "ram_blocks": 322,
+    "block_memory_bits": 2547969,
+    "dsp_blocks": 33,
+    "plls": 3
+  },
+  "worst_slack_ns": {
+    "Setup": 0.196,
+    "Hold": 0.245,
+    "Recovery": 3.854,
+    "Removal": 0.875,
+    "Minimum Pulse Width": 1.122
+  },
+  "all_reported_tns_zero": true,
+  "all_clocks_constrained": true,
+  "external_io_constraints": "Inherited MiSTer framework; some external ports lack explicit delay constraints.",
+  "tested_on_hardware": false,
+  "game_rom_embedded": false,
+  "limitations": [
+    "Sound unimplemented",
+    "Grayscale only; no color overlay or calibrated persistence",
+    "Game/display frame rates independent; tearing possible",
+    "Serial gamma and scandoubler/HQ2x disabled at this video clock rate"
+  ]
+}
