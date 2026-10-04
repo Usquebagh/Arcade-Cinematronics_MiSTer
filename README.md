@@ -2,21 +2,26 @@
 
 An FPGA implementation of Cinematronics vector arcade hardware for the
 [MiSTer FPGA](https://github.com/MiSTer-devel/Main_MiSTer/wiki) platform,
-starting with **Star Castle (version 3, 1980)**.
+supporting **Star Castle (version 3, 1980)** and **Rip Off (1980)** in one RBF.
 
 Defend your ship against the central cannon, breaking through its rotating
 shield rings while avoiding mines. The core recreates the CCPU, vector display
 and discrete sound, with a colour filter based on the original screen gels.
-Rip Off, Armor Attack and Solar Quest are planned next.
+Rip Off adds simultaneous two-player defence of the fuel supply.
+Armor Attack and Solar Quest are planned next.
 
 <p align="center">
   <img src="docs/arcade_cabinet.png" alt="Star Castle arcade cabinet" height="310">
   <img src="docs/star_castle.png" alt="Star Castle game screen" height="310">
 </p>
 
-> **Status:** Star Castle is playable on MiSTer. A full game has been completed;
-> sound and colour/brightness controls have passed user testing. The current
+> **Status:** Star Castle's earlier build passed a full game, sound and
+> colour/brightness checks on MiSTer. The current combined
 > build passes simulation, fitting and reported internal timing.
+> Both MRA paths and FPGA startup have been checked on MiSTer.
+> Rip Off passes a 120-frame gameplay simulation with both players' controls,
+> instruction/pixel comparisons and synthesized sound. Hardware gameplay checks
+> and Rip Off listening for the combined build are pending.
 >
 > **Known issues:** **CRT output is untested.** Neon glow, bloom and phosphor
 > persistence are not implemented. Frame tearing is possible. Physical colour,
@@ -32,7 +37,7 @@ Rip Off, Armor Attack and Solar Quest are planned next.
 | CPU | Cinematronics CCPU, two 12-bit accumulators | SystemVerilog CCPU, checked against the pinned MAME instruction reference |
 | Program | Four ROM chips, 8 KiB total | Writable program ROM, loaded through the MRA |
 | Video | Monochrome vector display with coloured screen gels | 512x384 raster framebuffer, 16 brightness levels and a Star Castle colour filter |
-| Sound | Discrete sound circuitry | Synthesized oscillators, noise, envelopes and eight effect channels; signed mono audio |
+| Sound | Game-specific discrete sound boards | Synthesized oscillators, noise and envelopes: eight Star Castle channels and six Rip Off effects; signed mono audio |
 
 ## Controls
 
@@ -45,9 +50,13 @@ Rip Off, Armor Attack and Solar Quest are planned next.
 | Start 1 | 1 | Controller 1 Start |
 | Start 2 | 2 | Start 2 button or Controller 2 Start |
 
+For Rip Off, each controller operates its own player. Player 2 keyboard controls
+are **A/D** to rotate, **W** to thrust and **F** to fire.
+
 The OSD provides **Colour overlay**, **Vector brightness** and **Overlay strength**.
 Use MiSTer's **Save settings** to retain your choices. See
 [video controls](docs/colour.md) for details.
+Rip Off uses monochrome output with adjustable brightness.
 
 ## ROMs and Installation
 
@@ -57,9 +66,11 @@ Copy the current files from [releases](releases/) to your MiSTer SD card:
 | --- | --- |
 | `Arcade-Cinematronics_20261004.rbf` | `_Arcade/cores/` |
 | `Star Castle (version 3).mra` | `_Arcade/` |
+| `Rip Off.mra` | `_Arcade/` |
 | Your own `starcas.zip` | `_Arcade/mame/` |
+| Your own `ripoff.zip` | `_Arcade/mame/` |
 
-Launch **Star Castle (version 3)** through its MRA. For individual GitHub
+Launch either game through its MRA; both select the same RBF. For individual GitHub
 downloads, use **Download raw file**. Keep only the current Cinematronics RBF
 in `cores/`. See [release details](releases/README.md) for build information
 and installation troubleshooting.
@@ -76,7 +87,8 @@ The output is `output_files/Arcade-Cinematronics.rbf`.
 [Validation](docs/validation.md) lists test commands and results. CI uses
 synthetic programs and requires no game ROMs. Technical details are in
 [architecture](docs/architecture.md), [MiSTer integration](docs/mister-integration.md),
-[sound](docs/sound.md), [colour](docs/colour.md) and [roadmap](docs/roadmap.md).
+[Star Castle sound](docs/sound.md), [Rip Off](docs/ripoff.md),
+[colour](docs/colour.md) and [roadmap](docs/roadmap.md).
 
 ## Credits
 

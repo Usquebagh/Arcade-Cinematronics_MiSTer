@@ -17,7 +17,9 @@ board/video/sound investigation; they have not all been reviewed yet. Star
 Castle manual PDF pages 86-87 (printed A-25/A-26) have now been visually
 reviewed for sound control wiring, oscillator/divider circuits, effect
 envelopes and mixing. The sound model's provenance and fidelity limits are
-recorded in [sound](sound.md).
+recorded in [sound](sound.md). Rip Off manual PDF page 80 (printed 8-18)
+was reviewed for its audio schematic, and page 81 (8-19) for controls.
+The model and pinned circuit references are recorded in [Rip Off](ripoff.md).
 
 MAME is pinned to commit `9eea5804dc46644dd2dc9c3bc28cbb6c2e93c54e`:
 

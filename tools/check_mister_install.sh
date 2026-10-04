@@ -5,7 +5,7 @@
 set -u
 export LC_ALL=C
 card_root=${1:-/media/fat}
-expected_sha=62a30e88d0a90f79502a3e47d0367129e2b45e1ebc38f3fdb2b46c0a43645c86
+expected_sha=2cbaffaab1df0a7dba0af6d670d17b9741bafbd62af76f165ddc13af6dfc8480
 
 printf 'Cinematronics installation check\nStorage: %s\n' "$card_root"
 if [ ! -d "$card_root" ]; then
@@ -75,9 +75,9 @@ found=0
 while IFS= read -r mra; do
     found=1
     check_mra "$mra"
-done < <(find "$card_root" -type f -iname '*star*castle*.mra')
+done < <(find "$card_root" -type f \( -iname '*star*castle*.mra' -o -iname '*rip*off*.mra' \))
 if [ "$found" = 0 ]; then
-    printf 'FAIL: no Star Castle MRA found on this storage\n'
+    printf 'FAIL: no Star Castle or Rip Off MRA found on this storage\n'
 fi
 printf '\nThis checks installed paths and files; FPGA startup still needs a launch test.\n'
 if [ -t 0 ]; then

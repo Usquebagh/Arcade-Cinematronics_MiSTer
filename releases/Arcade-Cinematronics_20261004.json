@@ -1,111 +1,115 @@
 {
-  "source_commit": "27b1c1271db6a065cf3163b7426c2b5c0f7302c3",
+  "source_commit": "a9c655e71ae3a3aaef5d59760f7e174c873f3808",
   "project": "Arcade-Cinematronics",
-  "target_game": "Star Castle (version 3)",
+  "target_games": [
+    "Star Castle (version 3)",
+    "Rip Off"
+  ],
   "build_date": "2026-10-04",
-  "build_id": "261004 colour",
+  "build_id": "261004",
   "quartus": "Quartus Prime Lite 17.0.2 Build 602",
   "docker_image": "theypsilon/quartus-lite-c5:17.0.2",
   "device": "5CSEBA6U23I7",
   "rbf": {
     "file": "Arcade-Cinematronics_20261004.rbf",
-    "bytes": 3289304,
-    "sha256": "62a30e88d0a90f79502a3e47d0367129e2b45e1ebc38f3fdb2b46c0a43645c86"
+    "bytes": 3338572,
+    "sha256": "2cbaffaab1df0a7dba0af6d670d17b9741bafbd62af76f165ddc13af6dfc8480"
+  },
+  "mra_sha256": {
+    "Star Castle (version 3).mra": "579bce481d83e61681afec60eff55e29c91a24c3333b1c35cc222e37ebff0556",
+    "Rip Off.mra": "c2aeba363d6965eb5af9484895c1d89fed335fca84eeed9dfd52dcb08ee05355"
   },
   "compilation": {
     "errors": 0,
-    "warnings": 8,
+    "warnings": 73,
     "critical_warnings": 0,
-    "reused_analysis_synthesis": true,
     "fitter_seed": 2
   },
   "resources": {
-    "alms": 11132,
-    "registers": 16295,
+    "alms": 11585,
+    "registers": 16797,
     "ram_blocks": 327,
     "block_memory_bits": 2586971,
-    "dsp_blocks": 83,
+    "dsp_blocks": 84,
     "plls": 3
   },
   "worst_slack_ns": {
-    "Setup": 0.531,
-    "Hold": 0.247,
-    "Recovery": 4.241,
-    "Removal": 0.659,
+    "Setup": 0.08,
+    "Hold": 0.242,
+    "Recovery": 3.479,
+    "Removal": 0.807,
     "Minimum Pulse Width": 1.122
   },
   "all_reported_tns_zero": true,
   "all_clocks_constrained": true,
   "external_io_constraints": "Inherited MiSTer framework; some external ports lack explicit delay constraints.",
-  "tested_on_hardware": true,
+  "tested_on_hardware": false,
   "hardware_validation": {
-    "date": "2026-10-04",
-    "installed_rbf_hash_matches": true,
-    "installed_mra_hash_matches": true,
-    "matching_installed_rbfs": 1,
-    "mra_launch": "passed",
-    "visual": "passed (user confirms brightness/overlay controls work)",
-    "gameplay": "passed (user reports game runs fine)",
+    "starcastle_gameplay": "pending on combined build",
+    "ripoff_gameplay": "pending",
+    "ripoff_listening": "pending",
     "crt_tested": false,
-    "saved_settings": "pending",
-    "audio_retest": "pending"
+    "installation_checksums": "RBF, both MRAs and local Rip Off ZIP match installed files",
+    "launch_checks": {
+      "Star Castle (version 3)": "Main selects expected RBF/MRA; FPGA operating",
+      "Rip Off": "Main selects expected RBF/MRA; FPGA operating"
+    }
+  },
+  "prior_starcastle_hardware_validation": {
+    "date": "2026-10-04",
+    "rbf_sha256": "62a30e88d0a90f79502a3e47d0367129e2b45e1ebc38f3fdb2b46c0a43645c86",
+    "gameplay": "passed",
+    "sound": "passed subjective listening comparison",
+    "colour_brightness_controls": "passed",
+    "crt_tested": false
+  },
+  "simulation": {
+    "github_ci": "passed on source commit",
+    "github_ci_run_url": "https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/actions/runs/37232812781",
+    "starcastle_frames": 28,
+    "starcastle_checked_instructions": 1031753,
+    "ripoff_frames": 120,
+    "ripoff_checked_instructions": 3851660,
+    "ripoff_vectors": 15059,
+    "ripoff_coin_acknowledgements": 2,
+    "all_frame_pixels_checked": true,
+    "both_ripoff_players_controls_exercised": true,
+    "sound_effects_checked": {
+      "starcastle": 8,
+      "ripoff": 6
+    }
   },
   "game_rom_embedded": false,
-  "limitations": [
-    "Analog sound model is behavioral; exact fidelity and channel balance need listening calibration",
-    "No calibrated persistence or glow; overlay colour is based on MAME artwork rather than measured gel/CRT response",
-    "Game/display frame rates independent; tearing possible",
-    "Serial gamma and scandoubler/HQ2x disabled at this video clock rate",
-    "CRT output has not been tested; neon glow, bloom and phosphor persistence are not implemented"
-  ],
   "audio": {
-    "model": "schematic-informed behavioral discrete circuit",
     "internal_sample_rate_hz": 96000,
-    "output": "signed 16-bit mono duplicated on left/right",
-    "sample_enabled_arithmetic_setup_cycles": 2,
-    "verified_minimum_sample_enable_spacing_clocks": 520,
-    "extra_sound_roms_or_samples": false
-  },
-  "mra_sha256": "806ba507953df7612e3cdf2490e5e51229b8a3657a0903ed441eabe76a82e84d",
-  "prior_audio_validation": {
-    "date": "2026-10-04",
-    "main_version": "260912",
-    "io_board": "analogue",
-    "installed_rbf_hash_matches": true,
-    "installed_mra_hash_matches": true,
-    "mra_launch": "passed",
-    "identified_core": "starcas",
-    "listening": "passed (user-reported subjective comparison)",
-    "user_feedback": "sound is good in comparison",
-    "comparison_video": "https://www.youtube.com/watch?v=S_DojyqJXKE",
-    "measured_fidelity_validation": false
+    "output": "signed 16-bit mono duplicated left/right",
+    "models": "schematic-informed behavioral discrete circuits",
+    "minimum_sample_enable_spacing_clocks": 520,
+    "extra_roms_or_samples": false
   },
   "video": {
-    "colour_overlay": "Star Castle fixed screen-space gel profile",
-    "reference_mame_commit": "9eea5804dc46644dd2dc9c3bc28cbb6c2e93c54e",
-    "overlay_source_license": "CC0-1.0",
-    "profile_row_data_bits": 38912,
-    "compositor_latency_clocks": 2,
-    "osd_controls": {
-      "colour_overlay": [
-        "On",
-        "Off"
-      ],
-      "vector_brightness_percent": [
-        100,
-        75,
-        125,
-        150
-      ],
-      "overlay_strength_percent": [
-        100,
-        75,
-        50,
-        25
-      ]
-    },
-    "save_method": "MiSTer Save settings",
-    "cabinet_artwork": false,
-    "electronic_colour_renderer": false
-  }
+    "starcastle": "fixed gel filter",
+    "ripoff": "monochrome",
+    "brightness_percent": [
+      100,
+      75,
+      125,
+      150
+    ],
+    "overlay_strength_percent": [
+      100,
+      75,
+      50,
+      25
+    ],
+    "save_method": "MiSTer Save settings"
+  },
+  "limitations": [
+    "CRT output untested",
+    "No bloom, glow or phosphor persistence",
+    "Frame tearing possible",
+    "Physical vector timing, gel colour and analog sound fidelity need calibration",
+    "Rip Off waveform and channel balance need hardware listening",
+    "Serial gamma and scandoubler/HQ2x disabled at this video clock rate"
+  ]
 }

@@ -20,7 +20,12 @@ unused SDRAM/DDR interfaces are disabled.
 
 ## ROM Loading
 
-HPS index 0 supplies the 8192-byte Star Castle v3 program. The loader holds the
+Each MRA sends a one-byte game profile at index 1 before its ROM: `00` for
+Star Castle, `01` for Rip Off. `cinemat_profile` validates it and selects the
+game at ROM-load start. A missing profile defaults to Star Castle; malformed
+profiles keep execution stopped. See [Rip Off](ripoff.md) for the protocol.
+
+HPS index 0 supplies the selected game's 8192-byte program. The loader holds the
 machine in reset during transfer and its completion edge, accepting only
 sequential addresses from zero and exactly 8192 bytes. A rejected transfer
 invalidates the previous image, keeps the CPU stopped and lights the user LED.
@@ -64,6 +69,10 @@ Hard reset and ROM download reset the sound model; CPU watchdog recovery
 does not. No additional sound ROMs or samples are required. See [sound](sound.md)
 for circuit references and fidelity limits.
 
+Rip Off selects its own six-effect [sound model](ripoff.md#sound-board) and
+independent player controls. Only the selected board is active. Both games
+share the same CCPU, ROM map, renderer and scanout; Rip Off bypasses the gel filter.
+
 ## Build and Verification
 
 Run `bash build.sh` in WSL/Linux. The Docker image
@@ -79,8 +88,8 @@ board-level interface timing still needs verification.
 
 The current [build manifest](../releases/Arcade-Cinematronics_20261004.json)
 records the exact RTL source commit, checksum, resource use and timing.
-Worst setup slack is +0.531 ns and every reported TNS is zero. Resources:
-11,132 ALMs, 16,295 registers, 327 RAM blocks, 83 DSP blocks and three PLLs.
+The accompanying fitter/timing summaries give resource use and reported slack.
+Every reported timing category must pass the build gate before packaging.
 
 [Validation](validation.md) lists reproducible checks. Platform tests cover
 malformed downloads, reload recovery, DIP isolation, keyboard/controller input
@@ -92,8 +101,9 @@ only in a temporary simulation copy; hardware `sys/` logic is unchanged.
 
 ## Hardware Status
 
-A full game has been completed on MiSTer. Sound passed a subjective listening
-comparison, and gameplay plus colour/brightness controls work on the current
-build. Installed RBF and MRA checksums match the package. CRT output, physical
-vector timing, gel/CRT calibration and measured analog sound fidelity remain
-unverified. Save/reload of video settings has not been separately verified.
+The earlier Star Castle build passed a full game, subjective sound comparison
+and colour/brightness checks on MiSTer. The combined build requires hardware
+gameplay checks for both games and listening checks for Rip Off; the manifest
+records installation/launch checks separately. CRT output, physical vector
+timing, gel/CRT calibration and measured analog sound fidelity remain unverified.
+Save/reload of video settings has not been separately verified.

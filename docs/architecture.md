@@ -1,9 +1,10 @@
-# Initial architecture
+# Architecture
 
 The CCPU executes game code and emits vector segments. The vector renderer
 converts those segments into a framebuffer with a synchronous grayscale scanout.
-Star Castle I/O, CPU/frame timing, watchdog and its sound-board model are now
-connected. Other game configurations remain separate implementation tasks.
+Star Castle and Rip Off share CPU/frame timing, watchdog and video, with
+game-specific I/O and sound boards selected by the MRA. Other game
+configurations remain separate implementation tasks.
 
 ## CPU component contract
 
@@ -16,7 +17,7 @@ fetch. The connected machine generates the nominal 19.923 MHz / 4 enable rate.
 `trace_cycles` uses MAME's instruction cycle counts, which
 are not yet proof of the original four-phase hardware timing.
 
-The CPU's `pc` is the full logical program address. Star Castle's physical ROM
+The CPU's `pc` is the full logical program address. Both games' physical ROM
 address is `{pc[13], pc[11:0]}`: logical banks 0/1 mirror the first half and
 2/3 mirror the second half. Masking the logical PC to 13 bits is incorrect.
 Data RAM is **256 12-bit words**, not 256 bytes. It is not reset by the CPU;
@@ -45,13 +46,12 @@ This choice is explicitly not a claim that the CPU is a gate-level reproduction
 or that QB-3 is supported. Check that behavior against schematics before
 expanding the game family.
 
-## Planned machine and MiSTer integration
+## MiSTer integration
 
-- Connect synchronous scanout to MiSTer video timing; add persistence,
-  point-intensity handling, intensity calibration and optional cabinet overlay.
-- MiSTer `emu` wrapper, HPS ROM download, OSD controls, reset and platform video.
-- Sound modeled from the supplied Star Castle circuitry, with comparison to
-  the reference circuit model and on-device testing.
+The `emu` wrapper connects synchronous scanout, HPS ROM/profile downloads,
+OSD controls, reset and synthesized sound to MiSTer. Persistence,
+point-intensity handling and physical intensity calibration remain future work.
+See [MiSTer integration](mister-integration.md) for platform details.
 
 The existing Jedi and Fire Trap repositories are build/platform examples.
 Their raster video and CPU designs do not implement this vector architecture.
@@ -80,20 +80,21 @@ cleared before accepting more lines. Scanout remains independent while clearing.
 `scan_gray` corresponds to `scan_x/scan_y` sampled on the preceding rising
 edge. Y inversion belongs to the scanout caller; the preview inverts it.
 
-This interface is connected to the live machine component, but MiSTer video
-timing is not implemented yet. The capture test replays reference-checked CPU segments
+This interface is connected to the live machine and MiSTer scanout.
+The capture test replays reference-checked CPU segments
 through the RTL video component. FRM groups the capture's frames; the final
 instruction-limited group is incomplete and excluded from framebuffer checks.
 Timing is not real-time in this capture path. No antialiasing, phosphor decay,
 cabinet overlay or normalization-dependent point brightness is implemented yet.
 
-## Connected Star Castle machine
+## Connected machine
 
-`rtl/games/starcastle_machine.sv` combines the CPU, synchronous program ROM,
+`rtl/games/cinemat_machine.sv` combines the CPU, synchronous program ROM,
 board I/O, sound, timing, watchdog, a 16-entry segment FIFO and vector video. All ports
 are synchronous to a 50 MHz system clock. The MiSTer wrapper clocks HPS/OSD
 and machine interfaces from this same PLL. The input controls are active-high booleans;
 the I/O module converts them to the original active-low electrical inputs.
+`starcastle_machine.sv` remains a compatibility wrapper for component tests.
 
 `cinemat_timing` uses a fractional accumulator to produce exactly 19,923 CPU
 enables per 200,000 system clocks (4.98075 MHz average). Enable gaps are 10 or
@@ -117,9 +118,11 @@ backpressures the producer when full. This adds renderer-dependent CPU stalls;
 it is an engineering baseline, not a claim of exact analog vector timing.
 The DR branch input remains low, consistent with the current MAME baseline.
 
-Input wiring: start1/start2 at bits 0/2, left/right at 6/8, thrust/fire at 10/12.
+Star Castle input wiring: start1/start2 at bits 0/2, left/right at 6/8,
+thrust/fire at 10/12. Rip Off has independent player inputs and opposite
+service-switch polarity; see [Rip Off](ripoff.md#game-selection-and-controls).
 Switch input ports 16-21 read DIP bits 2/5/4/3/0/1 respectively. `dips=6'h3f`
-is the initial default; service is separately active-high on port 22. A coin
+is the initial default; Star Castle service is active-high on port 22. A coin
 press latches port 23 low until OUT5 rises. Holding coin does not retrigger it,
 and a new coin wins if it coincides with an acknowledge edge.
 
@@ -132,8 +135,8 @@ The watchdog count resets after expiration so recovery can service it again.
 are accepted. The caller must assert load state before writing and only mark
 the complete image loaded when finished. Reloading also clears old frame and
 queue contents. `rtl/mister/starcastle_download.sv` implements this contract
-for HPS index 0. `outputs` is exposed for the sound
-board implementation; there is no audio output yet.
+for HPS index 0. `outputs` drives the selected sound board, which supplies
+signed 16-bit audio to the MiSTer wrapper.
 
 The platform wrapper and scanout contracts, pin/IP provenance and remaining
 display limitations are described in [MiSTer integration](mister-integration.md).

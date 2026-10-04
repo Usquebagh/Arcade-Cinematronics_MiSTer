@@ -1,8 +1,10 @@
 # Validation record - updated 2026-10-04
 
 Simulation and synthesis checks below are distinct from hardware feedback.
-Star Castle gameplay, sound and video controls have also passed MiSTer user
-testing; CRT output remains untested. See [hardware status](mister-integration.md#hardware-status).
+Star Castle gameplay, sound and video controls passed MiSTer user testing on
+the earlier build. The combined build needs gameplay checks for both games
+and Rip Off listening; CRT output remains untested. See
+[hardware status](mister-integration.md#hardware-status).
 
 ## Executed locally
 
@@ -29,6 +31,11 @@ Yosys; Docker image `theypsilon/quartus-lite-c5:17.0.2`.
 | End-to-end rasterizer + framebuffer + synchronous scanout | 69 complete frames, 14,283 segments; every scanout pixel passes |
 | Yosys video memory/netlist checks | Pass; two memory cells retained |
 | Quartus vector-video analysis and synthesis | Pass; 697 logic cells, 256 RAM segments, 2,097,152 block-memory bits; zero errors |
+| Rip Off chip size, CRC32, SHA-1 and MRA interleave | Pass |
+| Rip Off connected real-ROM gameplay | 120 frames; 3,851,660 checked instructions; 15,059 vectors; every framebuffer pixel passes |
+| Rip Off separate player controls and coin acknowledgements | Both players exercised; two coin acknowledgements pass |
+| Game profile selection, malformed profiles and legacy fallback | Pass |
+| Rip Off sound serial latch, six effects, release, headroom and 96 kHz timing | Pass at accelerated and 50 MHz clocks; short explosion triggers retained |
 
 The differential oracle is the original pinned MAME instruction function.
 Agreement establishes compatibility with that reference, not independent
@@ -66,6 +73,8 @@ bash sim/run.sh
 bash sim/run_vector.sh
 bash sim/run_machine.sh
 bash sim/run_sound.sh
+bash sim/run_ripoff.sh
+bash sim/run_ripoff_sound.sh
 bash sim/run_overlay.sh
 bash sim/run_mister.sh
 bash tools/synth.sh
@@ -84,6 +93,9 @@ python3 tools/preview_vector.py build/vector/starcastle.pgm build/vector/starcas
 bash sim/run_machine.sh build/roms/starcastle.bin build/machine/starcastle.pgm
 python3 tools/preview_vector.py build/machine/starcastle.pgm build/machine/starcastle.png
 bash sim/run_mister.sh games/mame/starcas.zip
+python3 tools/prepare_ripoff.py games/mame/ripoff.zip
+bash sim/run_ripoff.sh build/roms/ripoff.bin build/ripoff/ripoff.pgm build/sound/ripoff-game.wav
+python3 tools/check_mra.py games/mame/starcas.zip games/mame/ripoff.zip
 ```
 
 Component synthesis checks do not perform fitting or generate an RBF.

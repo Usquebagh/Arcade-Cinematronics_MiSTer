@@ -5,6 +5,9 @@ field and red, orange and yellow regions around the centre. It does not assign
 colours to objects. Any vector passing through a region receives its tint,
 like light passing through a gel. Black stays black.
 
+Rip Off bypasses the Star Castle filter and remains monochrome. Vector
+brightness still applies; overlay enable/strength affect Star Castle only.
+
 The OSD offers three controls:
 
 | Setting | Values | Default |

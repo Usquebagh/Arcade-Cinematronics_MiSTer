@@ -1,8 +1,11 @@
 # Current build — 2026-10-04
 
-**Star Castle (version 3)** is playable with synthesized sound, a colour filter
-and adjustable brightness. Gameplay and video controls have passed MiSTer
-user testing; sound has passed a subjective listening comparison.
+One RBF supports **Star Castle (version 3)** and **Rip Off**, each selected by
+its own MRA. Both have synthesized sound and adjustable brightness;
+Star Castle also has a colour filter. Simulation and reported internal timing
+pass. Both MRA paths and FPGA startup have been checked on MiSTer.
+Star Castle's earlier build passed hardware gameplay and sound checks;
+**gameplay testing of this combined build and Rip Off listening are pending.**
 **CRT output is untested.** Glow, bloom and phosphor persistence are not
 implemented; frame tearing is possible. Colour and analog sound calibration
 remain outstanding.
@@ -13,7 +16,9 @@ remain outstanding.
 | --- | --- |
 | [Arcade-Cinematronics_20261004.rbf](Arcade-Cinematronics_20261004.rbf) | `_Arcade/cores/` |
 | [Star Castle (version 3).mra](Star%20Castle%20%28version%203%29.mra) | `_Arcade/` |
+| [Rip Off.mra](Rip%20Off.mra) | `_Arcade/` |
 | Your own `starcas.zip` | `_Arcade/mame/` |
+| Your own `ripoff.zip` | `_Arcade/mame/` |
 
 Keep only the current Cinematronics RBF and launch the MRA. When downloading
 individual files from GitHub, use **Download raw file**.
