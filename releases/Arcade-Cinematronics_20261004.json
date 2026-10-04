@@ -1,5 +1,5 @@
 {
-  "source_commit": "a9c655e71ae3a3aaef5d59760f7e174c873f3808",
+  "source_commit": "7954a33990245ba28523b7ccc2ae90765caa776b",
   "project": "Arcade-Cinematronics",
   "target_games": [
     "Star Castle (version 3)",
@@ -12,8 +12,8 @@
   "device": "5CSEBA6U23I7",
   "rbf": {
     "file": "Arcade-Cinematronics_20261004.rbf",
-    "bytes": 3338572,
-    "sha256": "2cbaffaab1df0a7dba0af6d670d17b9741bafbd62af76f165ddc13af6dfc8480"
+    "bytes": 3346192,
+    "sha256": "f85b2e25ca28f74e15aab797943276564637fdf6f96422d26520a11df29f22fe"
   },
   "mra_sha256": {
     "Star Castle (version 3).mra": "579bce481d83e61681afec60eff55e29c91a24c3333b1c35cc222e37ebff0556",
@@ -26,18 +26,18 @@
     "fitter_seed": 2
   },
   "resources": {
-    "alms": 11585,
-    "registers": 16797,
+    "alms": 11666,
+    "registers": 16776,
     "ram_blocks": 327,
     "block_memory_bits": 2586971,
     "dsp_blocks": 84,
     "plls": 3
   },
   "worst_slack_ns": {
-    "Setup": 0.08,
-    "Hold": 0.242,
-    "Recovery": 3.479,
-    "Removal": 0.807,
+    "Setup": 0.054,
+    "Hold": 0.244,
+    "Recovery": 3.25,
+    "Removal": 0.687,
     "Minimum Pulse Width": 1.122
   },
   "all_reported_tns_zero": true,
@@ -45,27 +45,33 @@
   "external_io_constraints": "Inherited MiSTer framework; some external ports lack explicit delay constraints.",
   "tested_on_hardware": false,
   "hardware_validation": {
-    "starcastle_gameplay": "pending on combined build",
-    "ripoff_gameplay": "pending",
-    "ripoff_listening": "pending",
+    "starcastle_gameplay": "previous combined build confirmed by user; this audio revision needs listening",
+    "ripoff_status": "Bootable but otherwise untested/WIP",
+    "ripoff_gameplay": "boots and plays per user; otherwise unvalidated",
+    "ripoff_two_player": "untested",
+    "ripoff_listening": "untested",
+    "starcastle_explosion_listening": "pending on revised mix",
     "crt_tested": false,
-    "installation_checksums": "RBF, both MRAs and local Rip Off ZIP match installed files",
-    "launch_checks": {
-      "Star Castle (version 3)": "Main selects expected RBF/MRA; FPGA operating",
-      "Rip Off": "Main selects expected RBF/MRA; FPGA operating"
-    }
+    "installation_checksums": "Updated RBF and installation checker match installed files; both MRAs unchanged",
+    "starcastle_launch": "Main selects expected RBF/MRA; FPGA operating"
+  },
+  "prior_combined_hardware_validation": {
+    "date": "2026-10-04",
+    "rbf_sha256": "2cbaffaab1df0a7dba0af6d670d17b9741bafbd62af76f165ddc13af6dfc8480",
+    "starcastle": "still plays correctly; explosions reported missing",
+    "ripoff": "boots and plays; otherwise untested/WIP"
   },
   "prior_starcastle_hardware_validation": {
     "date": "2026-10-04",
     "rbf_sha256": "62a30e88d0a90f79502a3e47d0367129e2b45e1ebc38f3fdb2b46c0a43645c86",
     "gameplay": "passed",
-    "sound": "passed subjective listening comparison",
+    "sound": "earlier subjective comparison; subsequently reported missing explosions",
     "colour_brightness_controls": "passed",
     "crt_tested": false
   },
   "simulation": {
     "github_ci": "passed on source commit",
-    "github_ci_run_url": "https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/actions/runs/37232812781",
+    "github_ci_run_url": "https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/actions/runs/37234978523",
     "starcastle_frames": 28,
     "starcastle_checked_instructions": 1031753,
     "ripoff_frames": 120,
@@ -77,7 +83,34 @@
     "sound_effects_checked": {
       "starcastle": 8,
       "ripoff": 6
-    }
+    },
+    "sound_regression_commit": "d4af12de589122f927ae20af5e4892ecb78ab250",
+    "settled_filter_20ns_explosions": "passed locally at 50 MHz after one second of settling",
+    "starcastle_explosion_burst_rms": {
+      "soft": 658.392,
+      "loud": 1297
+    },
+    "additional_gameplay_captures": {
+      "driver": "local instrumentation: extended frames, sustained thrust/fire and output-event logging",
+      "starcastle": {
+        "frames": 600,
+        "checked_instructions": 22301081,
+        "vectors": 63488,
+        "audio_peak": 7265,
+        "all_pixels_checked": true,
+        "explosion_output_pulses": 0
+      },
+      "ripoff": {
+        "frames": 400,
+        "checked_instructions": 14476269,
+        "vectors": 55190,
+        "audio_peak": 9015,
+        "all_pixels_checked": true
+      },
+      "limit": "Star Castle capture did not exercise explosion commands; isolated board tests cover both burst inputs. Hardware crash/destruction listening remains pending."
+    },
+    "sound_regression_ci": "passed",
+    "sound_regression_ci_run_url": "https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/actions/runs/37235709597"
   },
   "game_rom_embedded": false,
   "audio": {
@@ -85,7 +118,13 @@
     "output": "signed 16-bit mono duplicated left/right",
     "models": "schematic-informed behavioral discrete circuits",
     "minimum_sample_enable_spacing_clocks": 520,
-    "extra_roms_or_samples": false
+    "extra_roms_or_samples": false,
+    "explosion_gain_change_db": {
+      "starcastle_soft": 24,
+      "starcastle_loud": 12,
+      "ripoff": 12
+    },
+    "explosion_hardware_listening": "pending"
   },
   "video": {
     "starcastle": "fixed gel filter",

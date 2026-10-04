@@ -101,9 +101,9 @@ only in a temporary simulation copy; hardware `sys/` logic is unchanged.
 
 ## Hardware Status
 
-The earlier Star Castle build passed a full game, subjective sound comparison
-and colour/brightness checks on MiSTer. The combined build requires hardware
-gameplay checks for both games and listening checks for Rip Off; the manifest
-records installation/launch checks separately. CRT output, physical vector
+The user confirmed Star Castle still plays correctly on the combined build.
+Rip Off boots and plays, but is otherwise untested/WIP: gameplay, two-player
+operation and sound have not been validated. The manifest records
+installation/launch checks separately. CRT output, physical vector
 timing, gel/CRT calibration and measured analog sound fidelity remain unverified.
 Save/reload of video settings has not been separately verified.

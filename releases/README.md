@@ -3,9 +3,9 @@
 One RBF supports **Star Castle (version 3)** and **Rip Off**, each selected by
 its own MRA. Both have synthesized sound and adjustable brightness;
 Star Castle also has a colour filter. Simulation and reported internal timing
-pass. Both MRA paths and FPGA startup have been checked on MiSTer.
-Star Castle's earlier build passed hardware gameplay and sound checks;
-**gameplay testing of this combined build and Rip Off listening are pending.**
+pass. Star Castle still plays correctly on the combined core.
+**Rip Off is bootable but otherwise untested/WIP**: it boots and plays on
+MiSTer, but gameplay, two-player operation and sound have not been validated.
 **CRT output is untested.** Glow, bloom and phosphor persistence are not
 implemented; frame tearing is possible. Colour and analog sound calibration
 remain outstanding.

@@ -7,7 +7,8 @@ have passed user testing on MiSTer.
 
 Rip Off shares the CPU/video path and adds its own MRA, two-player controls
 and sound board. Its 120-frame live-ROM regression passes 3,851,660 checked
-instructions and every framebuffer pixel; hardware testing is pending.
+instructions and every framebuffer pixel. It boots and plays on MiSTer but
+is otherwise untested/WIP; gameplay, two-player operation and sound need validation.
 
 Next steps:
 

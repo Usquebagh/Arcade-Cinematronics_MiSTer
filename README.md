@@ -15,15 +15,13 @@ Armor Attack and Solar Quest are planned next.
   <img src="docs/star_castle.png" alt="Star Castle game screen" height="310">
 </p>
 
-> **Status:** Star Castle's earlier build passed a full game, sound and
-> colour/brightness checks on MiSTer. The current combined
-> build passes simulation, fitting and reported internal timing.
-> Both MRA paths and FPGA startup have been checked on MiSTer.
-> Rip Off passes a 120-frame gameplay simulation with both players' controls,
-> instruction/pixel comparisons and synthesized sound. Hardware gameplay checks
-> and Rip Off listening for the combined build are pending.
+> **Status:** Star Castle still plays correctly on the combined core.
+> **Rip Off is bootable but otherwise untested/WIP**: it boots and plays on
+> MiSTer, but gameplay, two-player operation and sound have not been validated.
+> Simulation, fitting and reported internal timing pass for both games.
 >
-> **Known issues:** **CRT output is untested.** Neon glow, bloom and phosphor
+> **Known issues:** **CRT output is untested.** Explosion levels have been
+> corrected in simulation; hardware listening is pending. Neon glow, bloom and phosphor
 > persistence are not implemented. Frame tearing is possible. Physical colour,
 > vector timing and analog sound fidelity remain uncalibrated. Feedback and
 > bug reports are welcome via [Issues](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/issues).

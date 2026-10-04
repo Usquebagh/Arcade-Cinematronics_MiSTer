@@ -2,8 +2,8 @@
 
 Simulation and synthesis checks below are distinct from hardware feedback.
 Star Castle gameplay, sound and video controls passed MiSTer user testing on
-the earlier build. The combined build needs gameplay checks for both games
-and Rip Off listening; CRT output remains untested. See
+the earlier build. Star Castle also still plays on the combined build.
+Rip Off is bootable but otherwise untested/WIP; CRT output remains untested. See
 [hardware status](mister-integration.md#hardware-status).
 
 ## Executed locally
