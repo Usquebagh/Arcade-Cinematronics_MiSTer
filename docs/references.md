@@ -13,7 +13,11 @@ Hardware references supplied locally:
 
 The instruction table on page 18 and the extracted CPU reference text were
 inspected during setup. Other manuals are available for the subsequent
-board/video/sound investigation; they have not all been reviewed yet.
+board/video/sound investigation; they have not all been reviewed yet. Star
+Castle manual PDF pages 86-87 (printed A-25/A-26) have now been visually
+reviewed for sound control wiring, oscillator/divider circuits, effect
+envelopes and mixing. The sound model's provenance and fidelity limits are
+recorded in [sound](sound.md).
 
 MAME is pinned to commit `9eea5804dc46644dd2dc9c3bc28cbb6c2e93c54e`:
 

@@ -17,7 +17,7 @@ vvp build/queue | tee -a "$root/build/machine/results.txt"
 python3 tools/generate_mame_adapter.py
 verilator --cc --exe --build --top-module starcastle_machine -Wall -Wno-UNUSEDSIGNAL -Wno-PINCONNECTEMPTY \
   --Mdir build/obj -CFLAGS "-std=c++17 -I\"$PWD/sim\" -I\"$PWD/sim/reference\"" \
-  rtl/ccpu/ccpu.sv rtl/games/*.sv rtl/io/*.sv rtl/machine/*.sv rtl/vector/*.sv \
+  rtl/ccpu/ccpu.sv rtl/games/*.sv rtl/io/*.sv rtl/machine/*.sv rtl/vector/*.sv rtl/sound/*.sv \
   "$PWD/sim/starcastle_machine_test.cpp" "$PWD/build/sim/mame_impl.cpp" \
   >build/compile.log 2>&1 || { cat build/compile.log; exit 1; }
 cp build/compile.log "$root/build/machine/compile.log"

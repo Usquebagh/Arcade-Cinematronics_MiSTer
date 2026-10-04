@@ -29,6 +29,8 @@ struct Test {
     uint64_t clocks=0,retirements=0,vectors=0;
     unsigned frame_ticks=0,presentations=0,resets=0,acknowledgements=0,input_reads=0;
     unsigned queue_stalls=0;
+    unsigned sound_commands=0, audio_peak=0;
+    std::vector<int16_t> audio_samples;
     unsigned control_reads[5]{}; // start1, left, right, thrust, fire while pressed
     bool running=false,script=false,latched_seen=false;
     void check(const char* label,unsigned actual,unsigned expected) {
@@ -61,8 +63,15 @@ struct Test {
         rtl.clk=0;rtl.eval();
         bool wake=rtl.cpu_frame_wake,expired=rtl.watchdog_reset,timer=rtl.frame_tick;
         unsigned inputs=rtl.cpu_inputs,old_outputs=rtl.outputs;
+        bool audio_ce=rtl.audio_ce;
+        unsigned old_sound=rtl.sound_latch;
         rtl.clk=1;rtl.eval();rtl.clk=0;rtl.eval();++clocks;
         if(!running) return;
+        if(rtl.sound_latch!=old_sound) ++sound_commands;
+        if(audio_ce) {
+            auto sample=int16_t(rtl.audio);audio_samples.push_back(sample);
+            audio_peak=std::max(audio_peak,unsigned(std::abs(int(sample))));
+        }
         if(rtl.vector_valid&&!rtl.vector_ready) ++queue_stalls;
         if(timer) ++frame_ticks;
         if(wake) ref.m_waiting=0;
@@ -144,16 +153,28 @@ int main(int argc,char** argv) {
             if(test.resets||test.vectors<100||!test.acknowledgements||test.input_reads<20)
                 throw std::runtime_error("Real-ROM machine lacked expected activity or triggered watchdog");
             for(auto count:test.control_reads) if(!count) throw std::runtime_error("Game did not read a pressed control");
+            if(test.sound_commands<2||test.audio_peak<100||test.audio_samples.size()<10000)
+                throw std::runtime_error("Real-ROM machine did not drive the sound board");
             auto image=test.scan();
             if(argc>2) {
                 std::ofstream out(argv[2],std::ios::binary);if(!out) throw std::runtime_error("Cannot write machine preview");
                 out<<"P5\n512 384\n255\n";out.write(reinterpret_cast<const char*>(image.data()),image.size());
+            }
+            if(argc>3) {
+                std::ofstream out(argv[3],std::ios::binary);if(!out) throw std::runtime_error("Cannot write game audio");
+                auto word=[&](uint32_t n,unsigned bytes) {for(unsigned k=0;k<bytes;++k)out.put(char(n>>(8*k)));};
+                out.write("RIFF",4);word(36+test.audio_samples.size()*2,4);out.write("WAVEfmt ",8);word(16,4);
+                word(1,2);word(1,2);word(96000,4);word(192000,4);word(2,2);word(16,2);
+                out.write("data",4);word(test.audio_samples.size()*2,4);
+                for(auto sample:test.audio_samples)word(uint16_t(sample),2);
             }
             std::cout<<"PASS: Star Castle live machine, "<<test.presentations<<" frames, "<<test.retirements
                      <<" reference-checked instructions, "<<test.vectors<<" vectors, "<<test.acknowledgements
                      <<" coin acknowledgements, "<<test.input_reads<<" input reads; every scanout pixel checked\n";
             std::cout<<"PASS: pressed start/left/right/thrust/fire reads: "<<test.control_reads[0]<<'/'
                      <<test.control_reads[1]<<'/'<<test.control_reads[2]<<'/'<<test.control_reads[3]<<'/'<<test.control_reads[4]<<'\n';
+            std::cout<<"PASS: real game drives "<<test.sound_commands<<" sound-latch changes, "
+                     <<test.audio_samples.size()<<" audio samples, peak "<<test.audio_peak<<"\n";
         } else {
             Test test;test.ref.rom.fill(0x5f);
             std::vector<uint8_t> code;

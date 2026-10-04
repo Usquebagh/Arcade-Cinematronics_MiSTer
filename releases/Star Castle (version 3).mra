@@ -5,7 +5,7 @@
     <category>Shooter</category>
     <setname>starcas</setname>
     <rbf>Cinematronics</rbf>
-    <about author="Usquebagh" webpage="https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer">Development core: grayscale video, sound pending.</about>
+    <about author="Usquebagh" webpage="https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer">Development core: grayscale video, synthesized discrete sound.</about>
     <rotation>horizontal</rotation>
     <players>2 (alternating)</players>
     <joystick>2-way</joystick>

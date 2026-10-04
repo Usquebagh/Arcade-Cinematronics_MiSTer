@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2026 Usquebagh
-// Standalone synchronous machine component; MiSTer wrapper and sound follow.
+// Synchronous Star Castle machine, including its discrete sound-board model.
 module starcastle_machine (
     input wire clk, reset,
     input wire load_active, rom_loaded, load_write,
@@ -10,7 +10,10 @@ module starcastle_machine (
     input wire [5:0] dips,
     input wire [8:0] scan_x, scan_y,
     output wire [7:0] scan_gray,
+    output wire signed [15:0] audio,
+    output wire audio_ce,
     output wire [7:0] outputs,
+    output wire [7:0] sound_latch,
     output wire machine_ready, waiting, coin_latched, watchdog_reset,
     output wire frame_presented, cpu_ce, frame_tick,
     // Verification ports. These may be left unconnected by the MiSTer wrapper.
@@ -61,6 +64,10 @@ module starcastle_machine (
         .left(left), .right(right), .thrust(thrust), .fire(fire),
         .coin(coin), .service(service), .dips(dips), .outputs(outputs),
         .inputs(cpu_inputs), .coin_latched(coin_latched)
+    );
+    starcastle_sound sound (
+        .clk(clk), .reset(hard_reset), .outputs(outputs), .audio(audio),
+        .sample_ce(audio_ce), .shift_register(), .sound_latch(sound_latch)
     );
     ccpu cpu (
         .clk(clk), .reset(hard_reset), .soft_reset(watchdog_reset),

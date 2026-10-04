@@ -5,9 +5,9 @@ The intended progression is Star Castle, Rip Off, Armor Attack, Solar Quest,
 then the other CCPU games after their controls, sound and board differences
 have been implemented and checked.
 
-**Current milestone: Star Castle is connected to a complete MiSTer project.
-A first development RBF passes Quartus fit and reported internal timing.
-Sound and hardware gameplay testing remain pending.**
+**Current milestone: Star Castle has passed a full-game hardware test.
+The sound board is now connected and passes simulation; the sound-enabled
+hardware build and listening test are the next validation steps.**
 
 Implemented:
 
@@ -29,12 +29,15 @@ Implemented:
   retired instructions and all displayed pixels to the references.
 - MiSTer platform wrapper with validated HPS ROM downloads, DIP settings,
   keyboard/controller inputs, native progressive scanout and a Star Castle MRA.
+- Synthesized sound-board model with serial control latches, eight effect
+  channels, filtered noise, VCOs, RC envelopes and signed mono audio.
 
 The MAME-compatible CPU behavior is a starting point. Physical CPU timing,
-draw-busy timing, calibrated intensity/persistence, sound and on-device gameplay
-remain to be established. The first complete MiSTer build passes fitting and
+draw-busy timing, calibrated intensity/persistence and analog sound fidelity
+remain to be established. A full game has been played successfully on hardware.
+The first complete MiSTer build passes fitting and
 reported internal timing; the development RBF and MRA are in `releases/`.
-Sound output is currently silent.
+See [sound implementation and limits](docs/sound.md) for the new audio model.
 QB-3's banking and video differences are outside this baseline.
 
 ## Run the tests
@@ -57,6 +60,7 @@ bash sim/run_machine.sh
 bash sim/run_machine.sh build/roms/starcastle.bin build/machine/starcastle.pgm
 python3 tools/preview_vector.py build/machine/starcastle.pgm build/machine/starcastle.png
 bash tools/synth_machine.sh --quartus
+bash sim/run_sound.sh
 ```
 
 The optional Quartus check uses the Docker image
@@ -75,7 +79,8 @@ ordering without ROMs. `bash build.sh` uses the installed Quartus Docker image
 for a full DE10-Nano compile. See [MiSTer integration](docs/mister-integration.md)
 for platform provenance, installation, controls and current limitations.
 The [release notes](releases/README.md) give the SD-card locations and controls
-for the first hardware test. This build is silent and frame tearing is possible.
+for hardware testing. The original build is silent; the sound-enabled build
+adds synthesized audio. Frame tearing is still possible.
 
 See [architecture](docs/architecture.md), [development milestones](docs/roadmap.md),
 [reference provenance](docs/references.md) and [validation](docs/validation.md).

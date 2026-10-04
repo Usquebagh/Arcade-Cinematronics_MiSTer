@@ -3,6 +3,7 @@ set_global_assignment -name SDC_FILE Arcade-Cinematronics.sdc
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/ccpu/ccpu.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/games/starcastle_rom.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/games/starcastle_machine.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/sound/starcastle_sound.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/io/starcastle_io.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/machine/cinemat_timing.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/machine/cinemat_watchdog.sv

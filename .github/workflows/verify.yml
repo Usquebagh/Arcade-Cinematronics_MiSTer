@@ -21,6 +21,8 @@ jobs:
         run: bash tools/synth_vector.sh
       - name: Connected machine, timers, controls and watchdog tests
         run: bash sim/run_machine.sh
+      - name: Sound board controls, voices, envelopes and sample rate
+        run: bash sim/run_sound.sh
       - name: Machine component synthesis
         run: bash tools/synth_machine.sh
       - name: MiSTer ROM download, controls, scanout and MRA tests

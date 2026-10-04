@@ -17,11 +17,15 @@
    Platform wiring and tests are implemented. A first complete game-connected
    build passes fit and reported timing; the final development RBF and evidence
    are recorded in `releases/` and `docs/mister-integration.md`. Scanout/game
-   frame synchronization and board-level validation remain follow-ups.
+   frame synchronization remains a follow-up. FPGA startup and a full game
+   have now passed on hardware with the original silent RBF.
 5. **Playable Star Castle**: verify attract mode, coin/start, controls, gameplay,
    reset and long runs on hardware; implement and validate sound. Record the
    exact tested source commit and RBF hash. Hardware results require access to
-   a MiSTer or user testing; simulation alone cannot establish them.
+   a MiSTer or user testing; simulation alone cannot establish them. A full
+   silent game has passed. A first synthesized sound-board model now passes
+   logic, effect, sample-rate and live-game simulations; hardware listening
+   and analog fidelity remain to be checked.
 6. **Shared platform**: Rip Off, Armor Attack and Solar Quest, each with ROM
    validation, proper I/O and sound. Then analog/keypad/rotary games and QB-3.
 

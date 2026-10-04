@@ -70,7 +70,8 @@ rate independently of 60 Hz scanout. A bank swap during visible scanout can
 tear a frame. Synchronizing presentation without reducing the CPU's execution
 budget is a follow-up. HDMI/analog behavior, controller mapping and the display
 timing need on-device validation; no hardware test is implied by compilation.
-There is no color overlay, calibrated persistence or discrete sound yet.
+There is no color overlay or calibrated persistence yet. The machine now
+includes a behavioral discrete sound model; see [sound](sound.md).
 
 ## Build and installation
 
@@ -88,8 +89,9 @@ needs hardware verification.
 For a hardware test, place `Arcade-Cinematronics_YYYYMMDD.rbf` in
 `_Arcade/cores/`, `Star Castle (version 3).mra` in `_Arcade/`, and your own
 `starcas.zip` in `_Arcade/mame/` on the MiSTer SD card. Launch the MRA.
-This is a development build: expect silent grayscale output and report the
-tested RBF hash, attract/coin/start behavior, display behavior and any resets.
+This is a development build: expect grayscale output and report the tested
+RBF hash, attract/coin/start behavior, sound, display behavior and any resets.
+The original RBF is silent; the `_sound` revision adds synthesized mono audio.
 
 Tests: `bash sim/run_mister.sh` (ROM-free) or
 `bash sim/run_mister.sh games/mame/starcas.zip` (local ROM layout verification).
@@ -139,5 +141,16 @@ framework dual-clock RAM behavior and FIFO read-during-write passthrough logic.
 The same source passes the ROM-free platform tests and the local-ZIP layout
 check. The established real-game machine regression also passes: 28 frames,
 1,031,753 MAME-checked instructions, 3,435 vectors, exercised coin/start and
-controls, and every framebuffer pixel checked. **No hardware test has been
-performed; sound is unimplemented.**
+controls, and every framebuffer pixel checked. The original silent build has
+now passed FPGA startup and a complete user-played game on hardware. The
+initial loading failure was caused by saved GitHub HTML pages masquerading
+as the MRA/RBF; verified raw-file replacement fixed it.
+
+## Sound integration
+
+The machine's sound output is connected to both MiSTer audio channels as signed
+16-bit mono. `starcastle_sound` observes the CCPU output latches at 50 MHz and
+updates its RC/VCO/noise model at 96 kHz. It resets on hard reset or ROM download,
+but does not reset on the CPU watchdog's soft recovery. There are no extra
+MRA downloads or sound ROMs. The OSD version suffix `sound` identifies this
+revision. Model fidelity and listening checks are described in [sound](sound.md).

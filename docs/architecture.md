@@ -2,8 +2,8 @@
 
 The CCPU executes game code and emits vector segments. The vector renderer
 converts those segments into a framebuffer with a synchronous grayscale scanout.
-Star Castle I/O, CPU/frame timing and watchdog are now connected. Sound and
-other game configurations remain separate implementation tasks.
+Star Castle I/O, CPU/frame timing, watchdog and its sound-board model are now
+connected. Other game configurations remain separate implementation tasks.
 
 ## CPU component contract
 
@@ -90,7 +90,7 @@ cabinet overlay or normalization-dependent point brightness is implemented yet.
 ## Connected Star Castle machine
 
 `rtl/games/starcastle_machine.sv` combines the CPU, synchronous program ROM,
-board I/O, timing, watchdog, a 16-entry segment FIFO and vector video. All ports
+board I/O, sound, timing, watchdog, a 16-entry segment FIFO and vector video. All ports
 are synchronous to a 50 MHz system clock. The MiSTer wrapper clocks HPS/OSD
 and machine interfaces from this same PLL. The input controls are active-high booleans;
 the I/O module converts them to the original active-low electrical inputs.

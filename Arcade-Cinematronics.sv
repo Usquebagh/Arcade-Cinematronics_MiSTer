@@ -14,7 +14,7 @@ module emu (
         "-;R[0],Reset;",
         "J1,Fire,Thrust,Start 1,Coin,Start 2;",
         "jn,A,B,Start,Select,X;",
-        "V,v",`BUILD_DATE
+        "V,v",`BUILD_DATE," sound"
     };
     wire [127:0] status;
     wire [1:0] buttons;
@@ -58,6 +58,7 @@ module emu (
     );
     wire [8:0] scan_x, scan_y;
     wire [7:0] scan_gray, gray;
+    wire signed [15:0] mono_audio;
     wire [7:0] display_gray = rom_loaded && !load_active && !reset ? gray : 8'd0;
     wire ce_pix, hs, vs, hblank, vblank;
     starcastle_machine machine (
@@ -65,7 +66,8 @@ module emu (
         .load_write(load_write), .load_addr(load_addr), .load_data(load_data),
         .start1(start1), .start2(start2), .left(left), .right(right),
         .thrust(thrust), .fire(fire), .coin(coin), .service(status[6]), .dips(dips[5:0]),
-        .scan_x(scan_x), .scan_y(scan_y), .scan_gray(scan_gray)
+        .scan_x(scan_x), .scan_y(scan_y), .scan_gray(scan_gray),
+        .audio(mono_audio), .audio_ce()
     );
     vector_scanout scanout (
         .clk(clk_sys), .reset(!pll_locked), .scan_gray(scan_gray),
@@ -87,7 +89,8 @@ module emu (
     assign VIDEO_ARX = ar == 0 ? 13'd4 : {11'd0,ar} - 13'd1;
     assign VIDEO_ARY = ar == 0 ? 13'd3 : 13'd0;
     assign {VGA_F1,VGA_SCALER,VGA_DISABLE,HDMI_FREEZE,HDMI_BLACKOUT,HDMI_BOB_DEINT} = 0;
-    assign {AUDIO_L,AUDIO_R} = 0; // Discrete sound is the next milestone.
+    assign AUDIO_L = mono_audio;
+    assign AUDIO_R = mono_audio;
     assign AUDIO_S = 1;
     assign AUDIO_MIX = 0;
     assign LED_USER = load_active || load_error;
