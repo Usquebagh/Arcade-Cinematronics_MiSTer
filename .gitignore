@@ -9,7 +9,6 @@
 db/
 incremental_db/
 *.qws
-*.rbf
 *.sof
 *.vcd
 __pycache__/
