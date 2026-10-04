@@ -1,14 +1,29 @@
 # Cinematronics vector arcade hardware for MiSTer FPGA
 
-Private development repository. First target: **Star Castle (version 3)**.
+An FPGA implementation of Cinematronics vector arcade hardware for the
+[MiSTer FPGA](https://github.com/MiSTer-devel/Main_MiSTer/wiki) platform,
+starting with **Star Castle (version 3)**.
+
+Private development repository.
 The intended progression is Star Castle, Rip Off, Armor Attack, Solar Quest,
 then the other CCPU games after their controls, sound and board differences
 have been implemented and checked.
 
-**Current milestone: Star Castle has passed a full-game hardware test.
-The sound-enabled build passes simulation, fitting and reported timing, and
-has been installed and launched on MiSTer. The user confirms sound works and
-compares well with a Star Castle gameplay recording.**
+<p align="center">
+  <img src="docs/arcade_cabinet.png" alt="Star Castle arcade cabinet" height="310">
+  <img src="docs/star_castle.png" alt="Star Castle game screen" height="310">
+</p>
+
+> **Status:** Star Castle has passed a full-game hardware test. The current
+> build passes simulation, fitting and reported timing, and sound has been
+> confirmed working on MiSTer.
+>
+> **Known issues:** video is grayscale, with no color overlay or calibrated
+> persistence. Frame tearing is possible. Sound works, but exact analog
+> fidelity and channel balance remain uncalibrated. Feedback and bug reports
+> are welcome via [Issues](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/issues).
+
+---
 
 Implemented:
 
