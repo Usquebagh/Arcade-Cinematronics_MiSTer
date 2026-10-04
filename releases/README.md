@@ -3,8 +3,10 @@
 The current `_colour` revision adds a Star Castle colour overlay and adjustable
 video to the playable core with eight synthesized sound effects. It passes
 simulation, fitting and reported internal timing, and is installed and launched
-on MiSTer with matching file hashes. Visual and saved-settings
-checks on this revision are pending. The previous sound build passed the user's
+on MiSTer with matching file hashes. The user confirms that gameplay and the
+brightness/overlay controls work. **CRT output has not been tested.** Saved-settings
+persistence has not been explicitly checked. Neon glow, bloom and phosphor
+persistence are not implemented. The previous sound build passed the user's
 listening comparison with a Star Castle gameplay recording; its audio logic is
 retained. Sound fidelity, physical gel/CRT colour and persistence remain
 uncalibrated. Frame tearing is possible because game-frame presentation is not

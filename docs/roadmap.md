@@ -27,10 +27,12 @@
    logic, effect, sample-rate and live-game simulations. Hardware listening has
    passed a user comparison; measured analog fidelity remains uncalibrated.
    Shared colour-overlay support and simple saved video controls pass simulation
-   and timing; the first Star Castle profile awaits hardware visual checks.
+   and timing. The user confirms that gameplay and brightness/overlay controls
+   work on the colour build. CRT output is untested; glow, bloom and persistence
+   remain future work.
 6. **Shared platform**: Rip Off, Armor Attack and Solar Quest, each with ROM
    validation, proper I/O and sound. Then analog/keypad/rotary games and QB-3.
 
-Keep the repository private throughout development. Do not change visibility
-or publish a public release without the user's instruction. Commit each
+The user authorized public repository visibility on 2026-10-04. Commit each
 verified development milestone, preserving clear status and known limitations.
+Game ROMs and proprietary documentation remain excluded from the repository.

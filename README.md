@@ -4,7 +4,6 @@ An FPGA implementation of Cinematronics vector arcade hardware for the
 [MiSTer FPGA](https://github.com/MiSTer-devel/Main_MiSTer/wiki) platform,
 starting with **Star Castle (version 3)**.
 
-Private development repository.
 The intended progression is Star Castle, Rip Off, Armor Attack, Solar Quest,
 then the other CCPU games after their controls, sound and board differences
 have been implemented and checked.
@@ -15,12 +14,12 @@ have been implemented and checked.
 </p>
 
 > **Status:** Star Castle has passed a full-game hardware test. The current
-> build passes simulation, fitting and reported timing, and sound has been
-> confirmed working on MiSTer.
+> build passes simulation, fitting and reported timing. Gameplay, sound and
+> colour/brightness controls have been checked on MiSTer hardware.
 >
-> **Known issues:** the colour-enabled build passes simulation and timing;
-> hardware visual checks are pending. Persistence and gel/CRT colour remain
-> uncalibrated, and frame tearing is possible. Sound works, but exact analog
+> **Known issues:** CRT output has not been tested. Neon glow, bloom and phosphor
+> persistence are not implemented. Gel/CRT colour remains uncalibrated, and
+> frame tearing is possible. Sound works, but exact analog
 > fidelity and channel balance remain uncalibrated. Feedback and bug reports
 > are welcome via [Issues](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/issues).
 
@@ -112,8 +111,8 @@ Original CPU/machine/video modules and tools are BSD-3-Clause; see
 [BSD license](LICENSES/Cinematronics-BSD-3-Clause.txt). The CCPU instruction
 semantics and differential reference come from Aaron Giles' BSD-3-Clause MAME
 CCPU, with credits and its license preserved in `sim/reference/` and `LICENSES/`.
-Zonn Moore's programmer's reference and the supplied schematics are hardware
-references, kept locally. Game ROMs and scanned manuals are not distributed.
+Game ROMs and other proprietary game data or documentation are not included
+or distributed with this repository.
 Imported MiSTer framework components retain their own licenses. The integrated
 MiSTer core is GPL-3.0-or-later; see [LICENSE](LICENSE). Original
 modules and tools remain BSD-3-Clause individually.

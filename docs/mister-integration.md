@@ -172,5 +172,7 @@ adds five RAM blocks and six DSP blocks compared with the sound build.
 ROM-free CI passes, including exhaustive overlay checks and nine full RGB
 frames through the MiSTer video pipeline. The installed RBF/MRA hashes match
 the package, and MiSTer is running with the colour RBF and MRA after launch.
-Only that RBF remains installed. Hardware visual and save/reload checks remain
-pending; the earlier sound listening result does not retest this new bitstream.
+Only that RBF remains installed. The user confirms that gameplay and the
+brightness/overlay controls work on this revision. **CRT output has not been
+tested.** Save/reload persistence and a separate audio retest have not been
+explicitly reported. Neon glow, bloom and phosphor persistence are not implemented.

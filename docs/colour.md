@@ -81,5 +81,8 @@ An optional local machine PGM can be passed to `sim/run_overlay.sh` with a PPM
 output path to render and check the real-game frame through the RTL. Captures
 stay under ignored `build/`. The colour build passes the full Quartus timing
 gate and has been installed on MiSTer with verified RBF/MRA hashes. MiSTer is
-running with that RBF and MRA after a launch request. User visual, video-control
-and save/reload checks are pending.
+running with that RBF and MRA after a launch request. On 2026-10-04 the user
+confirmed that gameplay and the brightness/overlay controls work. **CRT output
+has not been tested.** Save/reload persistence has not been explicitly verified.
+The current controls are functional colour/brightness adjustments; neon glow,
+bloom and phosphor persistence remain future work.

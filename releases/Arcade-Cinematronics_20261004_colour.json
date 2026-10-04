@@ -44,7 +44,9 @@
     "installed_mra_hash_matches": true,
     "matching_installed_rbfs": 1,
     "mra_launch": "MiSTer process running with colour RBF and matching MRA",
-    "visual": "pending",
+    "visual": "passed (user confirms brightness/overlay controls work)",
+    "gameplay": "passed (user reports game runs fine)",
+    "crt_tested": false,
     "saved_settings": "pending",
     "audio_retest_on_colour_build": "pending"
   },
@@ -53,7 +55,8 @@
     "Analog sound model is behavioral; exact fidelity and channel balance need listening calibration",
     "No calibrated persistence or glow; overlay colour is based on MAME artwork rather than measured gel/CRT response",
     "Game/display frame rates independent; tearing possible",
-    "Serial gamma and scandoubler/HQ2x disabled at this video clock rate"
+    "Serial gamma and scandoubler/HQ2x disabled at this video clock rate",
+    "CRT output has not been tested; neon glow, bloom and phosphor persistence are not implemented"
   ],
   "audio": {
     "model": "schematic-informed behavioral discrete circuit",
