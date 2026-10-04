@@ -24,8 +24,10 @@
    exact tested source commit and RBF hash. Hardware results require access to
    a MiSTer or user testing; simulation alone cannot establish them. A full
    silent game has passed. A first synthesized sound-board model now passes
-   logic, effect, sample-rate and live-game simulations; hardware listening
-   and analog fidelity remain to be checked.
+   logic, effect, sample-rate and live-game simulations. Hardware listening has
+   passed a user comparison; measured analog fidelity remains uncalibrated.
+   Shared colour-overlay support and simple saved video controls pass simulation
+   and timing; the first Star Castle profile awaits hardware visual checks.
 6. **Shared platform**: Rip Off, Armor Attack and Solar Quest, each with ROM
    validation, proper I/O and sound. Then analog/keypad/rotary games and QB-3.
 

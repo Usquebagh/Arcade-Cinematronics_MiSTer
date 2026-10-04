@@ -79,5 +79,7 @@ three colour, three monochrome and three adjusted-colour frames.
 
 An optional local machine PGM can be passed to `sim/run_overlay.sh` with a PPM
 output path to render and check the real-game frame through the RTL. Captures
-stay under ignored `build/`. Hardware visual and save/reload checks are pending
-until the new build is installed and tested.
+stay under ignored `build/`. The colour build passes the full Quartus timing
+gate and has been installed on MiSTer with verified RBF/MRA hashes. MiSTer is
+running with that RBF and MRA after a launch request. User visual, video-control
+and save/reload checks are pending.

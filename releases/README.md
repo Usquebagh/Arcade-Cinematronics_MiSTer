@@ -1,19 +1,20 @@
 # Star Castle development build
 
-The current `_sound` revision adds eight synthesized sound effects to the
-grayscale video and coin/start/gameplay controls. It passes simulation, fitting
-and reported internal timing, and has launched on MiSTer Main version 260912.
-The user confirms sound works and compares well with a Star Castle gameplay
-recording. The sound model is a behavioral approximation;
-its fidelity and channel balance still need calibration. Frame
-tearing is possible because game-frame presentation is not yet synchronized
-to display blanking. Only the current sound-enabled RBF is packaged here.
+The current `_colour` revision adds a Star Castle colour overlay and adjustable
+video to the playable core with eight synthesized sound effects. It passes
+simulation, fitting and reported internal timing, and is installed and launched
+on MiSTer with matching file hashes. Visual and saved-settings
+checks on this revision are pending. The previous sound build passed the user's
+listening comparison with a Star Castle gameplay recording; its audio logic is
+retained. Sound fidelity, physical gel/CRT colour and persistence remain
+uncalibrated. Frame tearing is possible because game-frame presentation is not
+yet synchronized to display blanking. Only the current RBF is packaged here.
 
 Copy these files to your MiSTer SD card:
 
 | File | Destination |
 | --- | --- |
-| `Arcade-Cinematronics_20261004_sound.rbf` | `_Arcade/cores/` |
+| `Arcade-Cinematronics_20261004_colour.rbf` | `_Arcade/cores/` |
 | `Star Castle (version 3).mra` | `_Arcade/` |
 | Your own `starcas.zip` | `_Arcade/mame/` |
 
@@ -21,13 +22,18 @@ Launch the MRA. Keyboard: 5 for coin, 1/2 for start, Left/Right to rotate,
 Up to thrust, Space to fire. Controller: directions to rotate, Fire/Thrust
 buttons, Start and Coin; button mapping can be changed through MiSTer.
 
+The OSD offers **Colour overlay** (On/Off), **Vector brightness**
+(100/75/125/150%) and **Overlay strength** (100/75/50/25%). Use MiSTer's
+**Save settings** to retain your choices. Defaults are colour on, normal
+brightness and full overlay strength. See [colour controls](../docs/colour.md).
+
 When downloading individual files from GitHub, use **Download raw file**.
 Saving the GitHub file webpage produces HTML with an `.mra` or `.rbf` name.
 That caused the first reported launch failure: both installed files were HTML.
 Replacing them with the verified XML and bitstream allowed the core to start.
 
 The build/source identity and RBF SHA-256 are in
-`Arcade-Cinematronics_20261004_sound.json`. No game ROM bytes are embedded in the
+`Arcade-Cinematronics_20261004_colour.json`. No game ROM bytes are embedded in the
 RBF or included in this repository; the MRA downloads your ROM at launch.
 See [integration and validation](../docs/mister-integration.md) for details.
 

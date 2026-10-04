@@ -18,8 +18,8 @@ have been implemented and checked.
 > build passes simulation, fitting and reported timing, and sound has been
 > confirmed working on MiSTer.
 >
-> **Known issues:** the released build is grayscale; colour-overlay support
-> passes simulation and awaits its hardware build/check. Persistence remains
+> **Known issues:** the colour-enabled build passes simulation and timing;
+> hardware visual checks are pending. Persistence and gel/CRT colour remain
 > uncalibrated, and frame tearing is possible. Sound works, but exact analog
 > fidelity and channel balance remain uncalibrated. Feedback and bug reports
 > are welcome via [Issues](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/issues).
