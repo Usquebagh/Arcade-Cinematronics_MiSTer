@@ -80,8 +80,8 @@ ordering without ROMs. `bash build.sh` uses the installed Quartus Docker image
 for a full DE10-Nano compile. See [MiSTer integration](docs/mister-integration.md)
 for platform provenance, installation, controls and current limitations.
 The [release notes](releases/README.md) give the SD-card locations and controls
-for hardware testing. The original build is silent; the sound-enabled build
-adds synthesized audio. Frame tearing is still possible.
+for hardware testing. The current build includes synthesized audio.
+Frame tearing is still possible.
 
 See [architecture](docs/architecture.md), [development milestones](docs/roadmap.md),
 [reference provenance](docs/references.md) and [validation](docs/validation.md).

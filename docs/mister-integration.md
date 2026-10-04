@@ -91,7 +91,7 @@ For a hardware test, place `Arcade-Cinematronics_YYYYMMDD.rbf` in
 `starcas.zip` in `_Arcade/mame/` on the MiSTer SD card. Launch the MRA.
 This is a development build: expect grayscale output and report the tested
 RBF hash, attract/coin/start behavior, sound, display behavior and any resets.
-The original RBF is silent; the `_sound` revision adds synthesized mono audio.
+The current `_sound` build includes synthesized mono audio.
 
 Tests: `bash sim/run_mister.sh` (ROM-free) or
 `bash sim/run_mister.sh games/mame/starcas.zip` (local ROM layout verification).
@@ -107,44 +107,12 @@ in the temporary simulation copy only. Hardware `sys/` has no logic changes.
 These are syntax/elaboration adaptations; they do not change the selected pixel
 path, which has gamma and scandoubling disabled.
 
-## 2026-10-04 build evidence
+## Hardware validation history
 
-Full Quartus Prime Lite 17.0.2 compile: **successful, zero errors, 70 warnings**.
-The build creates a 3,264,828-byte RBF. Its exact source commit and SHA-256 are
-recorded in `releases/Arcade-Cinematronics_20261004.json`, alongside copies of
-the fit and timing summaries. Only the final native-video configuration is
-packaged; intermediate builds are not release candidates.
-
-| Resource | Used / available |
-| --- | --- |
-| ALMs | 9,648 / 41,910 (23%) |
-| Registers | 15,107 |
-| RAM blocks | 322 / 553 (58%) |
-| Logical block-memory bits | 2,547,969 / 5,662,720 (45%) |
-| DSP blocks | 33 / 112 |
-| PLLs | 3 / 6 |
-
-| Reported timing category | Worst slack (ns) |
-| --- | --- |
-| Setup | +0.196 |
-| Hold | +0.245 |
-| Recovery | +3.854 |
-| Removal | +0.875 |
-| Minimum pulse width | +1.122 |
-
-Every reported TNS is zero; illegal and unconstrained clock counts are zero.
-The STA report confirms a 50 MHz machine PLL. The inherited external-port
-constraint limitation described above remains. No critical warnings were
-reported. Warnings include disabled/constant I/O, unused Intel PLL ports,
-framework dual-clock RAM behavior and FIFO read-during-write passthrough logic.
-
-The same source passes the ROM-free platform tests and the local-ZIP layout
-check. The established real-game machine regression also passes: 28 frames,
-1,031,753 MAME-checked instructions, 3,435 vectors, exercised coin/start and
-controls, and every framebuffer pixel checked. The original silent build has
-now passed FPGA startup and a complete user-played game on hardware. The
-initial loading failure was caused by saved GitHub HTML pages masquerading
-as the MRA/RBF; verified raw-file replacement fixed it.
+The initial silent build passed FPGA startup and a complete user-played game
+on hardware. It has been superseded by the sound-enabled build below and is
+no longer packaged. The initial loading failure was caused by saved GitHub
+HTML pages masquerading as the MRA/RBF; verified raw-file replacement fixed it.
 
 ## Sound integration
 
@@ -170,7 +138,9 @@ pulse width. All reported TNS is zero, with no illegal or unconstrained clocks.
 The external-interface constraint limitations above still apply.
 
 Sound control/sample tests, connected machine synthesis, MiSTer platform tests
-and the real-game 28-frame machine regression pass. ROM-free GitHub CI passes.
+and the real-game machine regression pass: 28 frames, 1,031,753 MAME-checked
+instructions, 3,435 vectors, exercised coin/start and controls, and every
+framebuffer pixel checked. ROM-free GitHub CI passes.
 On the analogue-I/O MiSTer running Main 260912, the installed RBF and MRA
 hashes match the package. Main launches the `_sound.rbf` through the MRA and
 identifies `starcas`. The user confirms audible sound and reports that it
