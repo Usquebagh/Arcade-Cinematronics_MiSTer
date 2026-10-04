@@ -6,9 +6,7 @@ Star Castle also has a colour filter. Simulation and reported internal timing
 pass. Star Castle still plays correctly on the combined core.
 **Rip Off is bootable but otherwise untested/WIP**: it boots and plays on
 MiSTer, but gameplay, two-player operation and sound have not been validated.
-**CRT output is untested.** Glow, bloom and phosphor persistence are not
-implemented; frame tearing is possible. Colour and analog sound calibration
-remain outstanding.
+**CRT output is untested.** Colour and analog sound calibration remain outstanding.
 
 ## Installation
 

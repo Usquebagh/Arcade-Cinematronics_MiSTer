@@ -21,8 +21,7 @@ Armor Attack and Solar Quest are planned next.
 > Simulation, fitting and reported internal timing pass for both games.
 >
 > **Known issues:** **CRT output is untested.** Explosion levels have been
-> corrected in simulation; hardware listening is pending. Neon glow, bloom and phosphor
-> persistence are not implemented. Frame tearing is possible. Physical colour,
+> corrected in simulation; hardware listening is pending. Physical colour,
 > vector timing and analog sound fidelity remain uncalibrated. Feedback and
 > bug reports are welcome via [Issues](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/issues).
 
