@@ -107,7 +107,8 @@ sample enables. Individual synthetic WAV files remain ignored under
 `build/sound/` for listening.
 Both 20 ns explosion triggers are checked at 50 MHz, including burst-level
 floors that reject the previously inaudible mix. Their first 100 ms RMS
-levels are approximately 498 (soft) and 1350 (loud). All voices together
+levels after a full second of filter settling are approximately 658 (soft)
+and 1297 (loud). All voices together
 remain below saturation in the directed mixer test.
 
 `bash sim/run_machine.sh build/roms/starcastle.bin

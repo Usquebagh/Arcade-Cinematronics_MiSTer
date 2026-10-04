@@ -54,7 +54,11 @@ int main(int argc,char** argv) {
             require(samples==4800,"50MHz sample enable rate is wrong");
             std::cout<<"PASS: 50 MHz -> exact-average 96 kHz, 4800 samples and 520/521-clock intervals\n";
             for(unsigned bit : {2U,1U}) {
-                t.reset();t.rtl.outputs&=~(1U<<bit);t.tick();require(!t.sample,"Pulse test coincides with audio enable");
+                t.reset();
+                // Let the noise filters settle: reset transients must not
+                // make an otherwise inaudible gameplay burst pass.
+                for(unsigned settled=0;settled<96000;) {t.tick();if(t.sample)++settled;}
+                t.rtl.outputs&=~(1U<<bit);t.tick();require(!t.sample,"Pulse test coincides with audio enable");
                 t.rtl.outputs|=1U<<bit;t.tick();require(!t.sample,"Pulse test spans an audio enable");
                 std::vector<int16_t> pulse;
                 while(pulse.size()<9600) {auto s=t.tick();if(t.sample)pulse.push_back(s);}

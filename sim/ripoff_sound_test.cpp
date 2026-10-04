@@ -52,7 +52,9 @@ int main(int argc,char** argv) {
                 t.tick();if(t.sample) {++samples;if(last)require(t.cycles-last==520||t.cycles-last==521,"Sample interval");last=t.cycles;}
             }
             require(samples==4800,"96 kHz sample count");
-            t.reset();t.rtl.outputs&=~128;t.tick();require(!t.sample,"Short trigger timing");t.rtl.outputs|=128;t.tick();
+            t.reset();
+            for(unsigned settled=0;settled<96000;) {t.tick();if(t.sample)++settled;}
+            t.rtl.outputs&=~128;t.tick();require(!t.sample,"Short trigger timing");t.rtl.outputs|=128;t.tick();
             std::vector<int16_t> pulse;
             while(pulse.size()<9600) {auto v=t.tick();if(t.sample)pulse.push_back(v);}
             require(rms(pulse)>800,"Short explosion is inaudible in the mix");
