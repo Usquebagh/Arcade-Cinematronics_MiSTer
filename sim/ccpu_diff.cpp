@@ -24,7 +24,7 @@ struct Test {
         cpu.clk=0;cpu.eval();
     }
     void reset() {
-        cpu.reset=1;cpu.inputs=ref.inputs;cpu.draw_busy=0;
+        cpu.reset=1;cpu.soft_reset=0;cpu.inputs=ref.inputs;cpu.draw_busy=0;
         cpu.external_input=0;cpu.frame_tick=0;cpu.vector_ready=1;
         tick();tick();cpu.reset=0;ref.device_reset();ref.outputs=0;
     }

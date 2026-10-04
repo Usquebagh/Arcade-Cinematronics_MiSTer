@@ -8,6 +8,9 @@
    Display calibration, persistence and live machine timing remain follow-ups.
 3. **Star Castle machine**: clock and frame timers, coin latch, DIP switches,
    controls, watchdog, reset and vector intensity.
+   Baseline completed in simulation: CPU/ROM/video are connected and coin/start
+   and gameplay controls are exercised, with watchdog recovery and frame checks.
+   Original draw-busy timing and on-device behavior still require validation.
 4. **MiSTer build**: import a pinned platform framework with licenses, add
    DE10-Nano project files and HPS ROM download, create the MRA, compile and
    resolve timing. A blank or diagnostic RBF does not satisfy this milestone.

@@ -8,6 +8,8 @@ module ccpu #(
     parameter JMI = 1'b1
 ) (
     input wire clk, reset, ce,
+    // Watchdog resets the CPU, preserving the external output latch.
+    input wire soft_reset,
     // One-clock synchronous ROM: address is stable during *_ADDR states.
     output logic [15:0] rom_addr,
     input wire [7:0] rom_data,
@@ -233,12 +235,13 @@ module ccpu #(
     always_ff @(posedge clk) begin
         retired <= 1'b0; ram_write <= 1'b0; watchdog_clear <= 1'b0;
         if (vector_valid && vector_ready) vector_valid <= 1'b0;
-        if (reset) begin
+        if (reset || soft_reset) begin
             pc <= 0; a <= 0; b <= 0; i <= 0; j <= 0; p <= 0;
             x <= 0; y <= 0; t <= 0; acc_b <= 0;
             cmp_acc <= 0; cmp_val <= 1; a0 <= 0; nc <= 0;
             mi <= 0; mi_next <= 0; mi_nextnext <= 0;
-            outputs <= 0; waiting <= 0; vector_valid <= 0;
+            if (reset) outputs <= 0;
+            waiting <= 0; vector_valid <= 0;
             vector_x0 <= 0; vector_y0 <= 0; vector_x1 <= 0; vector_y1 <= 0;
             vector_shift <= 0; cooldown <= 0; state <= FETCH_ADDR;
             opcode <= 0; operand <= 0; trace_opcode <= 0; trace_cycles <= 0;

@@ -19,3 +19,7 @@ jobs:
         run: bash sim/run_vector.sh
       - name: Vector component synthesis
         run: bash tools/synth_vector.sh
+      - name: Connected machine, timers, controls and watchdog tests
+        run: bash sim/run_machine.sh
+      - name: Machine component synthesis
+        run: bash tools/synth_machine.sh

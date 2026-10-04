@@ -1,4 +1,4 @@
-# Validation record - 2026-10-03
+# Validation record - updated 2026-10-04
 
 Development baseline; not an on-device gameplay result.
 
@@ -59,12 +59,18 @@ antialiased/phosphor output.
 
 - Quartus fitting, resource use of a complete machine, and timing closure.
 - Full MiSTer top-level project, HPS downloads, MRA and an installable RBF.
-- Live CPU-to-video integration, physical vector timing, point intensity,
+- Physical vector timing, point intensity,
   intensity calibration and persistence.
-- Controls, coin latch, watchdog, exact machine/frame clocks and sound.
+- MiSTer control mapping and sound.
 - Playability and sustained operation on a DE10-Nano.
 - Other games and special memory configurations, including QB-3.
 
 To reproduce the game run, provide the local `starcas.zip` and execute the
 commands in the README. No game ROMs are available in the repository or CI.
 Build logs and generated images live under ignored `build/`.
+
+The connected CPU/video, board controls, coin latch, watchdog and autonomous
+clock/frame timer are now tested together. See
+[connected-machine validation](machine-validation.md) for live-ROM gameplay
+simulation results and resource estimates. The original captured-frame tests
+above remain useful component regressions.
