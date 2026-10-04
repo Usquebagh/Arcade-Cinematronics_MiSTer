@@ -1,4 +1,4 @@
-name: Verify CPU foundation
+name: Verify Cinematronics core
 on: [push, pull_request, workflow_dispatch]
 permissions:
   contents: read
@@ -23,3 +23,5 @@ jobs:
         run: bash sim/run_machine.sh
       - name: Machine component synthesis
         run: bash tools/synth_machine.sh
+      - name: MiSTer ROM download, controls, scanout and MRA tests
+        run: bash sim/run_mister.sh

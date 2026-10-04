@@ -5,8 +5,9 @@ The intended progression is Star Castle, Rip Off, Armor Attack, Solar Quest,
 then the other CCPU games after their controls, sound and board differences
 have been implemented and checked.
 
-**Current milestone: connected Star Castle machine running in simulation. There is no
-playable MiSTer core or installable RBF yet.**
+**Current milestone: Star Castle is connected to a complete MiSTer project.
+A first development RBF passes Quartus fit and reported internal timing.
+Sound and hardware gameplay testing remain pending.**
 
 Implemented:
 
@@ -26,10 +27,14 @@ Implemented:
   enables, hardware frame ticks, controls, DIP wiring, latched coin and watchdog.
 - Live-machine tests exercise coin/start and gameplay controls while comparing
   retired instructions and all displayed pixels to the references.
+- MiSTer platform wrapper with validated HPS ROM downloads, DIP settings,
+  keyboard/controller inputs, native progressive scanout and a Star Castle MRA.
 
 The MAME-compatible CPU behavior is a starting point. Physical CPU timing,
-draw-busy timing, calibrated intensity/persistence, sound,
-MiSTer platform integration and on-device gameplay remain to be established.
+draw-busy timing, calibrated intensity/persistence, sound and on-device gameplay
+remain to be established. The first complete MiSTer build passes fitting and
+reported internal timing; the development RBF and MRA are in `releases/`.
+Sound output is currently silent.
 QB-3's banking and video differences are outside this baseline.
 
 ## Run the tests
@@ -59,17 +64,30 @@ The optional Quartus check uses the Docker image
 It performs component analysis and synthesis, not fitting, timing closure or
 RBF generation. The simulation script handles workspace paths containing spaces.
 
-ROMs, archival PDFs, derived ROM images and build products are ignored by Git.
+ROMs, archival PDFs, derived ROM images and temporary build products are ignored
+by Git. Verified development RBFs can be committed under `releases/`.
 CI runs with synthetic programs only; it does not download or require game ROMs.
+
+## MiSTer build
+
+Run `bash sim/run_mister.sh` to check downloads, controls, video timing and MRA
+ordering without ROMs. `bash build.sh` uses the installed Quartus Docker image
+for a full DE10-Nano compile. See [MiSTer integration](docs/mister-integration.md)
+for platform provenance, installation, controls and current limitations.
+The [release notes](releases/README.md) give the SD-card locations and controls
+for the first hardware test. This build is silent and frame tearing is possible.
 
 See [architecture](docs/architecture.md), [development milestones](docs/roadmap.md),
 [reference provenance](docs/references.md) and [validation](docs/validation.md).
 
 ## License and credits
 
-New source is BSD-3-Clause; see [LICENSE](LICENSE). The CCPU instruction
+Original CPU/machine/video modules and tools are BSD-3-Clause; see
+[BSD license](LICENSES/Cinematronics-BSD-3-Clause.txt). The CCPU instruction
 semantics and differential reference come from Aaron Giles' BSD-3-Clause MAME
 CCPU, with credits and its license preserved in `sim/reference/` and `LICENSES/`.
 Zonn Moore's programmer's reference and the supplied schematics are hardware
 references, kept locally. Game ROMs and scanned manuals are not distributed.
-Future imported MiSTer framework components retain their own licenses.
+Imported MiSTer framework components retain their own licenses. The integrated
+MiSTer core is GPL-3.0-or-later; see [LICENSE](LICENSE). Original
+modules and tools remain BSD-3-Clause individually.

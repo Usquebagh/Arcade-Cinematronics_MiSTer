@@ -57,11 +57,9 @@ antialiased/phosphor output.
 
 ## Still unverified or unimplemented
 
-- Quartus fitting, resource use of a complete machine, and timing closure.
-- Full MiSTer top-level project, HPS downloads, MRA and an installable RBF.
 - Physical vector timing, point intensity,
   intensity calibration and persistence.
-- MiSTer control mapping and sound.
+- MiSTer controls on hardware and sound.
 - Playability and sustained operation on a DE10-Nano.
 - Other games and special memory configurations, including QB-3.
 
@@ -74,3 +72,10 @@ clock/frame timer are now tested together. See
 [connected-machine validation](machine-validation.md) for live-ROM gameplay
 simulation results and resource estimates. The original captured-frame tests
 above remain useful component regressions.
+
+The MiSTer top-level, HPS loader, input adapter, MRA and scanout are now
+implemented. Platform tests exercise full and malformed ROM downloads, DIP
+isolation, keyboard/controller inputs and two complete raster frames. A full
+Quartus build has passed fitting and all reported timing categories. Final
+RBF evidence is recorded in the [MiSTer integration record](mister-integration.md).
+This does not establish hardware gameplay or original analog sound/video behavior.

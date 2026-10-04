@@ -91,8 +91,8 @@ cabinet overlay or normalization-dependent point brightness is implemented yet.
 
 `rtl/games/starcastle_machine.sv` combines the CPU, synchronous program ROM,
 board I/O, timing, watchdog, a 16-entry segment FIFO and vector video. All ports
-are synchronous to a 50 MHz system clock. HPS/OSD inputs must be synchronized
-by the future platform wrapper. The input controls are active-high booleans;
+are synchronous to a 50 MHz system clock. The MiSTer wrapper clocks HPS/OSD
+and machine interfaces from this same PLL. The input controls are active-high booleans;
 the I/O module converts them to the original active-low electrical inputs.
 
 `cinemat_timing` uses a fractional accumulator to produce exactly 19,923 CPU
@@ -131,6 +131,9 @@ The watchdog count resets after expiration so recovery can service it again.
 `load_active` or `!rom_loaded` holds the machine in hard reset while ROM writes
 are accepted. The caller must assert load state before writing and only mark
 the complete image loaded when finished. Reloading also clears old frame and
-queue contents. The interface is ready for a future HPS download wrapper,
-but is not itself an HPS implementation. `outputs` is exposed for the sound
+queue contents. `rtl/mister/starcastle_download.sv` implements this contract
+for HPS index 0. `outputs` is exposed for the sound
 board implementation; there is no audio output yet.
+
+The platform wrapper and scanout contracts, pin/IP provenance and remaining
+display limitations are described in [MiSTer integration](mister-integration.md).

@@ -1,6 +1,10 @@
 # User-supplied archival material and ROMs stay local.
 /Documentation/
 /games/
+/roms/
+*.rom
+*.bin
+*.zip
 /*.url
 /Project Brief for MiSTer FPGA .rbf core build.txt
 /tmp/
@@ -13,3 +17,9 @@ incremental_db/
 *.vcd
 __pycache__/
 *.pyc
+
+/build_id.v
+/jtag.cdf
+/c5_pin_model_dump.txt
+*.qdf
+*.smsg

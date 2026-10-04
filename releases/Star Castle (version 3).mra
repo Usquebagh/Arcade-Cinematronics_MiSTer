@@ -1,0 +1,28 @@
+<misterromdescription>
+    <name>Star Castle (version 3)</name>
+    <year>1980</year>
+    <manufacturer>Cinematronics</manufacturer>
+    <category>Shooter</category>
+    <setname>starcas</setname>
+    <rbf>Cinematronics</rbf>
+    <about author="Usquebagh" webpage="https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer">Development core: grayscale video, sound pending.</about>
+    <rotation>horizontal</rotation>
+    <players>2 (alternating)</players>
+    <joystick>2-way</joystick>
+    <num_buttons>2</num_buttons>
+    <buttons names="Fire,Thrust,Start 1,Coin,Start 2" default="A,B,Start,Select,X"/>
+    <switches default="3F">
+        <dip bits="0,1" name="Lives" ids="6,4,5,3"/>
+        <dip bits="2,3" name="Coinage" ids="4C/3C,2C/1C,2C/3C,1C/1C"/>
+    </switches>
+    <rom index="0" zip="starcas.zip" md5="none">
+        <interleave output="16">
+            <part name="starcas3.t7" crc="b5838b5d" map="01"/>
+            <part name="starcas3.p7" crc="f6bc2f4d" map="10"/>
+        </interleave>
+        <interleave output="16">
+            <part name="starcas3.u7" crc="188cd97c" map="01"/>
+            <part name="starcas3.r7" crc="c367b69d" map="10"/>
+        </interleave>
+    </rom>
+</misterromdescription>

@@ -14,6 +14,10 @@
 4. **MiSTer build**: import a pinned platform framework with licenses, add
    DE10-Nano project files and HPS ROM download, create the MRA, compile and
    resolve timing. A blank or diagnostic RBF does not satisfy this milestone.
+   Platform wiring and tests are implemented. A first complete game-connected
+   build passes fit and reported timing; the final development RBF and evidence
+   are recorded in `releases/` and `docs/mister-integration.md`. Scanout/game
+   frame synchronization and board-level validation remain follow-ups.
 5. **Playable Star Castle**: verify attract mode, coin/start, controls, gameplay,
    reset and long runs on hardware; implement and validate sound. Record the
    exact tested source commit and RBF hash. Hardware results require access to
