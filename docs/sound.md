@@ -111,6 +111,9 @@ program ROM layout are unchanged by sound integration.
 The sound-enabled RBF passes full Quartus fitting and the timing gate, with
 worst setup slack +0.268 ns and zero reported TNS. It has been installed with
 its matching MRA and launched on MiSTer Main version 260912; Main identifies
-the core as `starcas`. Hardware listening validation remains pending. Test
-thrust, player fire, shield hits, castle cannon, destruction and background
-pitch progression; check mono output on both channels, OSD reset and reload.
+the core as `starcas`. On 2026-10-04 the user confirmed audible sound on MiSTer,
+reporting "sound is good in comparison" to
+[this Star Castle gameplay recording](https://www.youtube.com/watch?v=S_DojyqJXKE).
+This passes the initial subjective listening check; no measured waveform or
+individual channel calibration is implied. Further checks can cover each
+effect, background pitch progression, both output channels, OSD reset and reload.

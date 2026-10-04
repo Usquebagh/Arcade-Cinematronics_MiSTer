@@ -3,7 +3,8 @@
 The current `_sound` revision adds eight synthesized sound effects to the
 grayscale video and coin/start/gameplay controls. It passes simulation, fitting
 and reported internal timing, and has launched on MiSTer Main version 260912.
-Hardware listening is pending. The sound model is a behavioral approximation;
+The user confirms sound works and compares well with a Star Castle gameplay
+recording. The sound model is a behavioral approximation;
 its fidelity and channel balance still need calibration. Frame
 tearing is possible because game-frame presentation is not yet synchronized
 to display blanking. The original silent build is retained for rollback; the

@@ -44,7 +44,10 @@
     "installed_mra_hash_matches": true,
     "mra_launch": "passed",
     "identified_core": "starcas",
-    "listening": "pending"
+    "listening": "passed (user-reported subjective comparison)",
+    "user_feedback": "sound is good in comparison",
+    "comparison_video": "https://www.youtube.com/watch?v=S_DojyqJXKE",
+    "measured_fidelity_validation": false
   },
   "game_rom_embedded": false,
   "limitations": [

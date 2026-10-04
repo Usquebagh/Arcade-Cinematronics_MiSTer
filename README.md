@@ -7,7 +7,8 @@ have been implemented and checked.
 
 **Current milestone: Star Castle has passed a full-game hardware test.
 The sound-enabled build passes simulation, fitting and reported timing, and
-has been installed and launched on MiSTer. Hardware listening is pending.**
+has been installed and launched on MiSTer. The user confirms sound works and
+compares well with a Star Castle gameplay recording.**
 
 Implemented:
 

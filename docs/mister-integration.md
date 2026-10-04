@@ -173,5 +173,7 @@ Sound control/sample tests, connected machine synthesis, MiSTer platform tests
 and the real-game 28-frame machine regression pass. ROM-free GitHub CI passes.
 On the analogue-I/O MiSTer running Main 260912, the installed RBF and MRA
 hashes match the package. Main launches the `_sound.rbf` through the MRA and
-identifies `starcas`. Hardware listening is pending; startup alone does not
-establish audible output or analog fidelity.
+identifies `starcas`. The user confirms audible sound and reports that it
+compares well with [a Star Castle gameplay recording](https://www.youtube.com/watch?v=S_DojyqJXKE).
+This establishes working audio and a passed subjective listening check;
+measured analog fidelity and channel calibration remain outstanding.
