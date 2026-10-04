@@ -2,117 +2,94 @@
 
 An FPGA implementation of Cinematronics vector arcade hardware for the
 [MiSTer FPGA](https://github.com/MiSTer-devel/Main_MiSTer/wiki) platform,
-starting with **Star Castle (version 3)**.
+starting with **Star Castle (version 3, 1980)**.
 
-The intended progression is Star Castle, Rip Off, Armor Attack, Solar Quest,
-then the other CCPU games after their controls, sound and board differences
-have been implemented and checked.
+Defend your ship against the central cannon, breaking through its rotating
+shield rings while avoiding mines. The core recreates the CCPU, vector display
+and discrete sound, with a colour filter based on the original screen gels.
+Rip Off, Armor Attack and Solar Quest are planned next.
 
 <p align="center">
   <img src="docs/arcade_cabinet.png" alt="Star Castle arcade cabinet" height="310">
   <img src="docs/star_castle.png" alt="Star Castle game screen" height="310">
 </p>
 
-> **Status:** Star Castle has passed a full-game hardware test. The current
-> build passes simulation, fitting and reported timing. Gameplay, sound and
-> colour/brightness controls have been checked on MiSTer hardware.
+> **Status:** Star Castle is playable on MiSTer. A full game has been completed;
+> sound and colour/brightness controls have passed user testing. The current
+> build passes simulation, fitting and reported internal timing.
 >
-> **Known issues:** CRT output has not been tested. Neon glow, bloom and phosphor
-> persistence are not implemented. Gel/CRT colour remains uncalibrated, and
-> frame tearing is possible. Sound works, but exact analog
-> fidelity and channel balance remain uncalibrated. Feedback and bug reports
-> are welcome via [Issues](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/issues).
+> **Known issues:** **CRT output is untested.** Neon glow, bloom and phosphor
+> persistence are not implemented. Frame tearing is possible. Physical colour,
+> vector timing and analog sound fidelity remain uncalibrated. Feedback and
+> bug reports are welcome via [Issues](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/issues).
 
 ---
 
-Implemented:
+## Original Hardware
 
-- Synthesizable SystemVerilog CCPU instruction executor, including the two
-  12-bit accumulators, 256 x 12-bit RAM, banking, delayed MI flags, vector
-  normalization, multiply steps, I/O and frame wait.
-- Synchronous 8 KiB writable program ROM with Star Castle's bank mirrors.
-- ROM preparation tool that verifies all four program chips before interleaving.
-- Differential tests against the original execution function from a pinned
-  BSD-licensed MAME reference. Tests include every opcode and an optional run
-  with the locally supplied game ROM.
-- Component synthesis checks for Yosys and Quartus Lite 17.0.2.
-- Clipped line rasterizer and double-buffered 512x384, 16-level grayscale
-  framebuffer with synchronous scanout and overlap intensity preservation.
-- End-to-end captured-frame tests and a reproducible simulation preview.
-- CPU, ROM, queued vectors and framebuffer connected to exact-average CPU
-  enables, hardware frame ticks, controls, DIP wiring, latched coin and watchdog.
-- Live-machine tests exercise coin/start and gameplay controls while comparing
-  retired instructions and all displayed pixels to the references.
-- MiSTer platform wrapper with validated HPS ROM downloads, DIP settings,
-  keyboard/controller inputs, native progressive scanout and a Star Castle MRA.
-- Synthesized sound-board model with serial control latches, eight effect
-  channels, filtered noise, VCOs, RC envelopes and signed mono audio.
-- Shared colour-overlay compositor with a Star Castle profile, monochrome
-  bypass, vector brightness and overlay-strength controls.
+| Subsystem | Original Hardware | FPGA Implementation |
+| --- | --- | --- |
+| CPU | Cinematronics CCPU, two 12-bit accumulators | SystemVerilog CCPU, checked against the pinned MAME instruction reference |
+| Program | Four ROM chips, 8 KiB total | Writable program ROM, loaded through the MRA |
+| Video | Monochrome vector display with coloured screen gels | 512x384 raster framebuffer, 16 brightness levels and a Star Castle colour filter |
+| Sound | Discrete sound circuitry | Synthesized oscillators, noise, envelopes and eight effect channels; signed mono audio |
 
-The MAME-compatible CPU behavior is a starting point. Physical CPU timing,
-draw-busy timing, calibrated intensity/persistence and analog sound fidelity
-remain to be established. A full game has been played successfully on hardware.
-The first complete MiSTer build passes fitting and
-reported internal timing; the development RBF and MRA are in `releases/`.
-See [sound implementation and limits](docs/sound.md) for the new audio model.
-See [colour overlays and video controls](docs/colour.md) for the new display stage.
-QB-3's banking and video differences are outside this baseline.
+## Controls
 
-## Run the tests
+| Action | Keyboard | Controller |
+| --- | --- | --- |
+| Rotate | Left/Right | Left/Right |
+| Thrust | Up | Thrust button or Up |
+| Fire | Space | Fire button |
+| Coin | 5 | Coin button |
+| Start 1 | 1 | Controller 1 Start |
+| Start 2 | 2 | Start 2 button or Controller 2 Start |
 
-From Linux or WSL, with Python 3, Verilator, Icarus Verilog, Yosys, GNU Make
-and a C++ compiler:
+The OSD provides **Colour overlay**, **Vector brightness** and **Overlay strength**.
+Use MiSTer's **Save settings** to retain your choices. See
+[video controls](docs/colour.md) for details.
 
-```sh
-bash sim/run.sh
-python3 tools/prepare_starcastle.py games/mame/starcas.zip
-bash sim/run.sh build/roms/starcastle.bin
-bash tools/synth.sh
-bash tools/synth.sh --quartus
-bash sim/run_vector.sh
-bash sim/run.sh build/roms/starcastle.bin build/vectors.csv
-bash sim/run_vector.sh build/vectors.csv build/vector/starcastle.pgm
-python3 tools/preview_vector.py build/vector/starcastle.pgm build/vector/starcastle.png
-bash tools/synth_vector.sh --quartus
-bash sim/run_machine.sh
-bash sim/run_machine.sh build/roms/starcastle.bin build/machine/starcastle.pgm
-python3 tools/preview_vector.py build/machine/starcastle.pgm build/machine/starcastle.png
-bash tools/synth_machine.sh --quartus
-bash sim/run_sound.sh
-bash sim/run_overlay.sh
-```
+## ROMs and Installation
 
-The optional Quartus check uses the Docker image
-`theypsilon/quartus-lite-c5:17.0.2`, matching the existing Jedi/Fire Trap setup.
-It performs component analysis and synthesis, not fitting, timing closure or
-RBF generation. The simulation script handles workspace paths containing spaces.
+Copy the current files from [releases](releases/) to your MiSTer SD card:
 
-ROMs, archival PDFs, derived ROM images and temporary build products are ignored
-by Git. Verified development RBFs can be committed under `releases/`.
-CI runs with synthetic programs only; it does not download or require game ROMs.
+| File | Destination |
+| --- | --- |
+| `Arcade-Cinematronics_20261004.rbf` | `_Arcade/cores/` |
+| `Star Castle (version 3).mra` | `_Arcade/` |
+| Your own `starcas.zip` | `_Arcade/mame/` |
 
-## MiSTer build
+Launch **Star Castle (version 3)** through its MRA. For individual GitHub
+downloads, use **Download raw file**. Keep only the current Cinematronics RBF
+in `cores/`. See [release details](releases/README.md) for build information
+and installation troubleshooting.
 
-Run `bash sim/run_mister.sh` to check downloads, controls, video timing and MRA
-ordering without ROMs. `bash build.sh` uses the installed Quartus Docker image
-for a full DE10-Nano compile. See [MiSTer integration](docs/mister-integration.md)
-for platform provenance, installation, controls and current limitations.
-The [release notes](releases/README.md) give the SD-card locations and controls
-for hardware testing. The current build includes synthesized audio.
-Frame tearing is still possible.
-
-See [architecture](docs/architecture.md), [development milestones](docs/roadmap.md),
-[reference provenance](docs/references.md) and [validation](docs/validation.md).
-
-## License and credits
-
-Original CPU/machine/video modules and tools are BSD-3-Clause; see
-[BSD license](LICENSES/Cinematronics-BSD-3-Clause.txt). The CCPU instruction
-semantics and differential reference come from Aaron Giles' BSD-3-Clause MAME
-CCPU, with credits and its license preserved in `sim/reference/` and `LICENSES/`.
 Game ROMs and other proprietary game data or documentation are not included
 or distributed with this repository.
-Imported MiSTer framework components retain their own licenses. The integrated
-MiSTer core is GPL-3.0-or-later; see [LICENSE](LICENSE). Original
-modules and tools remain BSD-3-Clause individually.
+
+## Compilation and Tests
+
+From Linux or WSL, run `bash build.sh`. It uses Quartus Prime Lite 17.0.2 in
+`theypsilon/quartus-lite-c5:17.0.2` and checks fitting and reported timing.
+The output is `output_files/Arcade-Cinematronics.rbf`.
+
+[Validation](docs/validation.md) lists test commands and results. CI uses
+synthetic programs and requires no game ROMs. Technical details are in
+[architecture](docs/architecture.md), [MiSTer integration](docs/mister-integration.md),
+[sound](docs/sound.md), [colour](docs/colour.md) and [roadmap](docs/roadmap.md).
+
+## Credits
+
+- Aaron Giles and MAME: CCPU instruction reference and Cinematronics board definitions.
+- MAME contributors: Star Castle sound-circuit and colour-filter references.
+- MiSTer developers: platform framework, imported through the Fire Trap core.
+- Hardware documentation authors: original CPU, board and circuit references.
+
+See [reference provenance](docs/references.md) for source revisions and licenses.
+
+## License
+
+The integrated MiSTer core is [GPL-3.0-or-later](LICENSE). Original CPU,
+machine, video modules and tools remain
+[BSD-3-Clause](LICENSES/Cinematronics-BSD-3-Clause.txt) individually.
+Imported components retain their respective licenses and credits.

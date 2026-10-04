@@ -8,7 +8,7 @@
   "docker_image": "theypsilon/quartus-lite-c5:17.0.2",
   "device": "5CSEBA6U23I7",
   "rbf": {
-    "file": "Arcade-Cinematronics_20261004_colour.rbf",
+    "file": "Arcade-Cinematronics_20261004.rbf",
     "bytes": 3289304,
     "sha256": "62a30e88d0a90f79502a3e47d0367129e2b45e1ebc38f3fdb2b46c0a43645c86"
   },
@@ -43,12 +43,12 @@
     "installed_rbf_hash_matches": true,
     "installed_mra_hash_matches": true,
     "matching_installed_rbfs": 1,
-    "mra_launch": "MiSTer process running with colour RBF and matching MRA",
+    "mra_launch": "passed",
     "visual": "passed (user confirms brightness/overlay controls work)",
     "gameplay": "passed (user reports game runs fine)",
     "crt_tested": false,
     "saved_settings": "pending",
-    "audio_retest_on_colour_build": "pending"
+    "audio_retest": "pending"
   },
   "game_rom_embedded": false,
   "limitations": [

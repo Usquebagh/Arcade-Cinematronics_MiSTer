@@ -1,6 +1,8 @@
 # Validation record - updated 2026-10-04
 
-Development baseline; not an on-device gameplay result.
+Simulation and synthesis checks below are distinct from hardware feedback.
+Star Castle gameplay, sound and video controls have also passed MiSTer user
+testing; CRT output remains untested. See [hardware status](mister-integration.md#hardware-status).
 
 ## Executed locally
 
@@ -28,15 +30,6 @@ Yosys; Docker image `theypsilon/quartus-lite-c5:17.0.2`.
 | Yosys video memory/netlist checks | Pass; two memory cells retained |
 | Quartus vector-video analysis and synthesis | Pass; 697 logic cells, 256 RAM segments, 2,097,152 block-memory bits; zero errors |
 
-Quartus reports three warnings: unspecified parallel processor count and a
-two-message warning for unused `external_input`. The latter is expected because
-the Star Castle JMI configuration selects the internal delayed minus flag.
-The video component has nine warnings identifying eight unused input bits:
-the four coordinate low bits are discarded by half-resolution mapping and
-the four intensity low bits by 16-level quantization. No latch or uninferred
-RAM warning remains. Initial shared-array inference duplicated the framebuffer;
-the verified version uses two explicit banks and halves the synthesized memory.
-
 The differential oracle is the original pinned MAME instruction function.
 Agreement establishes compatibility with that reference, not independent
 proof of every behavior of the physical board. The generic non-JMI variant
@@ -44,11 +37,9 @@ has not been separately tested. Synthetic tests initialize data RAM through
 software. The real-ROM simulation starts with Verilator's zero-valued RAM;
 physical startup RAM contents remain an integration check.
 
-The original short capture used all-high switch inputs, which asserts the
-active-high service switch and displays diagnostics. The current real-ROM run
-clears switch-bank bit 6 (`inputs=0xbfffff`) for normal attract operation. The
-preview shows the score screen and star field. The final partial capture frame
-is excluded from integration checks. Synthetic CI video tests require no ROM.
+The real-ROM run clears switch-bank bit 6 (`inputs=0xbfffff`) for normal attract
+operation. The final partial capture frame is excluded from integration checks.
+Synthetic CI video tests require no ROM.
 
 The video oracle is an independent C++ integer Bresenham model with the same
 declared half-resolution coordinate mapping and intensity quantization. It
@@ -59,13 +50,46 @@ antialiased/phosphor output.
 
 - Physical vector timing, point intensity,
   intensity calibration and persistence.
-- MiSTer controls on hardware and sound.
-- Playability and sustained operation on a DE10-Nano.
+- CRT output and measured analog sound fidelity.
+- Frame synchronization, glow and bloom.
 - Other games and special memory configurations, including QB-3.
 
-To reproduce the game run, provide the local `starcas.zip` and execute the
-commands in the README. No game ROMs are available in the repository or CI.
-Build logs and generated images live under ignored `build/`.
+## Reproducing the Checks
+
+Use Linux or WSL with Python 3, Verilator, Icarus Verilog, Yosys, GNU Make
+and a C++ compiler. Quartus checks use the Docker image listed above.
+
+ROM-free checks:
+
+```sh
+bash sim/run.sh
+bash sim/run_vector.sh
+bash sim/run_machine.sh
+bash sim/run_sound.sh
+bash sim/run_overlay.sh
+bash sim/run_mister.sh
+bash tools/synth.sh
+bash tools/synth.sh --quartus
+bash tools/synth_vector.sh --quartus
+bash tools/synth_machine.sh --quartus
+```
+
+Optional game-ROM checks and previews, using your local `starcas.zip`:
+
+```sh
+python3 tools/prepare_starcastle.py games/mame/starcas.zip
+bash sim/run.sh build/roms/starcastle.bin build/vectors.csv
+bash sim/run_vector.sh build/vectors.csv build/vector/starcastle.pgm
+python3 tools/preview_vector.py build/vector/starcastle.pgm build/vector/starcastle.png
+bash sim/run_machine.sh build/roms/starcastle.bin build/machine/starcastle.pgm
+python3 tools/preview_vector.py build/machine/starcastle.pgm build/machine/starcastle.png
+bash sim/run_mister.sh games/mame/starcas.zip
+```
+
+Component synthesis checks do not perform fitting or generate an RBF.
+Run `bash build.sh` for the full MiSTer compile and timing gate.
+No game ROMs are available in the repository or CI. Logs and generated images
+remain under ignored `build/` and `output_files/`.
 
 The connected CPU/video, board controls, coin latch, watchdog and autonomous
 clock/frame timer are now tested together. See
@@ -78,4 +102,5 @@ implemented. Platform tests exercise full and malformed ROM downloads, DIP
 isolation, keyboard/controller inputs and two complete raster frames. A full
 Quartus build has passed fitting and all reported timing categories. Final
 RBF evidence is recorded in the [MiSTer integration record](mister-integration.md).
-This does not establish hardware gameplay or original analog sound/video behavior.
+These checks establish digital behavior and reported internal timing;
+physical analog sound/video accuracy requires separate calibration.

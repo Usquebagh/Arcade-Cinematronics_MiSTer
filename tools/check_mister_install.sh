@@ -65,9 +65,9 @@ check_mra() {
         printf 'Download the raw file from GitHub; saving the file page saves HTML.\n'
     fi
     if [ "$actual_sha" = "$expected_sha" ]; then
-        printf 'PASS: identical to colour-enabled development build 20261004\n'
+        printf 'PASS: identical to build 20261004\n'
     else
-        printf 'FAIL: not identical to the current colour-enabled development build 20261004\n'
+        printf 'FAIL: not identical to the current build 20261004\n'
     fi
 }
 

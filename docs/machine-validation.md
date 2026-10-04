@@ -1,8 +1,9 @@
 # Connected-machine validation - 2026-10-04
 
-This milestone runs the real CPU, writable program ROM, board I/O, fractional
+This test runs the real CPU, writable program ROM, board I/O, fractional
 clock/frame timer, watchdog, vector queue, rasterizer and framebuffer together
-under Verilator. It does not provide a MiSTer wrapper or an RBF.
+under Verilator. Full-core build and hardware results are recorded separately
+in [MiSTer integration](mister-integration.md).
 
 ## Checks performed
 
@@ -32,8 +33,8 @@ and no watchdog expiration.
 Scripted inputs insert one coin, press start, then exercise both rotation
 directions, thrust and fire. The game acknowledges the coin and reads the
 asserted controls: start/left/right/thrust/fire = 1/3/3/30/14 reads. The final
-frame shows the castle rings and player ship. This is a simulated gameplay
-frame; hardware gameplay and sound have not been validated.
+frame shows the castle rings and player ship. These are simulation results;
+MiSTer gameplay and sound have separately passed user testing.
 
 ## Synthesis
 
@@ -47,18 +48,17 @@ analysis and synthesis for `5CSEBA6U23I7` succeed with zero errors:
   remains asynchronous logic RAM, as documented in the initial baseline.
 
 These are analysis/synthesis estimates. They are not fitted ALM/M10K counts,
-timing closure or proof that the complete MiSTer build fits. The component
-exports debug ports; the MiSTer wrapper will leave unused ones unconnected.
+timing closure. The complete fitted core's resource and timing results are
+in the [build manifest](../releases/Arcade-Cinematronics_20261004.json).
 
 ## Remaining limitations
 
 CPU execution pauses during frame presentation/clear and vector producer
 backpressure. Frame timing is autonomous and exact on average, but physical
 four-phase instruction timing and DR/draw-busy behavior remain to be checked.
-Scanout currently shares the system clock. A MiSTer platform wrapper must
-implement display timing and any required clock-domain crossing. Audio,
-antialiasing, phosphor persistence, overlays, point brightness and physical
-controls have not been validated.
+Physical vector timing, point intensity and phosphor persistence remain
+unverified. The MiSTer wrapper supplies scan timing, colour filtering and
+audio; those paths have their own [video](colour.md) and [sound](sound.md) checks.
 
 Run `bash sim/run_machine.sh` without ROMs for CI checks. Add
 `build/roms/starcastle.bin build/machine/starcastle.pgm` to run the local game
