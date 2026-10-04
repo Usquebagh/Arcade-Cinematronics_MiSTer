@@ -14,3 +14,4 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/vector/vector_queue.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/mister/starcastle_download.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/mister/starcastle_controls.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/mister/vector_scanout.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/video/vector_overlay.sv

@@ -7,6 +7,7 @@ module vector_scanout (
     input wire [7:0] scan_gray,
     output wire [8:0] scan_x, scan_y,
     output logic [7:0] gray,
+    output logic [8:0] pixel_x, pixel_y,
     output logic ce_pixel, hs, vs, hblank, vblank
 );
     logic phase;
@@ -17,12 +18,14 @@ module vector_scanout (
         if (reset) begin
             phase <= 0; h <= 0; v <= 0;
             ce_pixel <= 0; gray <= 0; hs <= 0; vs <= 0;
+            pixel_x <= 0; pixel_y <= 0;
             hblank <= 1; vblank <= 1;
         end else begin
             phase <= !phase;
             ce_pixel <= phase;
             if (phase) begin
                 gray <= h < 10'd512 && v < 10'd384 ? scan_gray : 8'd0;
+                pixel_x <= h[8:0]; pixel_y <= v[8:0];
                 hs <= h >= 10'd528 && h < 10'd624;
                 vs <= v >= 10'd394 && v < 10'd396;
                 hblank <= h >= 10'd512;

@@ -27,3 +27,5 @@ jobs:
         run: bash tools/synth_machine.sh
       - name: MiSTer ROM download, controls, scanout and MRA tests
         run: bash sim/run_mister.sh
+      - name: Colour overlay geometry, intensity and bypass
+        run: bash sim/run_overlay.sh

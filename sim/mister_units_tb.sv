@@ -46,7 +46,8 @@ module mister_units_tb;
     // Distinguish all pixel boundaries and the vertical flip through a
     // synchronous read with the same latency as the real framebuffer.
     always @(posedge clk) scan_gray <= sx[7:0] ^ sy[7:0];
-    vector_scanout scanout(clk,video_reset,scan_gray,sx,sy,gray,ce,hs,vs,hbl,vbl);
+    wire [8:0] pixel_x,pixel_y;
+    vector_scanout scanout(clk,video_reset,scan_gray,sx,sy,gray,pixel_x,pixel_y,ce,hs,vs,hbl,vbl);
     integer sample,hpos,vpos,visible,hs_count,vs_count;
     initial begin
         tick(); @(negedge clk); cold_reset=0;
@@ -79,6 +80,7 @@ module mister_units_tb;
             tick(); if(ce) $fatal(1,"Pixel enable phase");
             tick(); if(!ce) $fatal(1,"Missing pixel enable");
             hpos=sample%800; vpos=(sample/800)%521;
+            if(pixel_x !== (hpos&511) || pixel_y !== (vpos&511)) $fatal(1,"Pixel coordinate alignment");
             if(hbl !== (hpos>=512) || vbl !== (vpos>=384) ||
                 hs !== (hpos>=528 && hpos<624) || vs !== (vpos>=394 && vpos<396))
                 $fatal(1,"Video timing at %0d,%0d",hpos,vpos);

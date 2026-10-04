@@ -18,8 +18,9 @@ have been implemented and checked.
 > build passes simulation, fitting and reported timing, and sound has been
 > confirmed working on MiSTer.
 >
-> **Known issues:** video is grayscale, with no color overlay or calibrated
-> persistence. Frame tearing is possible. Sound works, but exact analog
+> **Known issues:** the released build is grayscale; colour-overlay support
+> passes simulation and awaits its hardware build/check. Persistence remains
+> uncalibrated, and frame tearing is possible. Sound works, but exact analog
 > fidelity and channel balance remain uncalibrated. Feedback and bug reports
 > are welcome via [Issues](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/issues).
 
@@ -47,6 +48,8 @@ Implemented:
   keyboard/controller inputs, native progressive scanout and a Star Castle MRA.
 - Synthesized sound-board model with serial control latches, eight effect
   channels, filtered noise, VCOs, RC envelopes and signed mono audio.
+- Shared colour-overlay compositor with a Star Castle profile, monochrome
+  bypass, vector brightness and overlay-strength controls.
 
 The MAME-compatible CPU behavior is a starting point. Physical CPU timing,
 draw-busy timing, calibrated intensity/persistence and analog sound fidelity
@@ -54,6 +57,7 @@ remain to be established. A full game has been played successfully on hardware.
 The first complete MiSTer build passes fitting and
 reported internal timing; the development RBF and MRA are in `releases/`.
 See [sound implementation and limits](docs/sound.md) for the new audio model.
+See [colour overlays and video controls](docs/colour.md) for the new display stage.
 QB-3's banking and video differences are outside this baseline.
 
 ## Run the tests
@@ -77,6 +81,7 @@ bash sim/run_machine.sh build/roms/starcastle.bin build/machine/starcastle.pgm
 python3 tools/preview_vector.py build/machine/starcastle.pgm build/machine/starcastle.png
 bash tools/synth_machine.sh --quartus
 bash sim/run_sound.sh
+bash sim/run_overlay.sh
 ```
 
 The optional Quartus check uses the Docker image

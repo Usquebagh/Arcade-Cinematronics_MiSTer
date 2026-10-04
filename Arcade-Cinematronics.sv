@@ -10,11 +10,14 @@ module emu (
         "Cinematronics;;",
         "-;",
         "O[122:121],Aspect ratio,Original,Full Screen,[ARC1],[ARC2];",
+        "O[7],Colour overlay,On,Off;",
+        "O[9:8],Vector brightness,100%,75%,125%,150%;",
+        "O[11:10],Overlay strength,100%,75%,50%,25%;",
         "-;DIP;O[6],Service mode,Off,On;",
         "-;R[0],Reset;",
         "J1,Fire,Thrust,Start 1,Coin,Start 2;",
         "jn,A,B,Start,Select,X;",
-        "V,v",`BUILD_DATE," sound"
+        "V,v",`BUILD_DATE," colour"
     };
     wire [127:0] status;
     wire [1:0] buttons;
@@ -57,6 +60,7 @@ module emu (
         .left(left), .right(right), .thrust(thrust), .fire(fire), .coin(coin)
     );
     wire [8:0] scan_x, scan_y;
+    wire [8:0] pixel_x, pixel_y;
     wire [7:0] scan_gray, gray;
     wire signed [15:0] mono_audio;
     wire [7:0] display_gray = rom_loaded && !load_active && !reset ? gray : 8'd0;
@@ -72,12 +76,25 @@ module emu (
     vector_scanout scanout (
         .clk(clk_sys), .reset(!pll_locked), .scan_gray(scan_gray),
         .scan_x(scan_x), .scan_y(scan_y), .gray(gray), .ce_pixel(ce_pix),
+        .pixel_x(pixel_x), .pixel_y(pixel_y),
         .hs(hs), .vs(vs), .hblank(hblank), .vblank(vblank)
+    );
+    `include "rtl/video/overlays/starcastle_gains.svh"
+    wire [23:0] display_rgb;
+    wire colour_ce, colour_hs, colour_vs, colour_hblank, colour_vblank;
+    vector_overlay #(.SPANS(STARCASTLE_OVERLAY_SPANS),
+                     .GAINS(STARCASTLE_OVERLAY_GAINS)) overlay (
+        .clk(clk_sys), .reset(!pll_locked), .enabled(!status[7]),
+        .brightness(status[9:8]), .strength(status[11:10]),
+        .x(pixel_x), .y(pixel_y), .rgb_in({display_gray,display_gray,display_gray}),
+        .ce_in(ce_pix), .hs_in(hs), .vs_in(vs), .hblank_in(hblank), .vblank_in(vblank),
+        .rgb_out(display_rgb), .ce_out(colour_ce), .hs_out(colour_hs), .vs_out(colour_vs),
+        .hblank_out(colour_hblank), .vblank_out(colour_vblank)
     );
     // Gamma's serial RGB calculation also needs four clocks per pixel.
     arcade_video #(512,24,0) video (
-        .clk_video(clk_sys), .ce_pix(ce_pix), .RGB_in({display_gray,display_gray,display_gray}),
-        .HBlank(hblank), .VBlank(vblank), .HSync(hs), .VSync(vs),
+        .clk_video(clk_sys), .ce_pix(colour_ce), .RGB_in(display_rgb),
+        .HBlank(colour_hblank), .VBlank(colour_vblank), .HSync(colour_hs), .VSync(colour_vs),
         .CLK_VIDEO(CLK_VIDEO), .CE_PIXEL(CE_PIXEL),
         .VGA_R(VGA_R), .VGA_G(VGA_G), .VGA_B(VGA_B),
         .VGA_HS(VGA_HS), .VGA_VS(VGA_VS), .VGA_DE(VGA_DE), .VGA_SL(VGA_SL),

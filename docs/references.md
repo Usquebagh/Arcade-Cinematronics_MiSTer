@@ -33,6 +33,9 @@ MAME is pinned to commit `9eea5804dc46644dd2dc9c3bc28cbb6c2e93c54e`:
   ROM interleave/checksums, program memory mirrors, clock and input definitions.
 - [Vector reference](https://github.com/mamedev/mame/blob/9eea5804dc46644dd2dc9c3bc28cbb6c2e93c54e/src/mame/cinematronics/cinemat_v.cpp):
   segment and intensity handling for later video work.
+- [Star Castle colour overlay](https://github.com/mamedev/mame/blob/9eea5804dc46644dd2dc9c3bc28cbb6c2e93c54e/src/mame/layout/starcas.lay),
+  CC0-1.0. The original layout and generated row/gain data are stored under
+  `rtl/video/overlays/`; see [colour](colour.md) for normalization and limitations.
 
 The supplied Star Castle v3 image passes all four chip size, CRC32 and SHA-1
 checks. Interleaved local image SHA-256:
