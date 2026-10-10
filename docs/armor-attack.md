@@ -2,8 +2,9 @@
 
 Armor Attack is a development/WIP profile in the shared Cinematronics core.
 It needs the three-game RBF; the 2026-10-04 two-game release cannot load it.
-Hardware gameplay, two-player operation, overlay calibration and sound
-comparison require user testing. No game ROMs or scanned manuals are distributed.
+The user confirmed it boots and plays on MiSTer. Two-player operation,
+overlay calibration and sound comparison require further testing.
+No game ROMs or scanned manuals are distributed.
 
 ## Program and controls
 
@@ -66,9 +67,18 @@ Tread modulation uses the resistor network and pinned MAME VCO fit. The
 beeper is approximately 396 Hz from its component values; the manual prose
 has conflicting units/frequency, so it is not used as an exact oscillator value.
 
-The mixer has a 75% master gain to preserve headroom when correlated noise
-voices overlap, with two continuously clocked pipeline stages (40 ns at
-50 MHz). No timing exceptions were added for Armor Attack arithmetic.
+Gameplay feedback identified excessively loud beeper/tread tones and faint
+explosions. The revised mix lowers the beeper and engine/tread tones, doubles
+low-explosion gain and raises helicopter gain. Loaded second-pole RC values
+also correct the tank, helicopter and shared jeep/high-explosion filters;
+in particular C33 is 0.0047 uF, giving the firing/high-explosion path much
+more bandwidth than the initial model.
+
+The mixer retains 75% master gain. A 4:1 compression knee above +/-24576
+limits large correlated sums while leaving smaller signals unchanged,
+preventing overlapping noise voices from clipping. Three continuously
+clocked pipeline stages take 60 ns at 50 MHz. No timing exceptions were
+added for Armor Attack arithmetic.
 Short serial explosion pulses are retained between audio enables. Reset and
 download mute/clear the selected board; inactive boards remain reset.
 
@@ -81,9 +91,13 @@ limits; passing digital tests does not establish exact analog fidelity.
 
 - All 65,536 logical addresses are checked in both ROM maps; mixed-size
   switching, legacy fallback, malformed downloads and DIP isolation pass.
-- Real-ROM run: 180 frames, 6,529,570 reference-checked instructions,
-  59,164 vectors, two coin acknowledgements and both players' controls.
+- Real-ROM run: 420 frames, 12,696,763 reference-checked instructions,
+  86,174 vectors, two coin acknowledgements and both players' controls.
   Every framebuffer pixel is compared with the raster reference.
+- Combat command counts: tank fire 2, high explosion 2, jeep fire 27,
+  low explosion 2 and helicopter 25. The game produces 66 latch changes
+  and an audio peak of 19,480. The earlier 180-frame run ended before
+  these effects and only established initial beeper activity.
 - Service diagnostic: 12 frames, 301,168 checked instructions and 2,508
   vectors; every framebuffer pixel passes. The captured city outline was
   visually compared with the overlay's town geometry; hardware alignment
@@ -91,8 +105,12 @@ limits; passing digital tests does not establish exact analog fidelity.
 - All 256 serial commands, seven audible effect groups, every tank-rate code,
   release, reset, silence and all-voice headroom pass sound tests.
 - Settled sub-sample high/low explosion bursts pass at 50 MHz, with first
-  100 ms RMS about 1173/538. The worst directed mixer excursion is 27,300,
+  100 ms RMS about 1793/1101. The worst directed mixer excursion is 29,131,
   below signed 16-bit saturation.
+- Level checks require high/low explosions to exceed the beeper by at least
+  8x/5x RMS and firing/helicopter to exceed engine/treads by at least 3x.
+  Revised isolated levels are approximately 2387/1560 for high/low explosions,
+  1912 for gunfire, 2297 for helicopter, 222 for beep and 450 for engine/treads.
 - The actual MiSTer video pipeline passes three default and three adjusted
   Armor town frames, checking every output RGB pixel and sync alignment,
   alongside the existing nine Star Castle/monochrome frames.
@@ -105,8 +123,10 @@ python3 tools/prepare_armora.py games/mame/armora.zip
 bash sim/run_armora.sh build/roms/armora.bin build/armora/armora.pgm build/sound/armora-game.wav
 ```
 
-The scripted ROM capture establishes execution and input/audio activity;
-it does not independently validate every combat effect or human gameplay.
+The longer scripted ROM capture checks actual game-generated firing,
+high/low explosion and helicopter commands. It does not establish analog
+sound fidelity or replace hardware listening. The revised mix still needs
+confirmation on MiSTer.
 Build and hardware status are recorded in the release manifest.
 
 ## References

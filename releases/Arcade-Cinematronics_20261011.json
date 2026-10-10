@@ -1,5 +1,5 @@
 {
-  "source_commit": "96055641e591b4030bbba24be91af79fd38a74ed",
+  "source_commit": "df8863bcc271e4b0331b790ae9e58a1261e28a29",
   "project": "Arcade-Cinematronics",
   "target_games": [
     "Star Castle (version 3)",
@@ -14,8 +14,8 @@
   "device": "5CSEBA6U23I7",
   "rbf": {
     "file": "Arcade-Cinematronics_20261011.rbf",
-    "bytes": 3493560,
-    "sha256": "b87de86907260cba6a00244878cf8e7a140b2df68aabff21a6e4f7de1c4018b1"
+    "bytes": 3512676,
+    "sha256": "ff0991b424f8a0d2652203bcb67414c64d46f7841f873837fab90a573c8ad5db"
   },
   "mra_sha256": {
     "Star Castle (version 3).mra": "579bce481d83e61681afec60eff55e29c91a24c3333b1c35cc222e37ebff0556",
@@ -29,18 +29,18 @@
     "fitter_seed": 2
   },
   "resources": {
-    "alms": 12840,
-    "registers": 17646,
+    "alms": 12903,
+    "registers": 17702,
     "ram_blocks": 399,
     "block_memory_bits": 3176795,
     "dsp_blocks": 90,
     "plls": 3
   },
   "worst_slack_ns": {
-    "Setup": 0.103,
-    "Hold": 0.158,
-    "Recovery": 4.147,
-    "Removal": 0.631,
+    "Setup": 0.362,
+    "Hold": 0.176,
+    "Recovery": 3.564,
+    "Removal": 1.05,
     "Minimum Pulse Width": 1.122
   },
   "all_reported_tns_zero": true,
@@ -53,10 +53,10 @@
     "ripoff_status": "previous build boots and plays; otherwise untested/WIP",
     "ripoff_two_player": "untested",
     "ripoff_sound": "untested",
-    "armora_status": "WIP; installed and launch command checked; gameplay pending",
+    "armora_status": "previous build plays; revised mix WIP pending hardware listening",
     "armora_two_player": "untested",
     "armora_overlay_alignment": "pending hardware collision checks",
-    "armora_sound": "untested",
+    "armora_sound": "previous mix heard but poorly balanced; revised mix listening pending",
     "crt_tested": false
   },
   "prior_build": {
@@ -67,7 +67,7 @@
   },
   "simulation": {
     "github_ci": "passed on source commit",
-    "github_ci_run_url": "https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/actions/runs/38093822041",
+    "github_ci_run_url": "https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/actions/runs/38095776693",
     "starcastle": {
       "frames": 28,
       "checked_instructions": 1031753,
@@ -80,16 +80,23 @@
       "coin_acknowledgements": 2
     },
     "armora": {
-      "frames": 180,
-      "checked_instructions": 6529570,
-      "vectors": 59164,
+      "frames": 420,
+      "checked_instructions": 12696763,
+      "vectors": 86174,
       "coin_acknowledgements": 2,
       "diagnostic_frames": 12,
       "diagnostic_checked_instructions": 301168,
       "diagnostic_vectors": 2508,
       "program_banks_exercised": 4,
-      "sound_latch_changes": 3,
-      "audio_peak": 1200
+      "sound_latch_changes": 66,
+      "audio_peak": 19480,
+      "combat_sound_commands": {
+        "tank_fire": 2,
+        "high_explosion": 2,
+        "jeep_fire": 27,
+        "low_explosion": 2,
+        "helicopter": 25
+      }
     },
     "all_frame_pixels_checked": true,
     "independent_two_player_controls_checked": true,
@@ -97,20 +104,23 @@
     "mixed_size_profile_switching_checked": true,
     "mister_rgb_frames_checked": 15,
     "armora_settled_explosion_bursts_checked": true,
-    "armora_all_effects_mixer_peak": 27300,
+    "armora_all_effects_mixer_peak": 29131,
     "sound_effect_groups_checked": {
       "starcastle": 8,
       "ripoff": 6,
       "armora": 7
     },
-    "limits": "Reference/logic tests do not prove hardware gameplay, collision alignment or analog sound accuracy."
+    "limits": "Reference/logic tests do not prove hardware gameplay, collision alignment or analog sound accuracy.",
+    "armora_balance_regression": "high/low explosions >8x/5x beeper RMS; jeep/helicopter >3x engine/treads RMS"
   },
   "game_rom_embedded": false,
   "audio": {
     "internal_sample_rate_hz": 96000,
     "output": "signed 16-bit mono duplicated left/right",
     "extra_roms_or_samples": false,
-    "models": "schematic-informed behavioral approximations"
+    "models": "schematic-informed behavioral approximations",
+    "armora_balance": "quiet beeper and engine/treads; stronger low explosion/helicopter; corrected loaded RC filter poles",
+    "armora_peak_control": "4:1 knee above +/-24576, 75% master, three 50 MHz pipeline stages"
   },
   "video": {
     "starcastle": "fixed gel filter",
@@ -135,6 +145,11 @@
     "Physical vector timing, colour and analog sound fidelity need calibration",
     "Armor Attack town alignment and combat sound require hardware testing"
   ],
+  "hardware_feedback": {
+    "previous_rbf_sha256": "b87de86907260cba6a00244878cf8e7a140b2df68aabff21a6e4f7de1c4018b1",
+    "armora": "plays per user; beeper and siren tones masked faint explosions; firing unclear",
+    "revised_mix": "hardware listening pending"
+  },
   "hardware_installation": {
     "date": "2026-10-11",
     "rbf_sha256_matches": true,
@@ -142,11 +157,6 @@
     "single_cinematronics_rbf_installed": true,
     "installation_checker": "passed for all three MRAs",
     "launch_checks": {
-      "Star Castle (version 3)": {
-        "selected_rbf": "Arcade-Cinematronics_20261011.rbf",
-        "selected_mra": "Star Castle (version 3).mra",
-        "fpga_manager_state": "operating"
-      },
       "Rip Off": {
         "selected_rbf": "Arcade-Cinematronics_20261011.rbf",
         "selected_mra": "Rip Off.mra",
@@ -159,6 +169,6 @@
       }
     },
     "left_selected": "Armor Attack",
-    "limits": "Process arguments and FPGA operating state checked over SSH; screen, gameplay, two-player controls and listening not verified."
+    "limits": "Process arguments and FPGA operating state checked over SSH; revised sound balance, gameplay and listening require user validation."
   }
 }

@@ -2,8 +2,9 @@
 
 Simulation and synthesis checks below are distinct from hardware feedback.
 Star Castle gameplay, sound and video controls passed MiSTer user testing on
-the earlier build. Gameplay on the new three-game build awaits user testing.
-Rip Off is bootable but otherwise untested/WIP; Armor Attack is a new WIP profile; CRT output remains untested. See
+the earlier build. The user confirmed Armor Attack boots and plays, but the
+revised audio balance needs listening. Rip Off remains bootable but otherwise
+untested/WIP; Armor Attack remains WIP; CRT output remains untested. See
 [hardware status](mister-integration.md#hardware-status).
 
 ## Executed locally
@@ -37,9 +38,11 @@ Yosys; Docker image `theypsilon/quartus-lite-c5:17.0.2`.
 | Game profile selection, malformed profiles and legacy fallback | Pass |
 | Rip Off sound serial latch, six effects, release, headroom and 96 kHz timing | Pass at accelerated and 50 MHz clocks; short explosion triggers retained |
 | Armor Attack 16 KiB ROM map, profile switching and loader rejection | Pass; all 65,536 addresses checked in both maps |
-| Armor Attack connected real-ROM execution | 180 frames; 6,529,570 checked instructions; 59,164 vectors; every framebuffer pixel passes |
+| Armor Attack connected real-ROM execution | 420 frames; 12,696,763 checked instructions; 86,174 vectors; every framebuffer pixel passes |
+| Armor Attack game-generated combat sound | Tank/high explosion/jeep/low explosion/helicopter commands 2/2/27/2/25; audio peak 19,480 |
 | Armor Attack service diagnostic | 12 frames; 301,168 checked instructions; 2,508 vectors; every framebuffer pixel passes |
-| Armor Attack sound serial latch, seven effect groups, all tank rates and headroom | Pass; settled short explosion bursts retained at 50 MHz; worst directed peak 27,300 |
+| Armor Attack sound serial latch, seven effect groups, all tank rates and headroom | Pass; settled short explosion bursts retained at 50 MHz; worst directed peak 29,131 |
+| Armor Attack audio balance | Explosions exceed beeper by at least 8x/5x RMS; firing/helicopter exceed engine/treads by at least 3x |
 | MiSTer video pipeline, including the Armor Attack city overlay | 15 complete RGB frames pass, including six Armor Attack frames |
 
 The differential oracle is the original pinned MAME instruction function.

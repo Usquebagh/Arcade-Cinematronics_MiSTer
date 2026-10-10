@@ -5,7 +5,7 @@
 set -u
 export LC_ALL=C
 card_root=${1:-/media/fat}
-expected_sha=b87de86907260cba6a00244878cf8e7a140b2df68aabff21a6e4f7de1c4018b1
+expected_sha=ff0991b424f8a0d2652203bcb67414c64d46f7841f873837fab90a573c8ad5db
 expected_build=20261011
 
 printf 'Cinematronics installation check\nStorage: %s\n' "$card_root"
