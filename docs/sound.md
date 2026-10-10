@@ -88,6 +88,14 @@ The filters, control wiring and decay constants are unchanged. This is an
 audibility correction, with physical-board balance still requiring listening.
 Do not describe passing logic tests as proof of analog sound accuracy.
 
+Armor Attack's subsequent hardware test confirmed that strong tonal voices
+can mask working noise effects. Star Castle merits the same balance review:
+the isolated drone is about 2310 RMS, versus 842/1664 for soft/loud explosions.
+Its soft-explosion second pole also currently uses the unloaded 15k/.1uF RC;
+the schematic's R60/R61 load should be considered in a filter refinement.
+These observations do not establish that every missing explosion has the
+same cause; revised Star Castle playback still needs listening confirmation.
+
 Reference sources are pinned to the same MAME commit as the CPU:
 
 - [Star Castle circuit netlist](https://github.com/mamedev/mame/blob/9eea5804dc46644dd2dc9c3bc28cbb6c2e93c54e/src/mame/cinematronics/nl_starcas.cpp),

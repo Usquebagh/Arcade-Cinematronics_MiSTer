@@ -19,11 +19,12 @@ Armor Attack adds two-player jeep combat through a city playfield. Solar Quest i
 > **Rip Off is bootable but otherwise untested/WIP**: it boots and plays on
 > MiSTer, but gameplay, two-player operation and sound have not been validated.
 > **Armor Attack boots and plays, but remains WIP** with city overlay and synthesized sound;
-> two-player operation, overlay alignment and revised sound levels need testing. The current three-game
+> its revised sound balance is confirmed by user listening. Two-player operation
+> and overlay alignment need testing. The current three-game
 > build passes simulation, fitting and reported internal timing.
 >
-> **Known issues:** **CRT output is untested.** Explosion levels have been
-> corrected in simulation; hardware listening is pending. Physical colour,
+> **Known issues:** **CRT output is untested.** Star Castle's revised explosion
+> levels still need listening confirmation. Physical colour,
 > vector timing and analog sound fidelity remain uncalibrated. Feedback and
 > bug reports are welcome via [Issues](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/issues).
 

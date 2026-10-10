@@ -3,7 +3,7 @@
 Simulation and synthesis checks below are distinct from hardware feedback.
 Star Castle gameplay, sound and video controls passed MiSTer user testing on
 the earlier build. The user confirmed Armor Attack boots and plays, but the
-revised audio balance needs listening. Rip Off remains bootable but otherwise
+revised audio balance is confirmed by user listening. Rip Off remains bootable but otherwise
 untested/WIP; Armor Attack remains WIP; CRT output remains untested. See
 [hardware status](mister-integration.md#hardware-status).
 

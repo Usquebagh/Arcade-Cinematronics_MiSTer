@@ -46,17 +46,17 @@
   "all_reported_tns_zero": true,
   "all_clocks_constrained": true,
   "external_io_constraints": "Inherited MiSTer framework; some external ports lack explicit delay constraints.",
-  "tested_on_hardware": false,
+  "tested_on_hardware": true,
   "hardware_validation": {
     "starcastle_gameplay": "previous build confirmed; new build pending",
     "starcastle_explosions": "listening pending",
     "ripoff_status": "previous build boots and plays; otherwise untested/WIP",
     "ripoff_two_player": "untested",
     "ripoff_sound": "untested",
-    "armora_status": "previous build plays; revised mix WIP pending hardware listening",
+    "armora_status": "boots and plays per user; WIP two-player and overlay alignment checks outstanding",
     "armora_two_player": "untested",
     "armora_overlay_alignment": "pending hardware collision checks",
-    "armora_sound": "previous mix heard but poorly balanced; revised mix listening pending",
+    "armora_sound": "2026-10-11: user confirmed revised mix sounds much better and balanced like the arcade; subjective listening, no measured waveform comparison",
     "crt_tested": false
   },
   "prior_build": {
@@ -143,12 +143,13 @@
   "limitations": [
     "CRT output untested",
     "Physical vector timing, colour and analog sound fidelity need calibration",
-    "Armor Attack town alignment and combat sound require hardware testing"
+    "Armor Attack town alignment and two-player operation require hardware testing"
   ],
   "hardware_feedback": {
     "previous_rbf_sha256": "b87de86907260cba6a00244878cf8e7a140b2df68aabff21a6e4f7de1c4018b1",
     "armora": "plays per user; beeper and siren tones masked faint explosions; firing unclear",
-    "revised_mix": "hardware listening pending"
+    "revised_mix": "2026-10-11: user confirmed improved sound balanced like the arcade",
+    "revised_rbf_sha256": "ff0991b424f8a0d2652203bcb67414c64d46f7841f873837fab90a573c8ad5db"
   },
   "hardware_installation": {
     "date": "2026-10-11",
@@ -169,6 +170,6 @@
       }
     },
     "left_selected": "Armor Attack",
-    "limits": "Process arguments and FPGA operating state checked over SSH; revised sound balance, gameplay and listening require user validation."
+    "limits": "SSH checks verify installed files and FPGA operating state. Armor Attack playback and revised sound balance additionally confirmed by user; see hardware_validation for scope and remaining checks."
   }
 }

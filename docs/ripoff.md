@@ -68,6 +68,13 @@ its isolated RMS is about 1635, comparable to the laser and beep. Short
 triggers and simultaneous-voice headroom pass simulation. Rip Off sound
 remains untested on hardware.
 
+Armor Attack's confirmed balance fix motivates a separate Rip Off listening
+review. Its current explosion and beeper are both about 1600 RMS in isolated
+tests; equal electrical RMS does not ensure equal perceived loudness. The
+explosion's two 1/512 low-pass steps also approximate the schematic's more
+complex noise/filter circuit. Review that path and balance against gameplay
+before treating the existing explosion gain increase as validated on hardware.
+
 ## References and Verification
 
 Pinned MAME revision: `9eea5804dc46644dd2dc9c3bc28cbb6c2e93c54e`.

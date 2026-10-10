@@ -7,9 +7,10 @@ overlay. Simulation and reported internal timing pass. Star Castle gameplay
 was confirmed on the previous two-game build.
 **Rip Off is bootable but otherwise untested/WIP**: it boots and plays on
 MiSTer, but gameplay, two-player operation and sound have not been validated.
-**Armor Attack boots and plays, but remains WIP**; two-player controls, overlay alignment
-and revised sound levels need testing. The current build lowers beeper/tread tones
-and brings up firing, explosions and helicopter audio. It needs hardware
+**Armor Attack boots and plays, but remains WIP**; its revised sound balance
+is confirmed by user listening. Two-player controls and overlay alignment need
+testing. The current build lowers beeper/tread tones and brings up firing,
+explosions and helicopter audio. Other profiles still need hardware
 regression checks. **CRT output is untested.** Colour and analog sound calibration remain outstanding.
 
 ## Installation

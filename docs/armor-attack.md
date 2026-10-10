@@ -2,8 +2,9 @@
 
 Armor Attack is a development/WIP profile in the shared Cinematronics core.
 It needs the three-game RBF; the 2026-10-04 two-game release cannot load it.
-The user confirmed it boots and plays on MiSTer. Two-player operation,
-overlay calibration and sound comparison require further testing.
+The user confirmed it boots and plays on MiSTer and that the revised sound
+is balanced like the arcade. Two-player operation, overlay calibration and
+measured analog fidelity require further testing.
 No game ROMs or scanned manuals are distributed.
 
 ## Program and controls
@@ -125,8 +126,9 @@ bash sim/run_armora.sh build/roms/armora.bin build/armora/armora.pgm build/sound
 
 The longer scripted ROM capture checks actual game-generated firing,
 high/low explosion and helicopter commands. It does not establish analog
-sound fidelity or replace hardware listening. The revised mix still needs
-confirmation on MiSTer.
+sound fidelity or replace hardware listening. On 2026-10-11 the user confirmed
+the revised mix sounds much better and balanced like the arcade on MiSTer.
+This is subjective playback feedback, not a measured waveform comparison.
 Build and hardware status are recorded in the release manifest.
 
 ## References

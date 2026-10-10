@@ -11,8 +11,9 @@ instructions and every framebuffer pixel. It boots and plays on MiSTer but
 is otherwise untested/WIP; gameplay, two-player operation and sound need validation.
 
 Armor Attack now has a 16 KiB profile, two-player inputs, a city/road overlay
-and synthesized sound. Its simulation and sound checks pass; hardware
-playability, overlay alignment and sound comparison need validation.
+and synthesized sound. Its simulation and sound checks pass; the user confirmed
+playback and the revised sound balance. Two-player operation, overlay alignment
+and measured analog fidelity need validation.
 
 Next steps:
 
