@@ -20,3 +20,7 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/mister/starcastle_download.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/mister/starcastle_controls.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/mister/vector_scanout.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/video/vector_overlay.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/games/cinemat_rom.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/mister/cinemat_download.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/sound/armora_sound.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/video/armora_overlay.sv

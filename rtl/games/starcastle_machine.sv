@@ -35,6 +35,6 @@ module starcastle_machine (
     output logic frame_overrun
 );
     // Compatibility wrapper used by the existing Star Castle regressions.
-    cinemat_machine machine (.game_ripoff(1'b0), .left2(1'b0), .right2(1'b0),
+    cinemat_machine machine (.game_id(2'd0), .load_addr({1'b0,load_addr}), .left2(1'b0), .right2(1'b0),
                              .thrust2(1'b0), .fire2(1'b0), .*);
 endmodule

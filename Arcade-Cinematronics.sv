@@ -10,12 +10,12 @@ module emu (
         "Cinematronics;;",
         "-;",
         "O[122:121],Aspect ratio,Original,Full Screen,[ARC1],[ARC2];",
-        "O[7],Colour overlay,On,Off;",
+        "O[7],Screen overlay,On,Off;",
         "O[9:8],Vector brightness,100%,75%,125%,150%;",
         "O[11:10],Overlay strength,100%,75%,50%,25%;",
         "-;DIP;O[6],Service mode,Off,On;",
         "-;R[0],Reset;",
-        "J1,Fire,Thrust,Start 1,Coin,Start 2;",
+        "J1,Fire,Thrust/Forward,Start 1,Coin,Start 2;",
         "jn,A,B,Start,Select,X;",
         "V,v",`BUILD_DATE
     };
@@ -40,15 +40,17 @@ module emu (
     );
     wire reset = RESET || status[0] || buttons[1] || !pll_locked;
     wire load_active, load_write, rom_loaded, load_error;
-    wire game_ripoff, profile_valid, profile_active;
+    wire [1:0] game_id, load_game_id;
+    wire profile_valid, profile_active;
     cinemat_profile profile (
         .clk(clk_sys), .cold_reset(!pll_locked), .downloading(ioctl_download),
         .wr(ioctl_wr), .index(ioctl_index), .addr(ioctl_addr), .data(ioctl_dout),
-        .game_ripoff(game_ripoff), .valid(profile_valid), .active(profile_active)
+        .game_id(game_id), .load_game_id(load_game_id), .valid(profile_valid), .active(profile_active)
     );
-    wire [12:0] load_addr;
+    wire [13:0] load_addr;
     wire [7:0] load_data;
-    starcastle_download download (
+    cinemat_download download (
+        .rom_16k(load_game_id == 2),
         .clk(clk_sys), .cold_reset(!pll_locked),
         .downloading(ioctl_download), .wr(ioctl_wr), .index(ioctl_index),
         .addr(ioctl_addr), .data(ioctl_dout),
@@ -63,7 +65,7 @@ module emu (
     wire left2, right2, thrust2, fire2;
     cinemat_controls controls (
         .clk(clk_sys), .reset(reset || load_active || profile_active || !profile_valid),
-        .game_ripoff(game_ripoff), .ps2_key(ps2_key),
+        .game_id(game_id), .ps2_key(ps2_key),
         .joy0(joy0), .joy1(joy1), .start1(start1), .start2(start2),
         .left(left), .right(right), .thrust(thrust), .fire(fire), .coin(coin),
         .left2(left2), .right2(right2), .thrust2(thrust2), .fire2(fire2)
@@ -76,7 +78,7 @@ module emu (
     wire ce_pix, hs, vs, hblank, vblank;
     cinemat_machine machine (
         .clk(clk_sys), .reset(reset || profile_active || !profile_valid),
-        .game_ripoff(game_ripoff), .left2(left2), .right2(right2), .thrust2(thrust2), .fire2(fire2),
+        .game_id(game_id), .left2(left2), .right2(right2), .thrust2(thrust2), .fire2(fire2),
         .load_active(load_active), .rom_loaded(rom_loaded),
         .load_write(load_write), .load_addr(load_addr), .load_data(load_data),
         .start1(start1), .start2(start2), .left(left), .right(right),
@@ -95,17 +97,33 @@ module emu (
     wire colour_ce, colour_hs, colour_vs, colour_hblank, colour_vblank;
     vector_overlay #(.SPANS(STARCASTLE_OVERLAY_SPANS),
                      .GAINS(STARCASTLE_OVERLAY_GAINS)) overlay (
-        .clk(clk_sys), .reset(!pll_locked), .enabled(!status[7] && !game_ripoff),
+        .clk(clk_sys), .reset(!pll_locked), .enabled(!status[7] && game_id == 0),
         .brightness(status[9:8]), .strength(status[11:10]),
         .x(pixel_x), .y(pixel_y), .rgb_in({display_gray,display_gray,display_gray}),
         .ce_in(ce_pix), .hs_in(hs), .vs_in(vs), .hblank_in(hblank), .vblank_in(vblank),
         .rgb_out(display_rgb), .ce_out(colour_ce), .hs_out(colour_hs), .vs_out(colour_vs),
         .hblank_out(colour_hblank), .vblank_out(colour_vblank)
     );
+    // Match the coordinates to the preceding two-clock Star/bypass compositor.
+    logic [8:0] artwork_x1,artwork_x2,artwork_y1,artwork_y2;
+    always_ff @(posedge clk_sys) begin
+        artwork_x1<=pixel_x;artwork_x2<=artwork_x1;
+        artwork_y1<=pixel_y;artwork_y2<=artwork_y1;
+    end
+    wire [23:0] final_rgb;
+    wire final_ce,final_hs,final_vs,final_hblank,final_vblank;
+    armora_overlay town (
+        .clk(clk_sys),.reset(!pll_locked),
+        .enabled(game_id==2 && !status[7] && rom_loaded && profile_valid && !profile_active && !load_active && !reset),
+        .strength(status[11:10]),.x(artwork_x2),.y(artwork_y2),.rgb_in(display_rgb),
+        .ce_in(colour_ce),.hs_in(colour_hs),.vs_in(colour_vs),
+        .hblank_in(colour_hblank),.vblank_in(colour_vblank),.rgb_out(final_rgb),
+        .ce_out(final_ce),.hs_out(final_hs),.vs_out(final_vs),.hblank_out(final_hblank),.vblank_out(final_vblank)
+    );
     // Gamma's serial RGB calculation also needs four clocks per pixel.
     arcade_video #(512,24,0) video (
-        .clk_video(clk_sys), .ce_pix(colour_ce), .RGB_in(display_rgb),
-        .HBlank(colour_hblank), .VBlank(colour_vblank), .HSync(colour_hs), .VSync(colour_vs),
+        .clk_video(clk_sys), .ce_pix(final_ce), .RGB_in(final_rgb),
+        .HBlank(final_hblank), .VBlank(final_vblank), .HSync(final_hs), .VSync(final_vs),
         .CLK_VIDEO(CLK_VIDEO), .CE_PIXEL(CE_PIXEL),
         .VGA_R(VGA_R), .VGA_G(VGA_G), .VGA_B(VGA_B),
         .VGA_HS(VGA_HS), .VGA_VS(VGA_VS), .VGA_DE(VGA_DE), .VGA_SL(VGA_SL),

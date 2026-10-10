@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2026 Usquebagh
 module cinemat_controls (
-    input wire clk, reset, game_ripoff,
+    input wire clk, reset,
+    input wire [1:0] game_id,
     input wire [10:0] ps2_key,
     input wire [31:0] joy0, joy1,
     output wire start1, start2, left, right, thrust, fire, coin,
@@ -11,7 +12,7 @@ module cinemat_controls (
     logic k_start1, k_start2, k_left, k_right, k_thrust, k_fire, k_coin;
     logic k_left2, k_right2, k_thrust2, k_fire2;
     wire [31:0] joy = joy0 | joy1;
-    wire [31:0] player1 = game_ripoff ? joy0 : joy;
+    wire [31:0] player1 = game_id != 0 ? joy0 : joy;
     assign left2 = joy1[1] || k_left2;
     assign right2 = joy1[0] || k_right2;
     assign thrust2 = joy1[5] || joy1[3] || k_thrust2;

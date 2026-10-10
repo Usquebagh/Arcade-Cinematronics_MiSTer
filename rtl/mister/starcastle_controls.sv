@@ -5,5 +5,5 @@ module starcastle_controls (
     input wire [31:0] joy0, joy1,
     output wire start1, start2, left, right, thrust, fire, coin
 );
-    cinemat_controls controls (.game_ripoff(1'b0), .left2(), .right2(), .thrust2(), .fire2(), .*);
+    cinemat_controls controls (.game_id(2'd0), .left2(), .right2(), .thrust2(), .fire2(), .*);
 endmodule

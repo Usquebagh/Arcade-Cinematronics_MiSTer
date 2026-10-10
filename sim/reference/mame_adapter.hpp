@@ -12,7 +12,8 @@ inline int16_t sext(uint16_t value, unsigned bits) {
 }
 }
 struct ccpu_cpu_device {
-    std::array<uint8_t,8192> rom{};
+    std::array<uint8_t,16384> rom{};
+    bool rom_16k=false;
     std::array<uint16_t,256> ram{};
     uint32_t inputs=0xffffff;
     uint8_t outputs=0;
@@ -24,7 +25,7 @@ struct ccpu_cpu_device {
     uint8_t shift=0;
     struct Cache {
         ccpu_cpu_device* owner;
-        uint8_t read_byte(uint16_t addr) {return owner->rom[((addr&0x2000)>>1)|(addr&0xfff)];}
+        uint8_t read_byte(uint16_t addr) {return owner->rom[owner->rom_16k ? (addr&0x3fff) : (((addr&0x2000)>>1)|(addr&0xfff))];}
     } m_cache{this};
     struct Data {
         ccpu_cpu_device* owner;

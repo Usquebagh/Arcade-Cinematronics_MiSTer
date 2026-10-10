@@ -25,6 +25,12 @@ jobs:
         run: bash sim/run_sound.sh
       - name: Rip Off profiles, two-player controls and shared machine
         run: bash sim/run_ripoff.sh
+      - name: Armor Attack 16 KiB mapping and mixed-profile downloads
+        run: bash sim/run_armora.sh
+      - name: Armor Attack sound, settled explosions and tank divider rates
+        run: bash sim/run_armora_sound.sh
+      - name: Armor Attack town overlay reproduces licensed source
+        run: python3 tools/prepare_armora_overlay.py --check
       - name: Rip Off sound board controls, six effects and sample timing
         run: bash sim/run_ripoff_sound.sh
       - name: Machine component synthesis

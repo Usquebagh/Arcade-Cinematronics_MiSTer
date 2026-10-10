@@ -19,3 +19,5 @@ set_global_assignment -name SYSTEMVERILOG_FILE ../rtl/vector/vector_framebuffer.
 set_global_assignment -name SYSTEMVERILOG_FILE ../rtl/vector/vector_video.sv
 set_global_assignment -name SDC_FILE CCPU-Synthesis.sdc
 set_global_assignment -name NUM_PARALLEL_PROCESSORS 4
+set_global_assignment -name SYSTEMVERILOG_FILE ../rtl/games/cinemat_rom.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../rtl/sound/armora_sound.sv

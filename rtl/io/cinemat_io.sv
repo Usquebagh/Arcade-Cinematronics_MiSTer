@@ -5,7 +5,8 @@
 // polarity is active-high for Star Castle and active-low for Rip Off.
 module cinemat_io (
     input wire clk, reset,
-    input wire game_ripoff, left2, right2, thrust2, fire2,
+    input wire [1:0] game_id,
+    input wire left2, right2, thrust2, fire2,
     input wire start1, start2, left, right, thrust, fire, coin, service,
     input wire [5:0] dips,
     input wire [7:0] outputs,
@@ -17,8 +18,8 @@ module cinemat_io (
                             1'b1,!left,3'b111,!start2,1'b1,!start1};
     wire [15:0] rip_controls = {!thrust,!right,!fire,!left,6'b111111,
                                 !fire2,!thrust2,!start2,!right2,!start1,!left2};
-    wire [15:0] controls = game_ripoff ? rip_controls : star_controls;
-    wire service_level = game_ripoff ? !service : service;
+    wire [15:0] controls = game_id != 0 ? rip_controls : star_controls;
+    wire service_level = game_id == 1 ? !service : service;
     // Switch order follows board wiring; port 23 reads the latched coin.
     assign inputs = {!coin_latched,service_level,dips[1],dips[0],dips[3],dips[4],
                      dips[5],dips[2],controls};

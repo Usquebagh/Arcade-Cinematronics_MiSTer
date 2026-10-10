@@ -7,7 +7,9 @@ module ripoff_units_tb;
     reg [15:0] index=0;
     reg [26:0] addr=0;
     reg [7:0] data=0;
-    wire game_ripoff,valid,active;
+    wire [1:0] game_id,load_game_id;
+    wire game_ripoff = game_id == 1;
+    wire valid,active;
     cinemat_profile profile(.*);
     task configure(input integer count,input [7:0] value,input integer first);
         @(negedge clk); index=1;downloading=1;wr=first;addr=0;data=value;
@@ -31,7 +33,7 @@ module ripoff_units_tb;
     reg [10:0] ps2_key=0;
     reg [31:0] joy0=0,joy1=0;
     wire cs1,cs2,cl,cr,ct,cf,cc,cl2,cr2,ct2,cf2;
-    cinemat_controls controls(.clk(clk),.reset(reset),.game_ripoff(game_ripoff),
+    cinemat_controls controls(.clk(clk),.reset(reset),.game_id(game_id),
         .ps2_key(ps2_key),.joy0(joy0),.joy1(joy1),.start1(cs1),.start2(cs2),
         .left(cl),.right(cr),.thrust(ct),.fire(cf),.coin(cc),
         .left2(cl2),.right2(cr2),.thrust2(ct2),.fire2(cf2));
@@ -75,10 +77,14 @@ module ripoff_units_tb;
         configure(1,1,0);load_rom();if(!valid || !game_ripoff) $fatal(1,"Delayed profile byte");
         configure(0,0,0);load_rom();if(valid) $fatal(1,"Empty profile accepted");
         configure(2,0,0);load_rom();if(valid) $fatal(1,"Long profile accepted");
-        configure(1,2,1);load_rom();if(valid) $fatal(1,"Unknown game accepted");
+        configure(1,3,1);load_rom();if(valid) $fatal(1,"Unknown game accepted");
         @(negedge clk);index=1;downloading=1;wr=1;addr=9;data=1;tick();
         @(negedge clk);downloading=0;wr=0;tick();load_rom();
         if(valid) $fatal(1,"Wrong first profile address accepted");
+        configure(1,2,1);load_rom();if(!valid || game_id != 2) $fatal(1,"Armor Attack profile");
+        if(inputs[22]!==0) $fatal(1,"Armor Attack service idle");
+        service=1;#1;if(inputs[22]!==1) $fatal(1,"Armor Attack service assertion");service=0;
+        joy1=(1<<1)|(1<<4);tick();if(cl || cf || !cl2 || !cf2) $fatal(1,"Armor Attack player separation");joy1=0;
         configure(1,0,1);load_rom();if(!valid || game_ripoff) $fatal(1,"Recovery/Star Castle selection");
         $display("PASS: profile switching, legacy fallback, malformed profile rejection, game I/O/service polarity, independent two-player keyboard/controllers");
         $finish;

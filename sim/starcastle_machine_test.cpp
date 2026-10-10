@@ -37,7 +37,8 @@ struct Test {
     unsigned sound_commands=0, audio_peak=0;
     std::vector<int16_t> audio_samples;
     unsigned control_reads[9]{}; // start1, left, right, thrust, fire while pressed
-    bool running=false,script=false,latched_seen=false,ripoff=false;
+    bool running=false,script=false,latched_seen=false,ripoff=false,armor=false,diagnostic=false;
+    unsigned executed_banks=0;
     void check(const char* label,unsigned actual,unsigned expected) {
         if(actual!=expected) {
             std::cerr<<"Clock "<<clocks<<", opcode "<<std::hex<<unsigned(rtl.trace_opcode)
@@ -60,18 +61,21 @@ struct Test {
     }
     void tick() {
         if(script) {
-            rtl.coin=ripoff ? (frame_ticks==3 || frame_ticks==5) : frame_ticks==4;
-            rtl.start1=!ripoff && frame_ticks==7;
-            rtl.start2=ripoff && frame_ticks==7;
+            unsigned script_frame=armor ? (frame_ticks>60?frame_ticks-60:0) : frame_ticks;
+            rtl.coin=(ripoff||armor) ? (script_frame==3 || script_frame==5) : script_frame==4;
+            rtl.start1=!(ripoff||armor) && script_frame==7;
+            rtl.start2=(ripoff||armor) && (armor ? script_frame>=7&&script_frame<12 : script_frame==7);
 #ifdef SHARED_MACHINE
             rtl.left2=rtl.right2=rtl.thrust2=rtl.fire2=0;
-            if(ripoff) {
-                rtl.left2=frame_ticks>=10&&frame_ticks<13;rtl.right2=frame_ticks>=14&&frame_ticks<17;
-                rtl.thrust2=frame_ticks>=9&&frame_ticks<24;rtl.fire2=frame_ticks>=12&&frame_ticks<26;
+            if(ripoff||armor) {
+                rtl.left2=script_frame>=10&&script_frame<13;rtl.right2=script_frame>=14&&script_frame<17;
+                rtl.thrust2=script_frame>=9&&(armor ? script_frame%30<20 : script_frame<24);
+                rtl.fire2=script_frame>=12&&(armor ? script_frame%8<4 : script_frame<26);
             }
 #endif
-            rtl.left=frame_ticks>=10&&frame_ticks<13;rtl.right=frame_ticks>=14&&frame_ticks<17;
-            rtl.thrust=frame_ticks>=9&&frame_ticks<24;rtl.fire=frame_ticks>=12&&frame_ticks<26;
+            rtl.left=script_frame>=10&&script_frame<13;rtl.right=script_frame>=14&&script_frame<17;
+            rtl.thrust=script_frame>=9&&(armor ? script_frame%30<20 : script_frame<24);
+            rtl.fire=script_frame>=12&&(armor ? script_frame%8<4 : script_frame<26);
         }
         rtl.clk=0;rtl.eval();
         bool wake=rtl.cpu_frame_wake,expired=rtl.watchdog_reset,timer=rtl.frame_tick;
@@ -102,9 +106,10 @@ struct Test {
             if(primary&&op>=0x10&&op<=0x1f&&!(inputs&(1U<<(op&15)))) {
                 const unsigned star_bits[]={0,6,8,10,12};
                 const unsigned rip_bits[]={3,12,14,15,13,0,2,4,5};
-                const unsigned* bits=ripoff?rip_bits:star_bits;
-                for(unsigned n=0;n<(ripoff?9U:5U);++n) if((op&15)==bits[n]) ++control_reads[n];
+                const unsigned* bits=(ripoff||armor)?rip_bits:star_bits;
+                for(unsigned n=0;n<((ripoff||armor)?9U:5U);++n) if((op&15)==bits[n]) ++control_reads[n];
             }
+            executed_banks |= 1U<<((rtl.pc>>12)&3);
             ref.inputs=inputs;ref.step();++retirements;compare();
             if(op!=0xe5&&op!=0xf5) check("instruction cycles",rtl.trace_cycles,1-ref.m_icount);
             if(op>=0x10&&op<=0x1f) ++input_reads;
@@ -123,12 +128,12 @@ struct Test {
     }
     void load() {
         running=false;std::fill(drawing.begin(),drawing.end(),0);std::fill(front.begin(),front.end(),0);
-        rtl.reset=1;rtl.load_active=1;rtl.rom_loaded=0;rtl.load_write=0;rtl.dips=ripoff?19:63;
+        rtl.reset=1;rtl.load_active=1;rtl.rom_loaded=0;rtl.load_write=0;rtl.service=diagnostic;rtl.dips=armor?46:ripoff?19:63;ref.rom_16k=armor;
 #ifdef SHARED_MACHINE
-        rtl.game_ripoff=ripoff;rtl.left2=rtl.right2=rtl.thrust2=rtl.fire2=0;
+        rtl.game_id=armor?2:ripoff?1:0;rtl.left2=rtl.right2=rtl.thrust2=rtl.fire2=0;
 #endif
         tick();rtl.reset=0;rtl.load_write=1;
-        for(unsigned n=0;n<8192;++n) {
+        for(unsigned n=0;n<(armor?16384U:8192U);++n) {
             rtl.load_addr=n;rtl.load_data=ref.rom[n];tick();
             check("CPU held during ROM load",rtl.retired,0);
         }
@@ -163,20 +168,23 @@ static void jump(std::vector<uint8_t>& code,unsigned address) {
 int main(int argc,char** argv) {
     Verilated::commandArgs(argc,argv);
     try {
+        bool diagnostic=argc>1 && std::string(argv[1])=="--armora-diag";
+        bool armor=diagnostic || (argc>1 && std::string(argv[1])=="--armora");
         bool ripoff=argc>1 && std::string(argv[1])=="--ripoff";
-        if(ripoff) {++argv;--argc;}
+        if(ripoff||armor) {++argv;--argc;}
         if(argc>1) {
-            Test test;test.ripoff=ripoff;
+            Test test;test.ripoff=ripoff;test.armor=armor;test.diagnostic=diagnostic;
             std::ifstream in(argv[1],std::ios::binary);
-            if(!in||!in.read(reinterpret_cast<char*>(test.ref.rom.data()),8192)) throw std::runtime_error("Expected 8192-byte CCPU ROM image");
-            test.load();test.script=true;test.run_frames(ripoff?120:28,true);
-            if(test.resets||test.vectors<100||!test.acknowledgements||test.input_reads<20)
+            if(!in||!in.read(reinterpret_cast<char*>(test.ref.rom.data()),armor?16384:8192)) throw std::runtime_error("Expected complete CCPU ROM image");
+            test.load();test.script=!diagnostic;test.run_frames(diagnostic?12:armor?180:ripoff?120:28,true);
+            if(test.resets||test.vectors<100||(!diagnostic && !test.acknowledgements)||test.input_reads<20)
                 throw std::runtime_error("Real-ROM machine lacked expected activity or triggered watchdog");
-            for(unsigned n=0;n<(ripoff?9U:5U);++n) if(!test.control_reads[n]) throw std::runtime_error("Game did not read a pressed control");
+            for(unsigned n=0;n<(!diagnostic?((ripoff||armor)?9U:5U):0U);++n) if(!test.control_reads[n]) throw std::runtime_error("Game did not read a pressed control");
             std::cout<<"Game audio activity: "<<test.sound_commands<<" latch changes, peak "<<test.audio_peak
                      <<", "<<test.audio_samples.size()<<" samples\n";
-            if(test.sound_commands<2||test.audio_peak<100||test.audio_samples.size()<10000)
+            if(!diagnostic && (test.sound_commands<2||test.audio_peak<100||test.audio_samples.size()<10000))
                 throw std::runtime_error("Real-ROM machine did not drive the sound board");
+            if(armor && !diagnostic && test.executed_banks!=15)throw std::runtime_error("Armor did not exercise all four program banks");
             auto image=test.scan();
             if(argc>2) {
                 std::ofstream out(argv[2],std::ios::binary);if(!out) throw std::runtime_error("Cannot write machine preview");
@@ -190,12 +198,12 @@ int main(int argc,char** argv) {
                 out.write("data",4);word(test.audio_samples.size()*2,4);
                 for(auto sample:test.audio_samples)word(uint16_t(sample),2);
             }
-            std::cout<<"PASS: "<<(ripoff?"Rip Off":"Star Castle")<<" live machine, "<<test.presentations<<" frames, "<<test.retirements
+            std::cout<<"PASS: "<<(armor?"Armor Attack":ripoff?"Rip Off":"Star Castle")<<" live machine, "<<test.presentations<<" frames, "<<test.retirements
                      <<" reference-checked instructions, "<<test.vectors<<" vectors, "<<test.acknowledgements
                      <<" coin acknowledgements, "<<test.input_reads<<" input reads; every scanout pixel checked\n";
             std::cout<<"PASS: pressed start/left/right/thrust/fire reads: "<<test.control_reads[0]<<'/'
                      <<test.control_reads[1]<<'/'<<test.control_reads[2]<<'/'<<test.control_reads[3]<<'/'<<test.control_reads[4]<<'\n';
-            if(ripoff) std::cout<<"PASS: pressed P2 left/right/thrust/fire reads: "<<test.control_reads[5]<<'/'<<test.control_reads[6]<<'/'<<test.control_reads[7]<<'/'<<test.control_reads[8]<<'\n';
+            if(ripoff||armor) std::cout<<"PASS: pressed P2 left/right/thrust/fire reads: "<<test.control_reads[5]<<'/'<<test.control_reads[6]<<'/'<<test.control_reads[7]<<'/'<<test.control_reads[8]<<'\n';
             std::cout<<"PASS: real game drives "<<test.sound_commands<<" sound-latch changes, "
                      <<test.audio_samples.size()<<" audio samples, peak "<<test.audio_peak<<"\n";
         } else {

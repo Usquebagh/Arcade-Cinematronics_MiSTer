@@ -13,8 +13,8 @@ CHIPS = (
     ('starcas3.r7', 0x1001, 'c367b69d', '98354d34ceb03e080b1846611d533be7bdff01cc'),
 )
 
-def assemble(archive, chips=CHIPS, game='Star Castle v3'):
-    image = bytearray(8192)
+def assemble(archive, chips=CHIPS, game='Star Castle v3', image_size=8192, chip_size=2048):
+    image = bytearray(image_size)
     with zipfile.ZipFile(archive) as z:
         # No extraction to filesystem; reject ambiguous filenames.
         members = {}
@@ -27,12 +27,12 @@ def assemble(archive, chips=CHIPS, game='Star Castle v3'):
             if name not in members:
                 raise ValueError(f'Missing chip: {name}; expected {game}')
             member = members[name]
-            if z.getinfo(member).file_size != 2048:
-                raise ValueError(f'{name}: expected 2048 bytes')
+            if z.getinfo(member).file_size != chip_size:
+                raise ValueError(f'{name}: expected {chip_size} bytes')
             data = z.read(member)
             if f'{zlib.crc32(data):08x}' != crc or hashlib.sha1(data).hexdigest() != sha1:
                 raise ValueError(f'{name}: checksum mismatch')
-            image[offset:offset+4096:2] = data
+            image[offset:offset+chip_size*2:2] = data
     return bytes(image)
 
 def main():

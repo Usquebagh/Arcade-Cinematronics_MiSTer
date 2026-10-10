@@ -1,0 +1,30 @@
+<misterromdescription>
+    <name>Armor Attack</name>
+    <year>1980</year>
+    <manufacturer>Cinematronics</manufacturer>
+    <category>Shooter</category>
+    <setname>armora</setname>
+    <rbf>Cinematronics</rbf>
+    <about author="Usquebagh" webpage="https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer">Development profile; requires the three-game core build.</about>
+    <rotation>horizontal</rotation>
+    <players>2 (simultaneous)</players>
+    <joystick>2-way</joystick>
+    <num_buttons>2</num_buttons>
+    <buttons names="Fire,Forward,Start 1,Coin,Start 2" default="A,B,Start,Select,X"/>
+    <switches default="2E">
+        <dip bits="0,1" name="Jeeps" ids="2,4,3,5"/>
+        <dip bits="2,3" name="Coinage" ids="4C/3C,2C/1C,2C/3C,1C/1C"/>
+        <dip bits="4" name="Demo sounds" ids="On,Off"/>
+    </switches>
+    <rom index="1"><part>02</part></rom>
+    <rom index="0" zip="armora.zip" md5="none">
+        <interleave output="16">
+            <part name="ar414le.t6" crc="d7e71f84" map="01"/>
+            <part name="ar414lo.p6" crc="df1c2370" map="10"/>
+        </interleave>
+        <interleave output="16">
+            <part name="ar414ue.u6" crc="b0276118" map="01"/>
+            <part name="ar414uo.r6" crc="229d779f" map="10"/>
+        </interleave>
+    </rom>
+</misterromdescription>

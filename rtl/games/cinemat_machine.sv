@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2026 Usquebagh
-// Shared 8 KiB JMI CCPU machine; game-specific I/O and sound are selected at load.
+// Shared JMI CCPU machine; game-specific ROM mapping, I/O and sound at load.
 module cinemat_machine (
     input wire clk, reset,
-    input wire game_ripoff, left2, right2, thrust2, fire2,
+    input wire [1:0] game_id,
+    input wire left2, right2, thrust2, fire2,
     input wire load_active, rom_loaded, load_write,
-    input wire [12:0] load_addr,
+    input wire [13:0] load_addr,
     input wire [7:0] load_data,
     input wire start1, start2, left, right, thrust, fire, coin, service,
     input wire [5:0] dips,
@@ -38,6 +39,8 @@ module cinemat_machine (
     typedef enum logic [1:0] {STARTUP, RUN, DRAIN, CLEAR} state_t;
     state_t state;
     wire hard_reset = reset || load_active || !rom_loaded;
+    wire game_ripoff = game_id == 1;
+    wire game_armor = game_id == 2;
     wire [15:0] rom_addr;
     wire [7:0] rom_data;
     wire watchdog_clear, video_clearing;
@@ -51,7 +54,8 @@ module cinemat_machine (
     // intensity latch until the queued segment has been accepted.
     wire execute_ce = cpu_ce && machine_ready && !vector_valid && !frame_tick;
     assign cpu_frame_wake = wake_pending && machine_ready && waiting;
-    starcastle_rom program_rom (
+    cinemat_rom program_rom (
+        .rom_16k(game_armor),
         .clk(clk), .cpu_addr(rom_addr), .cpu_data(rom_data),
         .load_write(load_write), .load_addr(load_addr), .load_data(load_data)
     );
@@ -64,22 +68,26 @@ module cinemat_machine (
         .clk(clk), .reset(hard_reset), .start1(start1), .start2(start2),
         .left(left), .right(right), .thrust(thrust), .fire(fire),
         .coin(coin), .service(service), .dips(dips), .outputs(outputs),
-        .game_ripoff(game_ripoff), .left2(left2), .right2(right2), .thrust2(thrust2), .fire2(fire2),
+        .game_id(game_id), .left2(left2), .right2(right2), .thrust2(thrust2), .fire2(fire2),
         .inputs(cpu_inputs), .coin_latched(coin_latched)
     );
-    wire signed [15:0] star_audio, rip_audio;
-    wire star_ce, rip_ce;
-    wire [7:0] star_latch, rip_latch;
-    assign audio = game_ripoff ? rip_audio : star_audio;
-    assign audio_ce = game_ripoff ? rip_ce : star_ce;
-    assign sound_latch = game_ripoff ? rip_latch : star_latch;
+    wire signed [15:0] star_audio, rip_audio,armor_audio;
+    wire star_ce, rip_ce,armor_ce;
+    wire [7:0] star_latch, rip_latch,armor_latch;
+    assign audio = game_armor ? armor_audio : game_ripoff ? rip_audio : star_audio;
+    assign audio_ce = game_armor ? armor_ce : game_ripoff ? rip_ce : star_ce;
+    assign sound_latch = game_armor ? armor_latch : game_ripoff ? rip_latch : star_latch;
     starcastle_sound sound (
-        .clk(clk), .reset(hard_reset || game_ripoff), .outputs(outputs), .audio(star_audio),
+        .clk(clk), .reset(hard_reset || game_id != 0), .outputs(outputs), .audio(star_audio),
         .sample_ce(star_ce), .shift_register(), .sound_latch(star_latch)
     );
     ripoff_sound rip_sound (
         .clk(clk), .reset(hard_reset || !game_ripoff), .outputs(outputs), .audio(rip_audio),
         .sample_ce(rip_ce), .shift_register(), .sound_latch(rip_latch)
+    );
+    armora_sound armor_sound (
+        .clk(clk), .reset(hard_reset || !game_armor), .outputs(outputs), .audio(armor_audio),
+        .sample_ce(armor_ce), .shift_register(), .sound_latch(armor_latch)
     );
     ccpu cpu (
         .clk(clk), .reset(hard_reset), .soft_reset(watchdog_reset),

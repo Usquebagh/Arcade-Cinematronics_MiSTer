@@ -7,6 +7,6 @@ module starcastle_io (
     output wire [23:0] inputs,
     output wire coin_latched
 );
-    cinemat_io io (.game_ripoff(1'b0), .left2(1'b0), .right2(1'b0),
+    cinemat_io io (.game_id(2'd0), .left2(1'b0), .right2(1'b0),
                   .thrust2(1'b0), .fire2(1'b0), .*);
 endmodule
