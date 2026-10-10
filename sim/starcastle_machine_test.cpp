@@ -35,6 +35,7 @@ struct Test {
     unsigned frame_ticks=0,presentations=0,resets=0,acknowledgements=0,input_reads=0;
     unsigned queue_stalls=0;
     unsigned sound_commands=0, audio_peak=0;
+    unsigned armor_effect_commands[4]{},armor_chopper_commands=0;
     std::vector<int16_t> audio_samples;
     unsigned control_reads[9]{}; // start1, left, right, thrust, fire while pressed
     bool running=false,script=false,latched_seen=false,ripoff=false,armor=false,diagnostic=false;
@@ -84,7 +85,12 @@ struct Test {
         unsigned old_sound=rtl.sound_latch;
         rtl.clk=1;rtl.eval();rtl.clk=0;rtl.eval();++clocks;
         if(!running) return;
-        if(rtl.sound_latch!=old_sound) ++sound_commands;
+        if(rtl.sound_latch!=old_sound) {
+            ++sound_commands;
+            if(armor)for(unsigned bit=0;bit<4;++bit)
+                if((old_sound&(1U<<bit)) && !(rtl.sound_latch&(1U<<bit)))++armor_effect_commands[bit];
+        }
+        if(armor && (old_outputs&8) && !(rtl.outputs&8))++armor_chopper_commands;
         if(audio_ce) {
             auto sample=int16_t(rtl.audio);audio_samples.push_back(sample);
             audio_peak=std::max(audio_peak,unsigned(std::abs(int(sample))));
@@ -176,7 +182,7 @@ int main(int argc,char** argv) {
             Test test;test.ripoff=ripoff;test.armor=armor;test.diagnostic=diagnostic;
             std::ifstream in(argv[1],std::ios::binary);
             if(!in||!in.read(reinterpret_cast<char*>(test.ref.rom.data()),armor?16384:8192)) throw std::runtime_error("Expected complete CCPU ROM image");
-            test.load();test.script=!diagnostic;test.run_frames(diagnostic?12:armor?180:ripoff?120:28,true);
+            test.load();test.script=!diagnostic;test.run_frames(diagnostic?12:armor?420:ripoff?120:28,true);
             if(test.resets||test.vectors<100||(!diagnostic && !test.acknowledgements)||test.input_reads<20)
                 throw std::runtime_error("Real-ROM machine lacked expected activity or triggered watchdog");
             for(unsigned n=0;n<(!diagnostic?((ripoff||armor)?9U:5U):0U);++n) if(!test.control_reads[n]) throw std::runtime_error("Game did not read a pressed control");
@@ -185,6 +191,13 @@ int main(int argc,char** argv) {
             if(!diagnostic && (test.sound_commands<2||test.audio_peak<100||test.audio_samples.size()<10000))
                 throw std::runtime_error("Real-ROM machine did not drive the sound board");
             if(armor && !diagnostic && test.executed_banks!=15)throw std::runtime_error("Armor did not exercise all four program banks");
+            if(armor && !diagnostic) {
+                for(auto count:test.armor_effect_commands)if(!count)throw std::runtime_error("Armor gameplay did not trigger every combat sound");
+                if(!test.armor_chopper_commands || test.audio_peak<5000)throw std::runtime_error("Armor combat audio activity missing or too quiet");
+                std::cout<<"PASS: game-triggered tank/high-explosion/jeep/low-explosion/helicopter commands: "
+                    <<test.armor_effect_commands[0]<<'/'<<test.armor_effect_commands[1]<<'/'
+                    <<test.armor_effect_commands[2]<<'/'<<test.armor_effect_commands[3]<<'/'<<test.armor_chopper_commands<<'\n';
+            }
             auto image=test.scan();
             if(argc>2) {
                 std::ofstream out(argv[2],std::ios::binary);if(!out) throw std::runtime_error("Cannot write machine preview");

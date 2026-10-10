@@ -54,6 +54,7 @@ int main(int argc,char** argv){
         auto old=t.rtl.sound_latch;t.rtl.outputs^=0x60;t.tick();require(t.rtl.sound_latch==old,"OUT5/6 affect sound latch");
         t.reset();require(rms(t.capture(96000))==0,"Inactive board not silent");
         const char* names[]={"tank-fire","high-explosion","jeep-fire","low-explosion","chopper","beep","tank-motor-treads"};
+        double levels[7]{};
         for(unsigned voice=0;voice<7;++voice){
             t.reset();
             if(voice<4)t.latch(255^(1U<<voice));
@@ -61,7 +62,8 @@ int main(int argc,char** argv){
             if(voice==5)t.rtl.outputs&=~4;
             if(voice==6){t.latch(0x7f);t.rtl.outputs&=~2;}
             auto a=t.capture(96000);auto bounds=std::minmax_element(a.begin(),a.end());
-            require(rms(a)>200,"Voice is inaudible");require(*bounds.first<0&&*bounds.second>0,"Voice not bipolar");
+            levels[voice]=rms(a);
+            require(levels[voice]>150,"Voice is inaudible");require(*bounds.first<0&&*bounds.second>0,"Voice not bipolar");
             require(*bounds.first>-32768&&*bounds.second<32767,"Voice clips");
             if(voice==5)require(crossings(a)>360&&crossings(a)<450,"Beep outside schematic 555 range");
             if(argc>1)wav(std::string(argv[1])+"/armora-"+names[voice]+".wav",a);
@@ -69,6 +71,9 @@ int main(int argc,char** argv){
             require(rms(t.capture(24000))<3,"Voice fails to release");
             std::cout<<"PASS: Armor "<<names[voice]<<", RMS "<<rms(a)<<", "<<crossings(a)<<" crossings; release\n";
         }
+        require(levels[1]>levels[5]*8 && levels[3]>levels[5]*5,"Explosions masked by beeper");
+        require(levels[2]>levels[6]*3 && levels[4]>levels[6]*3,"Gunfire/helicopter masked by motor and treads");
+        std::cout<<"PASS: combat effects dominate quiet beeper and engine/tread tones\n";
         for(unsigned code=0;code<16;++code){
             t.reset();uint8_t reverse=((code&1)<<3)|((code&2)<<1)|((code&4)>>1)|((code&8)>>3);
             t.latch((reverse<<4)|15);t.rtl.outputs&=~2;t.capture(1000);

@@ -64,25 +64,35 @@ module armora_sound #(parameter integer CLOCK_HZ=50000000)(
     // control resistance (750k vs 910k), approximated here by 1.25x gain.
     wire [9:0] jeep_gain={2'b00,jeep_env[23:16]}+{2'b00,hi_env[23:16]}+{4'b0000,hi_env[23:18]};
     wire signed [26:0] jeep_product=$signed(jeep_lp2[23:8])*$signed({1'b0,jeep_gain});
-    wire signed [31:0] chopper_voice=(!outputs[3] || chopper_pending || chopper_edge)?(chop_lp2>>>9):32'sd0;
-    wire signed [31:0] beep_voice=outputs[2]?32'sd0:(beep_phase[23]?32'sd1400:-32'sd1400);
+    // Gameplay listening: beeper/tread tones masked the combat noise. Keep
+    // the beeper quiet and the helicopter louder without inventing a rotor
+    // clock: OUT3 still supplies its blade rhythm.
+    wire signed [31:0] chopper_voice=(!outputs[3] || chopper_pending || chopper_edge)?(chop_lp2>>>7):32'sd0;
+    wire signed [31:0] beep_voice=outputs[2]?32'sd0:(beep_phase[23]?32'sd280:-32'sd280);
     wire signed [31:0] tread_voice=tank_on?
-        (tread_div[3]?32'sd1400:-32'sd1400)+
-        (tread_div[2]?32'sd140:-32'sd140)+
-        (tread_div[1]?32'sd140:-32'sd140)+
-        (tread_div[0]?32'sd140:-32'sd140):32'sd0;
-    wire signed [31:0] motor_source=tank_on?(motor_square?32'sd1900:-32'sd1900):32'sd0;
+        (tread_div[3]?32'sd180:-32'sd180)+
+        (tread_div[2]?32'sd18:-32'sd18)+
+        (tread_div[1]?32'sd18:-32'sd18)+
+        (tread_div[0]?32'sd18:-32'sd18):32'sd0;
+    wire signed [31:0] motor_source=tank_on?(motor_square?32'sd700:-32'sd700):32'sd0;
     wire signed [31:0] mixed=($signed({{7{tank_product[24]}},tank_product})>>>7)+
-        ($signed({{7{lo_product[24]}},lo_product})>>>8)+
+        ($signed({{7{lo_product[24]}},lo_product})>>>7)+
         ($signed({{5{jeep_product[26]}},jeep_product})>>>7)+
         chopper_voice+beep_voice+tread_voice+(motor_lp>>>8);
-    // Two continuously clocked stages separate the DSP/mixer and 75% master
-    // gain from the DC/output arithmetic. 40 ns latency at 50 MHz; no timing
-    // exceptions. The gain leaves headroom for correlated simultaneous noise.
-    logic signed [31:0] mixed_pipe,mixed_scaled;
+    // Preserve individual voices, compress only large summed excursions
+    // above 24576 at 4:1 before the 75% master gain. The noise voices share
+    // a source, so overlapping explosions can otherwise clip in phase.
+    // Three continuously clocked stages; 60 ns at 50 MHz, no timing exceptions.
+    logic signed [31:0] mixed_pipe,mixed_limited,mixed_scaled;
     always_ff @(posedge clk) begin
-        if(reset)begin mixed_pipe<=0;mixed_scaled<=0;end
-        else begin mixed_pipe<=mixed;mixed_scaled<=mixed_pipe-(mixed_pipe>>>2);end
+        if(reset)begin mixed_pipe<=0;mixed_limited<=0;mixed_scaled<=0;end
+        else begin
+            mixed_pipe<=mixed;
+            if(mixed_pipe>24576)mixed_limited<=32'sd24576+((mixed_pipe-32'sd24576)>>>2);
+            else if(mixed_pipe< -24576)mixed_limited<=-32'sd24576-((-mixed_pipe-32'sd24576)>>>2);
+            else mixed_limited<=mixed_pipe;
+            mixed_scaled<=mixed_limited-(mixed_limited>>>2);
+        end
     end
     wire signed [31:0] coupled=mixed_scaled-dc;
     always_ff @(posedge clk) begin
@@ -97,10 +107,16 @@ module armora_sound #(parameter integer CLOCK_HZ=50000000)(
         end else if(sample_ce)begin
             noise_half<=!noise_half;
             if(noise_half)noise_lfsr<={noise_lfsr[0]^noise_lfsr[3],noise_lfsr[16:1]};
-            tank_lp1<=rc(tank_lp1,noise_source,9,11);tank_lp2<=rc(tank_lp2,tank_lp1,9,10);
+            // Approximate loaded second-pole RCs, not the unloaded resistor:
+            // tank: (16k || 8.12k)*.22u ~1.19ms;
+            // chopper: (47k || 30.75k)*.047u ~.875ms;
+            // jeep/HI: (43k || 22.75k)*.0047u ~.070ms.
+            // The old jeep second pole treated C33 as .22u, muffling both
+            // gunfire and high explosions; the helicopter was also too dark.
+            tank_lp1<=rc(tank_lp1,noise_source,9,11);tank_lp2<=rc(tank_lp2,tank_lp1,7,10);
             lo_lp1<=rc(lo_lp1,noise_source,8,10);lo_lp2<=rc(lo_lp2,lo_lp1,6,9);
-            chop_lp1<=rc(chop_lp1,noise_source,6,8);chop_lp2<=rc(chop_lp2,chop_lp1,8,11);
-            jeep_lp1<=rc(jeep_lp1,noise_source,8,9);jeep_lp2<=rc(jeep_lp2,jeep_lp1,8,10);
+            chop_lp1<=rc(chop_lp1,noise_source,6,7);chop_lp2<=rc(chop_lp2,chop_lp1,7,8);
+            jeep_lp1<=rc(jeep_lp1,noise_source,8,9);jeep_lp2<=rc(jeep_lp2,jeep_lp1,3,6);
             tank_env<=(!sound_latch[0]||pending[0]||pulse[0])?32'sd16777215:rc(tank_env,0,16,18);
             hi_env<=(!sound_latch[1]||pending[1]||pulse[1])?32'sd16777215:rc(hi_env,0,16,0);
             jeep_env<=(!sound_latch[2]||pending[2]||pulse[2])?32'sd16777215:rc(jeep_env,0,15,16);
