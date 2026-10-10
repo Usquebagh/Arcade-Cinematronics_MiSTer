@@ -120,7 +120,7 @@ existing references while capturing the game's own sound commands. The
 program ROM layout are unchanged by sound integration.
 
 The current build passes full Quartus fitting and the timing gate; results
-are in the [manifest](../releases/Arcade-Cinematronics_20261004.json).
+are in the [manifest](../releases/Arcade-Cinematronics_20261011.json).
 On 2026-10-04 the user confirmed audible sound on MiSTer,
 reporting "sound is good in comparison" to
 [this Star Castle gameplay recording](https://www.youtube.com/watch?v=S_DojyqJXKE).

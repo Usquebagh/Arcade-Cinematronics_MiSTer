@@ -1,9 +1,9 @@
-# Validation record - updated 2026-10-04
+# Validation record - updated 2026-10-11
 
 Simulation and synthesis checks below are distinct from hardware feedback.
 Star Castle gameplay, sound and video controls passed MiSTer user testing on
-the earlier build. Star Castle also still plays on the combined build.
-Rip Off is bootable but otherwise untested/WIP; CRT output remains untested. See
+the earlier build. Gameplay on the new three-game build awaits user testing.
+Rip Off is bootable but otherwise untested/WIP; Armor Attack is a new WIP profile; CRT output remains untested. See
 [hardware status](mister-integration.md#hardware-status).
 
 ## Executed locally
@@ -36,6 +36,11 @@ Yosys; Docker image `theypsilon/quartus-lite-c5:17.0.2`.
 | Rip Off separate player controls and coin acknowledgements | Both players exercised; two coin acknowledgements pass |
 | Game profile selection, malformed profiles and legacy fallback | Pass |
 | Rip Off sound serial latch, six effects, release, headroom and 96 kHz timing | Pass at accelerated and 50 MHz clocks; short explosion triggers retained |
+| Armor Attack 16 KiB ROM map, profile switching and loader rejection | Pass; all 65,536 addresses checked in both maps |
+| Armor Attack connected real-ROM execution | 180 frames; 6,529,570 checked instructions; 59,164 vectors; every framebuffer pixel passes |
+| Armor Attack service diagnostic | 12 frames; 301,168 checked instructions; 2,508 vectors; every framebuffer pixel passes |
+| Armor Attack sound serial latch, seven effect groups, all tank rates and headroom | Pass; settled short explosion bursts retained at 50 MHz; worst directed peak 27,300 |
+| MiSTer video pipeline, including the Armor Attack city overlay | 15 complete RGB frames pass, including six Armor Attack frames |
 
 The differential oracle is the original pinned MAME instruction function.
 Agreement establishes compatibility with that reference, not independent
@@ -75,6 +80,9 @@ bash sim/run_machine.sh
 bash sim/run_sound.sh
 bash sim/run_ripoff.sh
 bash sim/run_ripoff_sound.sh
+bash sim/run_armora.sh
+bash sim/run_armora_sound.sh
+python3 tools/prepare_armora_overlay.py --check
 bash sim/run_overlay.sh
 bash sim/run_mister.sh
 bash tools/synth.sh
@@ -95,7 +103,9 @@ python3 tools/preview_vector.py build/machine/starcastle.pgm build/machine/starc
 bash sim/run_mister.sh games/mame/starcas.zip
 python3 tools/prepare_ripoff.py games/mame/ripoff.zip
 bash sim/run_ripoff.sh build/roms/ripoff.bin build/ripoff/ripoff.pgm build/sound/ripoff-game.wav
-python3 tools/check_mra.py games/mame/starcas.zip games/mame/ripoff.zip
+python3 tools/prepare_armora.py games/mame/armora.zip
+bash sim/run_armora.sh build/roms/armora.bin build/armora/armora.pgm build/sound/armora-game.wav
+python3 tools/check_mra.py games/mame/starcas.zip games/mame/ripoff.zip games/mame/armora.zip
 ```
 
 Component synthesis checks do not perform fitting or generate an RBF.

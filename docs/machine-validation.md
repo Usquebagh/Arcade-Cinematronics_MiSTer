@@ -49,7 +49,7 @@ analysis and synthesis for `5CSEBA6U23I7` succeed with zero errors:
 
 These are analysis/synthesis estimates. They are not fitted ALM/M10K counts,
 timing closure. The complete fitted core's resource and timing results are
-in the [build manifest](../releases/Arcade-Cinematronics_20261004.json).
+in the [build manifest](../releases/Arcade-Cinematronics_20261011.json).
 
 ## Remaining limitations
 

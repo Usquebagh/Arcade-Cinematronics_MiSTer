@@ -6,3 +6,4 @@
 *.py text eol=lf
 *.cpp text eol=lf
 *.hpp text eol=lf
+*.mra text eol=lf

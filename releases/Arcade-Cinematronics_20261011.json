@@ -1,0 +1,164 @@
+{
+  "source_commit": "96055641e591b4030bbba24be91af79fd38a74ed",
+  "project": "Arcade-Cinematronics",
+  "target_games": [
+    "Star Castle (version 3)",
+    "Rip Off",
+    "Armor Attack"
+  ],
+  "build_date": "2026-10-11",
+  "build_id": "261011",
+  "timezone": "Europe/London",
+  "quartus": "Quartus Prime Lite 17.0.2 Build 602",
+  "docker_image": "theypsilon/quartus-lite-c5:17.0.2",
+  "device": "5CSEBA6U23I7",
+  "rbf": {
+    "file": "Arcade-Cinematronics_20261011.rbf",
+    "bytes": 3493560,
+    "sha256": "b87de86907260cba6a00244878cf8e7a140b2df68aabff21a6e4f7de1c4018b1"
+  },
+  "mra_sha256": {
+    "Star Castle (version 3).mra": "579bce481d83e61681afec60eff55e29c91a24c3333b1c35cc222e37ebff0556",
+    "Rip Off.mra": "c2aeba363d6965eb5af9484895c1d89fed335fca84eeed9dfd52dcb08ee05355",
+    "Armor Attack.mra": "897cf0e53f67a07346feb922b58b2b837a1dfee9e91089e100c7ec29d2f62383"
+  },
+  "compilation": {
+    "errors": 0,
+    "warnings": 76,
+    "critical_warnings": 0,
+    "fitter_seed": 2
+  },
+  "resources": {
+    "alms": 12840,
+    "registers": 17646,
+    "ram_blocks": 399,
+    "block_memory_bits": 3176795,
+    "dsp_blocks": 90,
+    "plls": 3
+  },
+  "worst_slack_ns": {
+    "Setup": 0.103,
+    "Hold": 0.158,
+    "Recovery": 4.147,
+    "Removal": 0.631,
+    "Minimum Pulse Width": 1.122
+  },
+  "all_reported_tns_zero": true,
+  "all_clocks_constrained": true,
+  "external_io_constraints": "Inherited MiSTer framework; some external ports lack explicit delay constraints.",
+  "tested_on_hardware": false,
+  "hardware_validation": {
+    "starcastle_gameplay": "previous build confirmed; new build pending",
+    "starcastle_explosions": "listening pending",
+    "ripoff_status": "previous build boots and plays; otherwise untested/WIP",
+    "ripoff_two_player": "untested",
+    "ripoff_sound": "untested",
+    "armora_status": "WIP; installed and launch command checked; gameplay pending",
+    "armora_two_player": "untested",
+    "armora_overlay_alignment": "pending hardware collision checks",
+    "armora_sound": "untested",
+    "crt_tested": false
+  },
+  "prior_build": {
+    "date": "2026-10-04",
+    "rbf_sha256": "f85b2e25ca28f74e15aab797943276564637fdf6f96422d26520a11df29f22fe",
+    "starcastle": "playable per user; revised explosion listening unconfirmed",
+    "ripoff": "boots and plays per user; otherwise untested/WIP"
+  },
+  "simulation": {
+    "github_ci": "passed on source commit",
+    "github_ci_run_url": "https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/actions/runs/38093822041",
+    "starcastle": {
+      "frames": 28,
+      "checked_instructions": 1031753,
+      "vectors": 3435
+    },
+    "ripoff": {
+      "frames": 120,
+      "checked_instructions": 3851660,
+      "vectors": 15059,
+      "coin_acknowledgements": 2
+    },
+    "armora": {
+      "frames": 180,
+      "checked_instructions": 6529570,
+      "vectors": 59164,
+      "coin_acknowledgements": 2,
+      "diagnostic_frames": 12,
+      "diagnostic_checked_instructions": 301168,
+      "diagnostic_vectors": 2508,
+      "program_banks_exercised": 4,
+      "sound_latch_changes": 3,
+      "audio_peak": 1200
+    },
+    "all_frame_pixels_checked": true,
+    "independent_two_player_controls_checked": true,
+    "both_rom_maps_all_65536_addresses_checked": true,
+    "mixed_size_profile_switching_checked": true,
+    "mister_rgb_frames_checked": 15,
+    "armora_settled_explosion_bursts_checked": true,
+    "armora_all_effects_mixer_peak": 27300,
+    "sound_effect_groups_checked": {
+      "starcastle": 8,
+      "ripoff": 6,
+      "armora": 7
+    },
+    "limits": "Reference/logic tests do not prove hardware gameplay, collision alignment or analog sound accuracy."
+  },
+  "game_rom_embedded": false,
+  "audio": {
+    "internal_sample_rate_hz": 96000,
+    "output": "signed 16-bit mono duplicated left/right",
+    "extra_roms_or_samples": false,
+    "models": "schematic-informed behavioral approximations"
+  },
+  "video": {
+    "starcastle": "fixed gel filter",
+    "ripoff": "monochrome",
+    "armora": "CC0 MAME static town transmission/reflection overlay",
+    "brightness_percent": [
+      100,
+      75,
+      125,
+      150
+    ],
+    "overlay_strength_percent": [
+      100,
+      75,
+      50,
+      25
+    ],
+    "save_method": "MiSTer Save settings"
+  },
+  "limitations": [
+    "CRT output untested",
+    "Physical vector timing, colour and analog sound fidelity need calibration",
+    "Armor Attack town alignment and combat sound require hardware testing"
+  ],
+  "hardware_installation": {
+    "date": "2026-10-11",
+    "rbf_sha256_matches": true,
+    "all_three_mra_sha256_match": true,
+    "single_cinematronics_rbf_installed": true,
+    "installation_checker": "passed for all three MRAs",
+    "launch_checks": {
+      "Star Castle (version 3)": {
+        "selected_rbf": "Arcade-Cinematronics_20261011.rbf",
+        "selected_mra": "Star Castle (version 3).mra",
+        "fpga_manager_state": "operating"
+      },
+      "Rip Off": {
+        "selected_rbf": "Arcade-Cinematronics_20261011.rbf",
+        "selected_mra": "Rip Off.mra",
+        "fpga_manager_state": "operating"
+      },
+      "Armor Attack": {
+        "selected_rbf": "Arcade-Cinematronics_20261011.rbf",
+        "selected_mra": "Armor Attack.mra",
+        "fpga_manager_state": "operating"
+      }
+    },
+    "left_selected": "Armor Attack",
+    "limits": "Process arguments and FPGA operating state checked over SSH; screen, gameplay, two-player controls and listening not verified."
+  }
+}

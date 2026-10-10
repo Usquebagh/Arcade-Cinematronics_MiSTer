@@ -2,23 +2,25 @@
 
 An FPGA implementation of Cinematronics vector arcade hardware for the
 [MiSTer FPGA](https://github.com/MiSTer-devel/Main_MiSTer/wiki) platform,
-supporting **Star Castle (version 3, 1980)** and **Rip Off (1980)** in one RBF.
+supporting **Star Castle (version 3)**, **Rip Off** and **Armor Attack** (1980) in one RBF.
 
 Defend your ship against the central cannon, breaking through its rotating
 shield rings while avoiding mines. The core recreates the CCPU, vector display
 and discrete sound, with a colour filter based on the original screen gels.
 Rip Off adds simultaneous two-player defence of the fuel supply.
-Armor Attack and Solar Quest are planned next.
+Armor Attack adds two-player jeep combat through a city playfield. Solar Quest is planned next.
 
 <p align="center">
   <img src="docs/arcade_cabinet.png" alt="Star Castle arcade cabinet" height="310">
   <img src="docs/star_castle.png" alt="Star Castle game screen" height="310">
 </p>
 
-> **Status:** Star Castle still plays correctly on the combined core.
+> **Status:** Star Castle gameplay was confirmed on the previous two-game build.
 > **Rip Off is bootable but otherwise untested/WIP**: it boots and plays on
 > MiSTer, but gameplay, two-player operation and sound have not been validated.
-> Simulation, fitting and reported internal timing pass for both games.
+> **Armor Attack is WIP** with city overlay and synthesized sound; hardware gameplay,
+> two-player operation and sound comparison need testing. The current three-game
+> build passes simulation, fitting and reported internal timing.
 >
 > **Known issues:** **CRT output is untested.** Explosion levels have been
 > corrected in simulation; hardware listening is pending. Physical colour,
@@ -32,28 +34,28 @@ Armor Attack and Solar Quest are planned next.
 | Subsystem | Original Hardware | FPGA Implementation |
 | --- | --- | --- |
 | CPU | Cinematronics CCPU, two 12-bit accumulators | SystemVerilog CCPU, checked against the pinned MAME instruction reference |
-| Program | Four ROM chips, 8 KiB total | Writable program ROM, loaded through the MRA |
-| Video | Monochrome vector display with coloured screen gels | 512x384 raster framebuffer, 16 brightness levels and a Star Castle colour filter |
-| Sound | Game-specific discrete sound boards | Synthesized oscillators, noise and envelopes: eight Star Castle channels and six Rip Off effects; signed mono audio |
+| Program | Four ROM chips, 8 or 16 KiB total | Writable program ROM, loaded through the MRA |
+| Video | Monochrome vector display with coloured screen gels | 512x384 raster framebuffer, 16 brightness levels, Star Castle colour filter and Armor Attack city overlay |
+| Sound | Game-specific discrete sound boards | Synthesized oscillators, noise and envelopes: Star Castle, Rip Off and Armor Attack models; signed mono audio |
 
 ## Controls
 
 | Action | Keyboard | Controller |
 | --- | --- | --- |
 | Rotate | Left/Right | Left/Right |
-| Thrust | Up | Thrust button or Up |
+| Thrust / Forward | Up | Thrust button or Up |
 | Fire | Space | Fire button |
 | Coin | 5 | Coin button |
 | Start 1 | 1 | Controller 1 Start |
 | Start 2 | 2 | Start 2 button or Controller 2 Start |
 
-For Rip Off, each controller operates its own player. Player 2 keyboard controls
+For Rip Off and Armor Attack, each controller operates its own player. Player 2 keyboard controls
 are **A/D** to rotate, **W** to thrust and **F** to fire.
 
-The OSD provides **Colour overlay**, **Vector brightness** and **Overlay strength**.
+The OSD provides **Screen overlay**, **Vector brightness** and **Overlay strength**.
 Use MiSTer's **Save settings** to retain your choices. See
 [video controls](docs/colour.md) for details.
-Rip Off uses monochrome output with adjustable brightness.
+Rip Off uses monochrome output with adjustable brightness. Armor Attack adds a static city/road overlay.
 
 ## ROMs and Installation
 
@@ -61,13 +63,15 @@ Download the actual files using the links below and copy them to your MiSTer SD 
 
 | File | Destination |
 | --- | --- |
-| [Arcade-Cinematronics_20261004.rbf](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Arcade-Cinematronics_20261004.rbf) | `_Arcade/cores/` |
+| [Arcade-Cinematronics_20261011.rbf](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Arcade-Cinematronics_20261011.rbf) | `_Arcade/cores/` |
 | [Star Castle (version 3).mra](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Star%20Castle%20%28version%203%29.mra) | `_Arcade/` |
 | [Rip Off.mra](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Rip%20Off.mra) | `_Arcade/` |
+| [Armor Attack.mra](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Armor%20Attack.mra) | `_Arcade/` |
 | Your own `starcas.zip` | `_Arcade/mame/` |
 | Your own `ripoff.zip` | `_Arcade/mame/` |
+| Your own `armora.zip` | `_Arcade/mame/` |
 
-Launch either game through its MRA; both select the same RBF. From a GitHub
+Launch any game through its MRA; all three select the same RBF. From a GitHub
 file page, use **Download raw file**; saving the webpage creates an unusable HTML file.
 Keep only the current Cinematronics RBF
 in `cores/`. See [release details](releases/README.md) for build information
@@ -86,7 +90,7 @@ The output is `output_files/Arcade-Cinematronics.rbf`.
 synthetic programs and requires no game ROMs. Technical details are in
 [architecture](docs/architecture.md), [MiSTer integration](docs/mister-integration.md),
 [Star Castle sound](docs/sound.md), [Rip Off](docs/ripoff.md),
-[colour](docs/colour.md) and [roadmap](docs/roadmap.md).
+[Armor Attack](docs/armor-attack.md), [colour](docs/colour.md) and [roadmap](docs/roadmap.md).
 
 ## Credits
 

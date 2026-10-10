@@ -2,7 +2,7 @@
 
 The CCPU executes game code and emits vector segments. The vector renderer
 converts those segments into a framebuffer with a synchronous grayscale scanout.
-Star Castle and Rip Off share CPU/frame timing, watchdog and video, with
+Star Castle, Rip Off and Armor Attack share CPU/frame timing, watchdog and video, with
 game-specific I/O and sound boards selected by the MRA. Other game
 configurations remain separate implementation tasks.
 
@@ -17,9 +17,10 @@ fetch. The connected machine generates the nominal 19.923 MHz / 4 enable rate.
 `trace_cycles` uses MAME's instruction cycle counts, which
 are not yet proof of the original four-phase hardware timing.
 
-The CPU's `pc` is the full logical program address. Both games' physical ROM
+The CPU's `pc` is the full logical program address. The 8 KiB games' physical ROM
 address is `{pc[13], pc[11:0]}`: logical banks 0/1 mirror the first half and
 2/3 mirror the second half. Masking the logical PC to 13 bits is incorrect.
+Armor Attack uses the linear `pc[13:0]` map and the shared 16 KiB RAM.
 Data RAM is **256 12-bit words**, not 256 bytes. It is not reset by the CPU;
 the game initializes it. Current asynchronous RAM reads may synthesize into
 logic; a later memory-timing pass may replace them with synchronous block RAM.
@@ -134,7 +135,7 @@ The watchdog count resets after expiration so recovery can service it again.
 `load_active` or `!rom_loaded` holds the machine in hard reset while ROM writes
 are accepted. The caller must assert load state before writing and only mark
 the complete image loaded when finished. Reloading also clears old frame and
-queue contents. `rtl/mister/starcastle_download.sv` implements this contract
+queue contents. `rtl/mister/cinemat_download.sv` implements this contract with per-profile sizes
 for HPS index 0. `outputs` drives the selected sound board, which supplies
 signed 16-bit audio to the MiSTer wrapper.
 

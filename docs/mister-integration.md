@@ -21,13 +21,13 @@ unused SDRAM/DDR interfaces are disabled.
 ## ROM Loading
 
 Each MRA sends a one-byte game profile at index 1 before its ROM: `00` for
-Star Castle, `01` for Rip Off. `cinemat_profile` validates it and selects the
+Star Castle, `01` for Rip Off and `02` for Armor Attack. `cinemat_profile` validates it and selects the
 game at ROM-load start. A missing profile defaults to Star Castle; malformed
 profiles keep execution stopped. See [Rip Off](ripoff.md) for the protocol.
 
-HPS index 0 supplies the selected game's 8192-byte program. The loader holds the
+HPS index 0 supplies 8192 bytes for Star Castle/Rip Off or 16384 for Armor Attack. The loader holds the
 machine in reset during transfer and its completion edge, accepting only
-sequential addresses from zero and exactly 8192 bytes. A rejected transfer
+sequential addresses from zero and exactly the selected profile's byte count. A rejected transfer
 invalidates the previous image, keeps the CPU stopped and lights the user LED.
 Power/PLL reset requires a fresh download; OSD reset preserves the program.
 HPS index 254 byte 0 supplies six electrical DIP bits, default `3F`.
@@ -70,8 +70,10 @@ does not. No additional sound ROMs or samples are required. See [sound](sound.md
 for circuit references and fidelity limits.
 
 Rip Off selects its own six-effect [sound model](ripoff.md#sound-board) and
-independent player controls. Only the selected board is active. Both games
-share the same CCPU, ROM map, renderer and scanout; Rip Off bypasses the gel filter.
+independent player controls. Only the selected board is active. All games share the CCPU, renderer and scanout; Rip Off bypasses the gel filter.
+Armor Attack selects a linear 16 KiB map, city overlay and its own sound board;
+see [Armor Attack](armor-attack.md). The loader samples the staged profile before
+the ROM-start edge consumes it, preserving safe 8/16 KiB switching.
 
 ## Build and Verification
 
@@ -86,7 +88,7 @@ The gate checks reported internal timing. Inherited external I/O constraints
 leave some HDMI, I2C and user/SD ports without explicit input/output delays;
 board-level interface timing still needs verification.
 
-The current [build manifest](../releases/Arcade-Cinematronics_20261004.json)
+The current [build manifest](../releases/Arcade-Cinematronics_20261011.json)
 records the exact RTL source commit, checksum, resource use and timing.
 The accompanying fitter/timing summaries give resource use and reported slack.
 Every reported timing category must pass the build gate before packaging.
@@ -95,15 +97,18 @@ Every reported timing category must pass the build gate before packaging.
 malformed downloads, reload recovery, DIP isolation, keyboard/controller input
 and complete video frames. Connected machine tests compare CPU instructions
 and framebuffer pixels to references. Overlay tests cover every visible pixel
-and all video settings; the real MiSTer pipeline is checked across nine RGB frames.
+and all video settings; the real MiSTer pipeline is checked across fifteen RGB frames, including six Armor Attack town frames.
 For Verilator, `tools/prepare_video_sim.py` adapts legacy Quartus declarations
 only in a temporary simulation copy; hardware `sys/` logic is unchanged.
 
 ## Hardware Status
 
-The user confirmed Star Castle still plays correctly on the combined build.
+The user confirmed Star Castle plays correctly on the previous two-game build.
 Rip Off boots and plays, but is otherwise untested/WIP: gameplay, two-player
-operation and sound have not been validated. The manifest records
-installation/launch checks separately. CRT output, physical vector
+operation and sound have not been validated. Armor Attack is WIP with hardware
+gameplay, two-player operation, overlay alignment and sound comparison pending.
+The new three-game build is installed on MiSTer. All three launch commands select
+the dated RBF and report FPGA state `operating`; the manifest records those checks
+separately from gameplay and listening, which remain pending. CRT output, physical vector
 timing, gel/CRT calibration and measured analog sound fidelity remain unverified.
 Save/reload of video settings has not been separately verified.

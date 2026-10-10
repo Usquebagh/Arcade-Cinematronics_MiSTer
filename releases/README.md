@@ -1,22 +1,27 @@
-# Current build — 2026-10-04
+# Current build — 2026-10-11
 
-One RBF supports **Star Castle (version 3)** and **Rip Off**, each selected by
-its own MRA. Both have synthesized sound and adjustable brightness;
-Star Castle also has a colour filter. Simulation and reported internal timing
-pass. Star Castle still plays correctly on the combined core.
+One RBF supports **Star Castle (version 3)**, **Rip Off** and **Armor Attack**,
+each selected by its own MRA. All three have synthesized sound and adjustable
+brightness. Star Castle has a colour filter; Armor Attack has a static city
+overlay. Simulation and reported internal timing pass. Star Castle gameplay
+was confirmed on the previous two-game build.
 **Rip Off is bootable but otherwise untested/WIP**: it boots and plays on
 MiSTer, but gameplay, two-player operation and sound have not been validated.
-**CRT output is untested.** Colour and analog sound calibration remain outstanding.
+**Armor Attack is WIP**; hardware gameplay, two-player controls, overlay alignment
+and sound comparison need testing. The new three-game build needs hardware
+regression checks. **CRT output is untested.** Colour and analog sound calibration remain outstanding.
 
 ## Installation
 
 | File | MiSTer SD-card destination |
 | --- | --- |
-| [Arcade-Cinematronics_20261004.rbf](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Arcade-Cinematronics_20261004.rbf) | `_Arcade/cores/` |
+| [Arcade-Cinematronics_20261011.rbf](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Arcade-Cinematronics_20261011.rbf) | `_Arcade/cores/` |
 | [Star Castle (version 3).mra](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Star%20Castle%20%28version%203%29.mra) | `_Arcade/` |
 | [Rip Off.mra](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Rip%20Off.mra) | `_Arcade/` |
+| [Armor Attack.mra](https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/raw/refs/heads/main/releases/Armor%20Attack.mra) | `_Arcade/` |
 | Your own `starcas.zip` | `_Arcade/mame/` |
 | Your own `ripoff.zip` | `_Arcade/mame/` |
+| Your own `armora.zip` | `_Arcade/mame/` |
 
 The links above download the actual files. Keep only the current Cinematronics
 RBF and launch the MRA. From a GitHub file page, use **Download raw file**;
@@ -26,9 +31,9 @@ No game ROMs are embedded in the RBF or distributed here.
 
 ## Build Verification
 
-The [manifest](Arcade-Cinematronics_20261004.json) records the source commit,
-checksum and validation status. The [fitter](Arcade-Cinematronics_20261004.fit.summary)
-and [timing](Arcade-Cinematronics_20261004.sta.summary) summaries accompany it.
+The [manifest](Arcade-Cinematronics_20261011.json) records the source commit,
+checksum and validation status. The [fitter](Arcade-Cinematronics_20261011.fit.summary)
+and [timing](Arcade-Cinematronics_20261011.sta.summary) summaries accompany it.
 All reported internal timing categories pass; external interface constraints
 and hardware limits are described in [MiSTer integration](../docs/mister-integration.md).
 

@@ -10,6 +10,10 @@ and sound board. Its 120-frame live-ROM regression passes 3,851,660 checked
 instructions and every framebuffer pixel. It boots and plays on MiSTer but
 is otherwise untested/WIP; gameplay, two-player operation and sound need validation.
 
+Armor Attack now has a 16 KiB profile, two-player inputs, a city/road overlay
+and synthesized sound. Its simulation and sound checks pass; hardware
+playability, overlay alignment and sound comparison need validation.
+
 Next steps:
 
 - Test CRT output and additional displays and controllers.
@@ -17,10 +21,11 @@ Next steps:
 - Improve vector appearance with optional glow and phosphor persistence.
 - Calibrate physical vector timing, colour, intensity and analog sound.
 - Validate Rip Off gameplay and sound on hardware.
-- Add Armor Attack and Solar Quest with their own ROM layouts,
+- Validate Armor Attack gameplay, overlay and sound on hardware.
+- Add Solar Quest with its own ROM layout,
   controls, sound and display profiles.
 - Extend to other CCPU games, including analog/keypad/rotary controls and
   QB-3's banking and video differences.
 
 Current limitations and hardware status are recorded in the
-[README](../README.md) and [build manifest](../releases/Arcade-Cinematronics_20261004.json).
+[README](../README.md) and [build manifest](../releases/Arcade-Cinematronics_20261011.json).

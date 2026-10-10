@@ -5,7 +5,7 @@
     <category>Shooter</category>
     <setname>armora</setname>
     <rbf>Cinematronics</rbf>
-    <about author="Usquebagh" webpage="https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer">Development profile; requires the three-game core build.</about>
+    <about author="Usquebagh" webpage="https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer">WIP: city overlay and synthesized discrete sound; hardware gameplay and listening tests pending.</about>
     <rotation>horizontal</rotation>
     <players>2 (simultaneous)</players>
     <joystick>2-way</joystick>
