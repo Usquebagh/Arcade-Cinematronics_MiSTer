@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 module mister_video_harness (
-    input wire clk, reset, overlay_enabled, armora_enabled,
+    input wire clk, reset, overlay_enabled, armora_enabled, artwork_enabled,
     input wire [1:0] brightness, strength,
     output wire ce, de, hs, vs,
     output wire [7:0] r, g, b
@@ -32,7 +32,10 @@ module mister_video_harness (
     always_ff @(posedge clk) begin ax1<=px;ax2<=ax1;ay1<=py;ay2<=ay1;end
     wire [23:0] final_rgb;
     wire final_ce,final_hs,final_vs,final_hblank,final_vblank;
+    wire [1:0] ink;
+    armora_artwork artwork(.clk(clk),.x(ax2),.y(ay2),.ink(ink));
     armora_overlay town (
+        .ink(ink),.artwork_enabled(artwork_enabled),
         .clk(clk),.reset(reset),.enabled(armora_enabled),.strength(strength),.x(ax2),.y(ay2),.rgb_in(rgb),
         .ce_in(colour_ce),.hs_in(colour_hs),.vs_in(colour_vs),.hblank_in(colour_hblank),.vblank_in(colour_vblank),
         .rgb_out(final_rgb),.ce_out(final_ce),.hs_out(final_hs),.vs_out(final_vs),.hblank_out(final_hblank),.vblank_out(final_vblank)

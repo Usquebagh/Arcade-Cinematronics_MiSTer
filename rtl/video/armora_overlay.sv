@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // CC0 MAME armora.lay transmission tint plus additive playfield reflection.
-// Packed two-bit map; ROM, multiplication and saturating-add stages. Every
-// profile/bypass shares the same three-clock latency, including sync/blanking.
+// Packed two-bit town plus optional ink; ROM, tint, add and ink stages. Every
+// profile/bypass shares four-clock latency, including sync/blanking.
 module armora_overlay (
     input wire clk,reset,enabled,
+    input wire [1:0] ink,
+    input wire artwork_enabled,
     input wire [1:0] strength,
     input wire [8:0] x,y,
     input wire [23:0] rgb_in,
@@ -17,7 +19,12 @@ module armora_overlay (
     logic [1:0] low_x,strength_q;
     logic [23:0] rgb_q,bypass,reflection_q;
     logic enabled_q,enabled_qq;
-    logic [4:0] timing_q,timing_qq;
+    logic [4:0] timing_q,timing_qq,timing_qqq;
+    logic [23:0] composed;
+    logic [8:0] ink_gain_q,ink_gain_qq;
+    wire [16:0] ink_r=composed[23:16]*ink_gain_qq;
+    wire [16:0] ink_g=composed[15:8]*ink_gain_qq;
+    wire [16:0] ink_b=composed[7:0]*ink_gain_qq;
     wire [1:0] code=pixels[{low_x,1'b0} +: 2];
     logic [26:0] tint;
     logic [23:0] reflection;
@@ -59,6 +66,7 @@ module armora_overlay (
             low_x<=0;strength_q<=0;rgb_q<=0;enabled_q<=0;enabled_qq<=0;
             timing_q<=5'b00011;timing_qq<=5'b00011;
             bypass<=0;reflection_q<=0;rp<=0;gp<=0;bp<=0;
+            ink_gain_q<=256;ink_gain_qq<=256;composed<=0;timing_qqq<=5'b00011;
             rgb_out<=0;{ce_out,hs_out,vs_out,hblank_out,vblank_out}<=5'b00011;
         end else begin
             low_x<=x[1:0];strength_q<=strength;rgb_q<=rgb_in;enabled_q<=enabled;
@@ -69,9 +77,16 @@ module armora_overlay (
             bp<=rgb_q[7:0]*gain(tint[8:0],strength_q);
             reflection_q<={background(reflection[23:16],strength_q),
                            background(reflection[15:8],strength_q),background(reflection[7:0],strength_q)};
-            {ce_out,hs_out,vs_out,hblank_out,vblank_out}<=timing_qq;
-            rgb_out<=timing_qq[1] || timing_qq[0] ? 24'd0 : !enabled_qq ? bypass :
+            // Ink is read in parallel with the town ROM. Match its strength
+            // to the registered pixel, then apply it after tint/reflection.
+            ink_gain_q<=enabled_q && artwork_enabled ?
+                gain(ink==0?9'd256:ink==1?9'd171:ink==2?9'd85:9'd0,strength_q):9'd256;
+            ink_gain_qq<=ink_gain_q;
+            timing_qqq<=timing_qq;
+            composed<=timing_qq[1] || timing_qq[0] ? 24'd0 : !enabled_qq ? bypass :
                       {saturate(rp,reflection_q[23:16]),saturate(gp,reflection_q[15:8]),saturate(bp,reflection_q[7:0])};
+            rgb_out<={ink_r[15:8],ink_g[15:8],ink_b[15:8]};
+            {ce_out,hs_out,vs_out,hblank_out,vblank_out}<=timing_qqq;
         end
     end
 endmodule

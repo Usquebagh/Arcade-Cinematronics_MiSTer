@@ -5,6 +5,23 @@
 #include <stdexcept>
 #include <string>
 #include <algorithm>
+inline unsigned armora_ink_rgb(unsigned x,unsigned y,unsigned rgb,bool enabled,unsigned strength){
+    if(!enabled)return rgb;
+    static std::array<unsigned,65536> ink=[](){
+        std::array<unsigned,65536>a{};std::ifstream f("rtl/video/overlays/armora_ink.hex");
+        if(!f)throw std::runtime_error("Armor ink missing");
+        for(auto& v:a){std::string s;if(!(f>>s))throw std::runtime_error("Armor ink short");v=std::stoul(s,nullptr,16);}
+        return a;
+    }();
+    unsigned code=(ink[y*128+x/4]>>(2*(x%4)))&3;
+    const unsigned gains[]={256,171,85,0};unsigned loss=256-gains[code];
+    if(strength==1)loss=loss-loss/4;
+    if(strength==2)loss/=2;
+    if(strength==3)loss/=4;
+    unsigned gain=256-loss,result=0;
+    for(unsigned c=0;c<3;++c)result=(result<<8)|((((rgb>>(16-c*8))&255)*gain)>>8);
+    return result;
+}
 inline unsigned armora_rgb(unsigned x,unsigned y,unsigned rgb,bool enabled,unsigned strength){
     if(!enabled)return rgb;
     static std::array<unsigned,65536> image=[](){

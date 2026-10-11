@@ -5,6 +5,7 @@
 *.rom
 *.bin
 *.zip
+*.ovl
 /*.url
 /Project Brief for MiSTer FPGA .rbf core build.txt
 /tmp/

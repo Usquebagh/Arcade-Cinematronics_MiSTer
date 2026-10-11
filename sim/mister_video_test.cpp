@@ -6,10 +6,11 @@
 #include <iostream>
 #include <stdexcept>
 
-void run(bool enabled,unsigned brightness=0,unsigned strength=0,bool armor=false) {
+void run(bool enabled,unsigned brightness=0,unsigned strength=0,bool armor=false,bool artwork=false) {
     Vmister_video_harness rtl;
     rtl.overlay_enabled=enabled&&!armor;rtl.armora_enabled=enabled&&armor;
     rtl.brightness=brightness;rtl.strength=strength;
+    rtl.artwork_enabled=artwork;
     auto tick=[&]() {rtl.clk=0;rtl.eval();rtl.clk=1;rtl.eval();};
     rtl.reset=1;for(int n=0;n<16;n++) tick();rtl.reset=0;
     bool old_vs=false,old_de=false,synced=false;
@@ -33,6 +34,7 @@ void run(bool enabled,unsigned brightness=0,unsigned strength=0,bool armor=false
             unsigned expected=(col^(383-row))&255;
             unsigned rgb=overlay_rgb(col,row,expected*0x010101,enabled&&!armor,brightness,strength);
             rgb=armora_rgb(col,row,rgb,enabled&&armor,strength);
+            rgb=armora_ink_rgb(col,row,rgb,enabled&&armor&&artwork,strength);
             if(rtl.r!=((rgb>>16)&255) || rtl.g!=((rgb>>8)&255) || rtl.b!=(rgb&255)) {
                 std::cerr<<"Pipeline pixel "<<col<<","<<row<<": RGB="<<unsigned(rtl.r)
                          <<","<<unsigned(rtl.g)<<","<<unsigned(rtl.b)<<" expected="<<expected<<'\n';
@@ -48,4 +50,4 @@ void run(bool enabled,unsigned brightness=0,unsigned strength=0,bool armor=false
     }
     throw std::runtime_error("MiSTer video frame timeout");
 }
-int main() {run(true);run(false);run(true,3,2);run(true,0,0,true);run(true,2,3,true);}
+int main() {run(true);run(false);run(true,3,2);run(true,0,0,true);run(true,2,3,true);run(true,0,0,true,true);run(true,2,3,true,true);run(false,0,0,true,true);}

@@ -5,6 +5,7 @@ mkdir -p build
 python3 tools/prepare_overlay.py --check
 python3 tools/prepare_ripoff_sound.py --check
 python3 tools/prepare_armora_overlay.py --check
+python3 tools/prepare_armora_artwork.py --check
 python3 tools/prepare_armora_sound.py --check
 docker run --rm -e TZ -v "$PWD:/project" -w /project -u "$(id -u):$(id -g)" \
   theypsilon/quartus-lite-c5:17.0.2 quartus_sh --flow compile Arcade-Cinematronics.qpf \

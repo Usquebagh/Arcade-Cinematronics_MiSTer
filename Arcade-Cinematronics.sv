@@ -11,6 +11,7 @@ module emu (
         "-;",
         "O[122:121],Aspect ratio,Original,Full Screen,[ARC1],[ARC2];",
         "O[7],Screen overlay,On,Off;",
+        "O[12],Detailed artwork,On,Off;",
         "O[9:8],Vector brightness,100%,75%,125%,150%;",
         "O[11:10],Overlay strength,100%,75%,50%,25%;",
         "-;DIP;O[6],Service mode,Off,On;",
@@ -112,7 +113,12 @@ module emu (
     end
     wire [23:0] final_rgb;
     wire final_ce,final_hs,final_vs,final_hblank,final_vblank;
+    wire [1:0] artwork_ink;
+    armora_artwork artwork (
+        .clk(clk_sys),.x(artwork_x2),.y(artwork_y2),.ink(artwork_ink)
+    );
     armora_overlay town (
+        .ink(artwork_ink),.artwork_enabled(!status[12]),
         .clk(clk_sys),.reset(!pll_locked),
         .enabled(game_id==2 && !status[7] && rom_loaded && profile_valid && !profile_active && !load_active && !reset),
         .strength(status[11:10]),.x(artwork_x2),.y(artwork_y2),.rgb_in(display_rgb),

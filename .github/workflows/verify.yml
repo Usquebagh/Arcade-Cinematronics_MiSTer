@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install HDL tools
-        run: sudo apt-get update && sudo apt-get install -y verilator iverilog yosys
+        run: sudo apt-get update && sudo apt-get install -y verilator iverilog yosys python3-pil
       - name: CPU differential tests without game ROMs
         run: bash sim/run.sh
       - name: Component synthesis
@@ -31,6 +31,8 @@ jobs:
         run: bash sim/run_armora_sound.sh
       - name: Armor Attack town overlay reproduces licensed source
         run: python3 tools/prepare_armora_overlay.py --check
+      - name: Armor Attack scaled transparency reproduces credited source
+        run: python3 tools/prepare_armora_artwork.py --check
       - name: Rip Off sound board controls, six effects and sample timing
         run: bash sim/run_ripoff_sound.sh
       - name: Machine component synthesis
