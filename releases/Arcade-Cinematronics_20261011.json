@@ -48,16 +48,16 @@
   "all_reported_tns_zero": true,
   "all_clocks_constrained": true,
   "external_io_constraints": "Inherited MiSTer framework; some external ports lack explicit delay constraints.",
-  "tested_on_hardware": false,
+  "tested_on_hardware": true,
   "hardware_validation": {
     "starcastle_gameplay": "previous build confirmed; new build pending",
     "starcastle_explosions": "listening pending",
     "ripoff_status": "previous build boots and plays; otherwise untested/WIP",
     "ripoff_two_player": "untested",
     "ripoff_sound": "untested",
-    "armora_status": "previous sound build plays per user; new detailed-artwork build needs visual testing",
+    "armora_status": "plays per user; detailed artwork visually aligned on MiSTer; WIP two-player testing and measured analog calibration",
     "armora_two_player": "untested",
-    "armora_overlay_alignment": "detailed scan scaled to existing town bounds; hardware wall/collision alignment pending",
+    "armora_overlay_alignment": "2026-10-11: user confirmed detailed artwork lines up on MiSTer; exhaustive collision testing not separately reported",
     "armora_sound": "user confirmed previous audio build balanced like arcade; sound RTL unchanged in detailed-artwork build",
     "crt_tested": false
   },
@@ -163,13 +163,15 @@
   "limitations": [
     "CRT output untested",
     "Physical vector timing, colour and analog sound fidelity need calibration",
-    "Armor Attack town alignment and two-player operation require hardware testing"
+    "Armor Attack two-player operation requires hardware testing"
   ],
   "hardware_feedback": {
     "previous_rbf_sha256": "b87de86907260cba6a00244878cf8e7a140b2df68aabff21a6e4f7de1c4018b1",
     "armora": "plays per user; beeper and siren tones masked faint explosions; firing unclear",
     "revised_mix": "2026-10-11: user confirmed improved sound balanced like the arcade",
-    "revised_rbf_sha256": "ff0991b424f8a0d2652203bcb67414c64d46f7841f873837fab90a573c8ad5db"
+    "revised_rbf_sha256": "ff0991b424f8a0d2652203bcb67414c64d46f7841f873837fab90a573c8ad5db",
+    "detailed_artwork": "2026-10-11: user confirmed it lines up fine",
+    "detailed_artwork_rbf_sha256": "b6ec1d9c17728e2b59c23b0522e6ccdd60386904e206327dcb14317dfb4b431d"
   },
   "hardware_installation": {
     "date": "2026-10-11",
@@ -185,6 +187,6 @@
       }
     },
     "left_selected": "Armor Attack",
-    "limits": "SSH checks verify installed paths and FPGA operating state. Detailed artwork toggle, Save settings and wall/collision alignment need user confirmation; sound RTL matches the previously confirmed build."
+    "limits": "Installed files and FPGA operating state checked over SSH; user confirmed detailed artwork alignment. Toggle and Save settings behavior and exhaustive collisions not separately confirmed."
   }
 }

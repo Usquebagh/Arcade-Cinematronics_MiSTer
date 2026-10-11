@@ -3,8 +3,9 @@
 Armor Attack is a development/WIP profile in the shared Cinematronics core.
 It needs the three-game RBF; the 2026-10-04 two-game release cannot load it.
 The user confirmed it boots and plays on MiSTer and that the revised sound
-is balanced like the arcade. Two-player operation, overlay calibration and
-measured analog fidelity require further testing.
+is balanced like the arcade. Detailed artwork alignment is also confirmed.
+Two-player operation, physical colour calibration and measured analog fidelity
+require further testing.
 No game ROMs or scanned manuals are distributed.
 
 ## Program and controls
@@ -68,9 +69,9 @@ bit is 12; all earlier settings retain their original bits. MiSTer's Save
 settings retains the choice.
 
 The map is embedded in the RBF; no extra SD-card artwork file or MRA part
-is needed. Colours still come from the existing town palette. Final wall,
-artwork and collision alignment require hardware checking; scans and
-physical overlays can have small placement differences.
+is needed. Colours still come from the existing town palette. On 2026-10-11
+the user confirmed the detailed artwork lines up on MiSTer. This confirms
+visual placement; exhaustive collision testing has not been separately reported.
 
 ## Sound
 
@@ -126,8 +127,8 @@ limits; passing digital tests does not establish exact analog fidelity.
   these effects and only established initial beeper activity.
 - Service diagnostic: 12 frames, 301,168 checked instructions and 2,508
   vectors; every framebuffer pixel passes. The captured city outline was
-  visually compared with the overlay's town geometry; hardware alignment
-  and collisions remain unvalidated.
+  visually compared with the overlay's town geometry. The user subsequently
+  confirmed hardware artwork alignment; exhaustive collisions remain unvalidated.
 - All 256 serial commands, seven audible effect groups, every tank-rate code,
   release, reset, silence and all-voice headroom pass sound tests.
 - Settled sub-sample high/low explosion bursts pass at 50 MHz, with first

@@ -107,8 +107,8 @@ only in a temporary simulation copy; hardware `sys/` logic is unchanged.
 The user confirmed Star Castle plays correctly on the previous two-game build.
 Rip Off boots and plays, but is otherwise untested/WIP: gameplay, two-player
 operation and sound have not been validated. Armor Attack boots and plays per
-user feedback, but is WIP with two-player operation, overlay alignment and
-measured sound comparison pending. The user confirmed the revised sound
+user feedback, with detailed artwork alignment confirmed. It remains WIP
+with two-player operation and measured sound comparison pending. The user confirmed the revised sound
 balance is like the arcade on MiSTer.
 The current three-game build is installed on MiSTer. The installation checker
 resolves all three MRAs to the dated RBF. Armor Attack's launch check reports

@@ -12,8 +12,8 @@ is otherwise untested/WIP; gameplay, two-player operation and sound need validat
 
 Armor Attack now has a 16 KiB profile, two-player inputs, a city/road overlay
 and synthesized sound. Its simulation and sound checks pass; the user confirmed
-playback and the revised sound balance. Two-player operation, overlay alignment
-and measured analog fidelity need validation.
+playback, revised sound balance and detailed artwork alignment. Two-player
+operation and measured analog fidelity need validation.
 
 Next steps:
 
@@ -22,7 +22,7 @@ Next steps:
 - Improve vector appearance with optional glow and phosphor persistence.
 - Calibrate physical vector timing, colour, intensity and analog sound.
 - Validate Rip Off gameplay and sound on hardware.
-- Validate Armor Attack gameplay, overlay and sound on hardware.
+- Validate Armor Attack two-player operation and remaining hardware details.
 - Add Solar Quest with its own ROM layout,
   controls, sound and display profiles.
 - Extend to other CCPU games, including analog/keypad/rotary controls and

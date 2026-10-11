@@ -8,15 +8,15 @@ was confirmed on the previous two-game build.
 **Rip Off is bootable but otherwise untested/WIP**: it boots and plays on
 MiSTer, but gameplay, two-player operation and sound have not been validated.
 **Armor Attack boots and plays, but remains WIP**; its revised sound balance
-is confirmed by user listening. Two-player controls and overlay alignment need
-testing. The current build lowers beeper/tread tones and brings up firing,
+and detailed artwork alignment are confirmed by user testing. Two-player
+controls need testing. The current build lowers beeper/tread tones and brings up firing,
 explosions and helicopter audio. Other profiles still need hardware
 regression checks. **CRT output is untested.** Colour and analog sound calibration remain outstanding.
 
 Armor Attack includes credited ArcadeArtwork.org transparent building detail,
 scaled to 512x384. **Detailed artwork On/Off** switches between detailed and
 plain city views; **Save settings** retains the choice. No extra artwork file
-is required on the SD card. Final wall/artwork alignment needs testing.
+is required on the SD card. The user confirmed the artwork lines up on MiSTer.
 
 ## Installation
 
