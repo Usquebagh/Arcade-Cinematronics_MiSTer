@@ -14,6 +14,12 @@ transparent building detail. Effects do not assign colours to game objects.
 | Overlay strength | 100%, 75%, 50%, 25% | 100% |
 | Detailed artwork (Armor Attack) | On, Off | On |
 
+Beam brightness, Glow amount and Glow spread appear in all three games.
+Screen overlay and Overlay strength appear only in Star Castle and Armor
+Attack. Detailed artwork appears only in Armor Attack. MiSTer menu mask bit 1
+shows the gel/town controls (`h1`); bit 2 shows detailed artwork (`h2`). The MRA
+selects these capabilities automatically; saved setting bits are unchanged.
+
 Use MiSTer's **Save settings** to retain choices for the game. Existing status
 bits keep their meaning; Glow amount uses bits 14:13 and spread uses 16:15.
 Try 100% brightness with Medium/Soft first. Higher brightness now feeds more
@@ -96,5 +102,6 @@ launch requests reached FPGA state `operating`. Star Castle is left selected. On
 confirmed that gameplay and the brightness/overlay controls work. **CRT output
 has not been tested.** Save/reload persistence has not been explicitly verified.
 The 2026-10-11 beam/glow update passes 288 component frames and 42 complete
-MiSTer RGB frames. Visual tuning of this update remains pending; phosphor
+MiSTer RGB frames. The user confirmed the effects are simple and effective
+on 2026-10-11. The menu-only update preserves that renderer; phosphor
 persistence is not implemented.

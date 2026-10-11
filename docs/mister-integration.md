@@ -62,7 +62,10 @@ independently of display blanking, so visible bank swaps can tear a frame.
 The shared beam stage retains brightness overdrive through a 3/5/7-tap
 spatial glow filter before final clipping. Gel/town artwork is composed
 afterward; see [video controls](colour.md). Phosphor persistence remains future
-work. CRT output and visual tuning of the new glow remain untested.
+work. The user confirmed the beam/glow appearance; CRT output remains untested.
+Overlay controls are conditional on the loaded game: Star Castle has gel
+controls, Armor Attack has town and detailed-artwork controls, and Rip Off
+shows only the shared beam/glow options.
 
 The sound model observes CCPU output latches at 50 MHz and updates its
 RC/VCO/noise model at 96 kHz. Signed 16-bit mono feeds both MiSTer channels.
@@ -115,7 +118,7 @@ The current three-game build is installed on MiSTer. The installation checker
 resolves all three MRAs to the dated RBF. Launch requests for all three MRAs
 report FPGA state `operating`; Star Castle is left selected. The manifest
 records these checks separately from prior user feedback. Gameplay regression
-and visual tuning of the new glow remain pending; Armor Attack playback, sound
+remains pending; the user confirmed the beam/glow appearance. Armor Attack playback, sound
 balance and artwork alignment were confirmed on the previous build.
 Other profiles still need regression listening. CRT output, physical vector
 timing, gel/CRT calibration and measured analog sound fidelity remain unverified.

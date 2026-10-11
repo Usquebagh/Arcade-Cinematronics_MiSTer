@@ -21,8 +21,8 @@ Armor Attack adds two-player jeep combat through a city playfield. Solar Quest i
 > **Armor Attack boots and plays, but remains WIP** with city overlay and synthesized sound;
 > its sound balance and detailed artwork alignment are confirmed by user testing.
 > Two-player operation needs testing. The current three-game
-> build passes simulation, fitting and reported internal timing. The new beam/glow
-> controls need visual confirmation on MiSTer.
+> build passes simulation, fitting and reported internal timing. Beam/glow
+> appearance is confirmed by user testing.
 >
 > **Known issues:** **CRT output is untested.** Star Castle's revised explosion
 > levels still need listening confirmation. Physical colour,
@@ -56,7 +56,9 @@ are **A/D** to rotate, **W** to thrust and **F** to fire.
 
 The OSD provides **Beam brightness**, **Glow amount**, **Glow spread**,
 **Screen overlay**, **Overlay strength** and **Detailed artwork**. Glow adds
-soft light around the sharp vector lines; the default is Medium/Soft. For Armor Attack, On adds transparent building detail;
+soft light around the sharp vector lines; the default is Medium/Soft. Overlay
+controls appear only for Star Castle and Armor Attack; Detailed artwork appears
+only for Armor Attack. For Armor Attack, On adds transparent building detail;
 Off retains the plain city view.
 Use MiSTer's **Save settings** to retain your choices. See
 [video controls](docs/colour.md) for details.

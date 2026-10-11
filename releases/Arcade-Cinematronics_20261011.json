@@ -60,7 +60,7 @@
     "armora_overlay_alignment": "previous detailed-artwork build aligned per user; new scanout-stage build pending",
     "armora_sound": "user confirmed previous audio build balanced like arcade; sound RTL unchanged in detailed-artwork build",
     "crt_tested": false,
-    "beam_glow": "installed and all three MRA launch requests reached FPGA operating state; visual tuning pending"
+    "beam_glow": "user approved beam/glow appearance on prior RBF; renderer unchanged in menu update"
   },
   "prior_build": {
     "date": "2026-10-04",
@@ -214,7 +214,7 @@
       "latency_pixel_enables": 2407,
       "new_sdram_requirement": false,
       "phosphor_persistence": false,
-      "hardware_visual_tuning": "pending"
+      "hardware_visual_tuning": "user approved appearance; measured CRT calibration remains untested"
     }
   },
   "limitations": [
@@ -229,7 +229,9 @@
     "revised_rbf_sha256": "ff0991b424f8a0d2652203bcb67414c64d46f7841f873837fab90a573c8ad5db",
     "detailed_artwork": "2026-10-11: user confirmed it lines up fine",
     "detailed_artwork_rbf_sha256": "b6ec1d9c17728e2b59c23b0522e6ccdd60386904e206327dcb14317dfb4b431d",
-    "pre_glow_rbf_sha256": "b6ec1d9c17728e2b59c23b0522e6ccdd60386904e206327dcb14317dfb4b431d"
+    "pre_glow_rbf_sha256": "b6ec1d9c17728e2b59c23b0522e6ccdd60386904e206327dcb14317dfb4b431d",
+    "beam_glow": "2026-10-11: user confirmed effects are simple and effective",
+    "beam_glow_rbf_sha256": "bc53431d32b4e4bedd1523b67fee236b422833d323a01a97cc3f464ca6dac711"
   },
   "hardware_installation": {
     "date": "2026-10-11",
