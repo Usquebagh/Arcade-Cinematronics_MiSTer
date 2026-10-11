@@ -112,9 +112,11 @@ user feedback, with detailed artwork alignment confirmed. It remains WIP
 with two-player operation and measured sound comparison pending. The user confirmed the revised sound
 balance is like the arcade on MiSTer.
 The current three-game build is installed on MiSTer. The installation checker
-resolves all three MRAs to the dated RBF. Armor Attack's launch check reports
-FPGA state `operating`; the manifest records those checks separately from
-user feedback: Armor Attack playback and sound balance are now confirmed.
+resolves all three MRAs to the dated RBF. Launch requests for all three MRAs
+report FPGA state `operating`; Star Castle is left selected. The manifest
+records these checks separately from prior user feedback. Gameplay regression
+and visual tuning of the new glow remain pending; Armor Attack playback, sound
+balance and artwork alignment were confirmed on the previous build.
 Other profiles still need regression listening. CRT output, physical vector
 timing, gel/CRT calibration and measured analog sound fidelity remain unverified.
 Save/reload of video settings has not been separately verified.
