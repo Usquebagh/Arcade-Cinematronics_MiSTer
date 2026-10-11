@@ -138,7 +138,9 @@
       "github_ci_run_url": "https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/actions/runs/38122707583",
       "github_ci_head_sha": "cbb95049540b52ebe7a7b3ec283c0b5e2b6aaeb5"
     },
-    "github_ci": "pending for menu update; renderer and game logic unchanged"
+    "github_ci": "passed; validated commit contains the exact built RTL",
+    "github_ci_run_url": "https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/actions/runs/38124518328",
+    "github_ci_head_sha": "0d85b53bf8f9c3e3caf7c6972640a8372b4e3785"
   },
   "game_rom_embedded": false,
   "audio": {
@@ -287,6 +289,7 @@
     },
     "left_selected": "Star Castle",
     "rollback_copy": "/tmp/cinematronics-before-overlay-menu",
-    "limits": "Installed paths, hashes, requested MRAs and FPGA operating state checked over SSH. Menu visibility, gameplay regression, settings save/reload and CRT output need user confirmation; beam/glow appearance was approved on the previous build."
+    "limits": "Installed paths, hashes, requested MRAs and FPGA operating state checked over SSH. Menu visibility, gameplay regression, settings save/reload and CRT output need user confirmation; beam/glow appearance was approved on the previous build.",
+    "published_github_rbf_sha256_matches": true
   }
 }
