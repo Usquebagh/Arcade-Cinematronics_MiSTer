@@ -1,5 +1,5 @@
 {
-  "source_commit": "df8863bcc271e4b0331b790ae9e58a1261e28a29",
+  "source_commit": "bdf6453d58f80ec91a93d12fc02e9c9acb7bfd71",
   "project": "Arcade-Cinematronics",
   "target_games": [
     "Star Castle (version 3)",
@@ -14,49 +14,51 @@
   "device": "5CSEBA6U23I7",
   "rbf": {
     "file": "Arcade-Cinematronics_20261011.rbf",
-    "bytes": 3512676,
-    "sha256": "ff0991b424f8a0d2652203bcb67414c64d46f7841f873837fab90a573c8ad5db"
+    "bytes": 3620392,
+    "sha256": "b6ec1d9c17728e2b59c23b0522e6ccdd60386904e206327dcb14317dfb4b431d"
   },
   "mra_sha256": {
     "Star Castle (version 3).mra": "579bce481d83e61681afec60eff55e29c91a24c3333b1c35cc222e37ebff0556",
     "Rip Off.mra": "c2aeba363d6965eb5af9484895c1d89fed335fca84eeed9dfd52dcb08ee05355",
-    "Armor Attack.mra": "897cf0e53f67a07346feb922b58b2b837a1dfee9e91089e100c7ec29d2f62383"
+    "Armor Attack.mra": "dd5b04ceb4c03de44272a783a8accbc91d959cc133b2dd88e0eba39bee9a7e00"
   },
   "compilation": {
     "errors": 0,
-    "warnings": 76,
+    "warnings": 8,
     "critical_warnings": 0,
-    "fitter_seed": 2
+    "fitter_seed": 3,
+    "analysis_synthesis_reused": true,
+    "warnings_scope": "current seed-3 refit flow; initial analysis/synthesis succeeded in seed-2 compilation"
   },
   "resources": {
-    "alms": 12903,
-    "registers": 17702,
-    "ram_blocks": 399,
-    "block_memory_bits": 3176795,
-    "dsp_blocks": 90,
+    "alms": 12959,
+    "registers": 17705,
+    "ram_blocks": 463,
+    "block_memory_bits": 3701083,
+    "dsp_blocks": 93,
     "plls": 3
   },
   "worst_slack_ns": {
-    "Setup": 0.362,
-    "Hold": 0.176,
-    "Recovery": 3.564,
-    "Removal": 1.05,
+    "Setup": 0.315,
+    "Hold": 0.169,
+    "Recovery": 3.48,
+    "Removal": 0.48,
     "Minimum Pulse Width": 1.122
   },
   "all_reported_tns_zero": true,
   "all_clocks_constrained": true,
   "external_io_constraints": "Inherited MiSTer framework; some external ports lack explicit delay constraints.",
-  "tested_on_hardware": true,
+  "tested_on_hardware": false,
   "hardware_validation": {
     "starcastle_gameplay": "previous build confirmed; new build pending",
     "starcastle_explosions": "listening pending",
     "ripoff_status": "previous build boots and plays; otherwise untested/WIP",
     "ripoff_two_player": "untested",
     "ripoff_sound": "untested",
-    "armora_status": "boots and plays per user; WIP two-player and overlay alignment checks outstanding",
+    "armora_status": "previous sound build plays per user; new detailed-artwork build needs visual testing",
     "armora_two_player": "untested",
-    "armora_overlay_alignment": "pending hardware collision checks",
-    "armora_sound": "2026-10-11: user confirmed revised mix sounds much better and balanced like the arcade; subjective listening, no measured waveform comparison",
+    "armora_overlay_alignment": "detailed scan scaled to existing town bounds; hardware wall/collision alignment pending",
+    "armora_sound": "user confirmed previous audio build balanced like arcade; sound RTL unchanged in detailed-artwork build",
     "crt_tested": false
   },
   "prior_build": {
@@ -67,7 +69,7 @@
   },
   "simulation": {
     "github_ci": "passed on source commit",
-    "github_ci_run_url": "https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/actions/runs/38095776693",
+    "github_ci_run_url": "https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/actions/runs/38098182263",
     "starcastle": {
       "frames": 28,
       "checked_instructions": 1031753,
@@ -102,7 +104,7 @@
     "independent_two_player_controls_checked": true,
     "both_rom_maps_all_65536_addresses_checked": true,
     "mixed_size_profile_switching_checked": true,
-    "mister_rgb_frames_checked": 15,
+    "mister_rgb_frames_checked": 24,
     "armora_settled_explosion_bursts_checked": true,
     "armora_all_effects_mixer_peak": 29131,
     "sound_effect_groups_checked": {
@@ -111,7 +113,9 @@
       "armora": 7
     },
     "limits": "Reference/logic tests do not prove hardware gameplay, collision alignment or analog sound accuracy.",
-    "armora_balance_regression": "high/low explosions >8x/5x beeper RMS; jeep/helicopter >3x engine/treads RMS"
+    "armora_balance_regression": "high/low explosions >8x/5x beeper RMS; jeep/helicopter >3x engine/treads RMS",
+    "real_rom_audio_checks_from_commit": "df8863bcc271e4b0331b790ae9e58a1261e28a29; CPU/framebuffer/sound RTL unchanged",
+    "armora_ink_map_reproducible": true
   },
   "game_rom_embedded": false,
   "audio": {
@@ -125,7 +129,7 @@
   "video": {
     "starcastle": "fixed gel filter",
     "ripoff": "monochrome",
-    "armora": "CC0 MAME static town transmission/reflection overlay",
+    "armora": "CC0 MAME town colours/geometry plus optional ArcadeArtwork.org transparent building detail",
     "brightness_percent": [
       100,
       75,
@@ -138,7 +142,23 @@
       50,
       25
     ],
-    "save_method": "MiSTer Save settings"
+    "save_method": "MiSTer Save settings",
+    "detailed_artwork": {
+      "default": "On",
+      "off": "plain town",
+      "osd_status_bit": 12,
+      "stored_in_rbf": true,
+      "source_url": "https://www.arcadeartwork.org/picture.php?/99140",
+      "source_png_sha256": "367514a593c945c04b86f10f057802ba0d94921d5b540c1898174aa711f9fc4e",
+      "map_sha256": "5c8559e6463108fafdbfc19843456c4ebaaef9aa1621464423be136895070a3c",
+      "dimensions": [
+        512,
+        384
+      ],
+      "alpha_levels": 4,
+      "data_bytes": 65536,
+      "pipeline_clocks": 4
+    }
   },
   "limitations": [
     "CRT output untested",
@@ -158,11 +178,6 @@
     "single_cinematronics_rbf_installed": true,
     "installation_checker": "passed for all three MRAs",
     "launch_checks": {
-      "Rip Off": {
-        "selected_rbf": "Arcade-Cinematronics_20261011.rbf",
-        "selected_mra": "Rip Off.mra",
-        "fpga_manager_state": "operating"
-      },
       "Armor Attack": {
         "selected_rbf": "Arcade-Cinematronics_20261011.rbf",
         "selected_mra": "Armor Attack.mra",
@@ -170,6 +185,6 @@
       }
     },
     "left_selected": "Armor Attack",
-    "limits": "SSH checks verify installed files and FPGA operating state. Armor Attack playback and revised sound balance additionally confirmed by user; see hardware_validation for scope and remaining checks."
+    "limits": "SSH checks verify installed paths and FPGA operating state. Detailed artwork toggle, Save settings and wall/collision alignment need user confirmation; sound RTL matches the previously confirmed build."
   }
 }

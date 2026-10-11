@@ -43,7 +43,7 @@ Yosys; Docker image `theypsilon/quartus-lite-c5:17.0.2`.
 | Armor Attack service diagnostic | 12 frames; 301,168 checked instructions; 2,508 vectors; every framebuffer pixel passes |
 | Armor Attack sound serial latch, seven effect groups, all tank rates and headroom | Pass; settled short explosion bursts retained at 50 MHz; worst directed peak 29,131 |
 | Armor Attack audio balance | Explosions exceed beeper by at least 8x/5x RMS; firing/helicopter exceed engine/treads by at least 3x |
-| MiSTer video pipeline, including the Armor Attack city overlay | 15 complete RGB frames pass, including six Armor Attack frames |
+| MiSTer video pipeline, including plain/detailed Armor city and overlay bypass | 24 complete RGB frames pass; every pixel and sync alignment checked |
 
 The differential oracle is the original pinned MAME instruction function.
 Agreement establishes compatibility with that reference, not independent
@@ -86,6 +86,7 @@ bash sim/run_ripoff_sound.sh
 bash sim/run_armora.sh
 bash sim/run_armora_sound.sh
 python3 tools/prepare_armora_overlay.py --check
+python3 tools/prepare_armora_artwork.py --check
 bash sim/run_overlay.sh
 bash sim/run_mister.sh
 bash tools/synth.sh

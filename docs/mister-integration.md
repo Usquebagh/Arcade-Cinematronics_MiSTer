@@ -97,7 +97,8 @@ Every reported timing category must pass the build gate before packaging.
 malformed downloads, reload recovery, DIP isolation, keyboard/controller input
 and complete video frames. Connected machine tests compare CPU instructions
 and framebuffer pixels to references. Overlay tests cover every visible pixel
-and all video settings; the real MiSTer pipeline is checked across fifteen RGB frames, including six Armor Attack town frames.
+and video settings; the real MiSTer pipeline is checked across 24 RGB frames,
+including detailed Armor Attack artwork and Screen overlay bypass.
 For Verilator, `tools/prepare_video_sim.py` adapts legacy Quartus declarations
 only in a temporary simulation copy; hardware `sys/` logic is unchanged.
 
@@ -110,8 +111,8 @@ user feedback, but is WIP with two-player operation, overlay alignment and
 measured sound comparison pending. The user confirmed the revised sound
 balance is like the arcade on MiSTer.
 The current three-game build is installed on MiSTer. The installation checker
-resolves all three MRAs to the dated RBF. Rip Off and Armor Attack launch checks
-report FPGA state `operating`; the manifest records those checks separately from
+resolves all three MRAs to the dated RBF. Armor Attack's launch check reports
+FPGA state `operating`; the manifest records those checks separately from
 user feedback: Armor Attack playback and sound balance are now confirmed.
 Other profiles still need regression listening. CRT output, physical vector
 timing, gel/CRT calibration and measured analog sound fidelity remain unverified.

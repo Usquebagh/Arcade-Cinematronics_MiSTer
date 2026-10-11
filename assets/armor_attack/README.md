@@ -2,8 +2,8 @@
 
 Source and archive credit: [ArcadeArtwork.org - armor attack overlay](https://www.arcadeartwork.org/picture.php?/99140).
 
-The user supplied overlay.png from that page and requested inclusion and
-attribution. The 1448x1086 image contains transparent black town detail;
+The original [overlay.png](overlay.png) is retained from that page with archive attribution.
+The 1448x1086 image contains transparent black town detail;
 it does not include a cabinet bezel or game ROM data.
 
 Original artwork rights remain with their respective owners. This artwork

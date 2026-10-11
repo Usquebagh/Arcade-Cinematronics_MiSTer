@@ -8,13 +8,14 @@ like light passing through a gel. Black stays black.
 Rip Off bypasses the Star Castle filter and remains monochrome. Vector
 brightness still applies; overlay enable/strength affect Star Castle and Armor Attack.
 
-The OSD offers three controls:
+The OSD offers four controls:
 
 | Setting | Values | Default |
 | --- | --- | --- |
 | Screen overlay | On, Off | On |
 | Vector brightness | 100%, 75%, 125%, 150% | 100% |
 | Overlay strength | 100%, 75%, 50%, 25% | 100% |
+| Detailed artwork (Armor Attack) | On, Off | On |
 
 Use MiSTer's **Save settings** to retain these choices for the game. They use
 the ordinary HPS status/configuration mechanism, not presets or game NVRAM.
@@ -26,8 +27,9 @@ phosphor decay and cabinet artwork are not implemented by these controls.
 
 Armor Attack adds a static town/road reflection layer and transmission tint,
 generated from the CC0 MAME SVG layout. Overlay strength also dims the town
-background. Its three-clock stage is shared with the other games' bypass path;
-see [Armor Attack](armor-attack.md#town-overlay).
+background. Its four-clock stage is shared with the other games' bypass path;
+see [Armor Attack](armor-attack.md#town-overlay). **Detailed artwork** separately
+adds credited transparent building detail; Off keeps the plain town.
 
 ## Shared implementation
 
@@ -83,7 +85,8 @@ brightness levels against independent circle equations, RGB input, all video
 control combinations, 8-bit levels at each band, bypass transitions, reset,
 black background, blanking and timing alignment. `bash sim/run_mister.sh`
 also checks every output RGB pixel through the real MiSTer video pipeline in
-three colour, three monochrome, three adjusted-colour and six Armor town frames.
+24 frames covering colour, monochrome, plain/detailed town, adjusted settings
+and detailed-artwork bypass when Screen overlay is Off.
 
 An optional local machine PGM can be passed to `sim/run_overlay.sh` with a PPM
 output path to render and check the real-game frame through the RTL. Captures

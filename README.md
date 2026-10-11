@@ -53,7 +53,9 @@ Armor Attack adds two-player jeep combat through a city playfield. Solar Quest i
 For Rip Off and Armor Attack, each controller operates its own player. Player 2 keyboard controls
 are **A/D** to rotate, **W** to thrust and **F** to fire.
 
-The OSD provides **Screen overlay**, **Vector brightness** and **Overlay strength**.
+The OSD provides **Screen overlay**, **Vector brightness**, **Overlay strength**
+and **Detailed artwork**. For Armor Attack, On adds transparent building detail;
+Off retains the plain city view.
 Use MiSTer's **Save settings** to retain your choices. See
 [video controls](docs/colour.md) for details.
 Rip Off uses monochrome output with adjustable brightness. Armor Attack adds a static city/road overlay.
@@ -78,8 +80,9 @@ Keep only the current Cinematronics RBF
 in `cores/`. See [release details](releases/README.md) for build information
 and installation troubleshooting.
 
-Game ROMs and other proprietary game data or documentation are not included
-or distributed with this repository.
+Game ROMs and scanned manuals are not included or distributed with this
+repository. The credited Armor Attack transparency is included under
+[artwork provenance](assets/armor_attack/README.md).
 
 ## Compilation and Tests
 
@@ -99,6 +102,7 @@ synthetic programs and requires no game ROMs. Technical details are in
 - MAME contributors: Star Castle sound-circuit and colour-filter references.
 - MiSTer developers: platform framework, imported through the Fire Trap core.
 - Hardware documentation authors: original CPU, board and circuit references.
+- [ArcadeArtwork.org](https://www.arcadeartwork.org/picture.php?/99140): Armor Attack transparent town artwork.
 
 See [reference provenance](docs/references.md) for source revisions and licenses.
 
@@ -108,3 +112,4 @@ The integrated MiSTer core is [GPL-3.0-or-later](LICENSE). Original CPU,
 machine, video modules and tools remain
 [BSD-3-Clause](LICENSES/Cinematronics-BSD-3-Clause.txt) individually.
 Imported components retain their respective licenses and credits.
+Artwork provenance and rights are recorded separately in the asset folder.

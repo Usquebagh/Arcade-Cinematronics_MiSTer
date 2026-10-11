@@ -40,12 +40,37 @@ padding). The palette represents black borders, green roads and yellow
 building areas. A narrow SVG stroke is rasterized without antialiasing.
 
 The compositor applies tint and adds the static reflection with saturation.
-The existing Star Castle stage still handles vector brightness; a three-clock
+The existing Star Castle stage still handles vector brightness; a four-clock
 Armor/bypass stage follows it with aligned coordinates, enables, blanking
 and sync. All games share the same pipeline latency. **Screen overlay**
 and **Overlay strength** affect this playfield; Vector brightness affects
 the vectors. Verify road/collision alignment using Service mode's maze
 pattern and actual wall impacts on hardware.
+
+### Detailed artwork
+
+**Detailed artwork On/Off** adds or removes transparent black building detail
+from [ArcadeArtwork.org](https://www.arcadeartwork.org/picture.php?/99140).
+The original 1448x1086 PNG is retained under `assets/armor_attack/`, with
+archive credit and separate artwork provenance. No cabinet bezel is added.
+
+`tools/prepare_armora_artwork.py` scales its alpha channel into the same
+4.04x3.03 bounds and vertical offset as the CC0 town. Lanczos resampling
+preserves fine details at 512x384. Four opacity levels use a 64 KiB packed
+ink map, with the 128 unused bottom rows clear.
+
+The ink ROM is read beside the town ROM. An extra output stage attenuates
+the composed vectors and background according to ink opacity; Overlay
+strength blends the ink toward transparency. Every game uses four-clock
+latency, preserving pixel/sync alignment. Screen overlay Off bypasses
+both town and ink; Detailed artwork Off retains the plain town. Its status
+bit is 12; all earlier settings retain their original bits. MiSTer's Save
+settings retains the choice.
+
+The map is embedded in the RBF; no extra SD-card artwork file or MRA part
+is needed. Colours still come from the existing town palette. Final wall,
+artwork and collision alignment require hardware checking; scans and
+physical overlays can have small placement differences.
 
 ## Sound
 
@@ -112,9 +137,9 @@ limits; passing digital tests does not establish exact analog fidelity.
   8x/5x RMS and firing/helicopter to exceed engine/treads by at least 3x.
   Revised isolated levels are approximately 2387/1560 for high/low explosions,
   1912 for gunfire, 2297 for helicopter, 222 for beep and 450 for engine/treads.
-- The actual MiSTer video pipeline passes three default and three adjusted
-  Armor town frames, checking every output RGB pixel and sync alignment,
-  alongside the existing nine Star Castle/monochrome frames.
+- The actual MiSTer video pipeline passes 24 complete frames, checking every
+  RGB pixel and sync alignment: colour/monochrome/plain town, detailed town
+  at default/adjusted settings, and Screen overlay bypass with artwork On.
 
 Reproduce with `bash sim/run_armora.sh` and `bash sim/run_armora_sound.sh`.
 Optional local program/captures:
