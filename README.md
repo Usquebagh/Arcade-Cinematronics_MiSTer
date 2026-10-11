@@ -21,7 +21,8 @@ Armor Attack adds two-player jeep combat through a city playfield. Solar Quest i
 > **Armor Attack boots and plays, but remains WIP** with city overlay and synthesized sound;
 > its sound balance and detailed artwork alignment are confirmed by user testing.
 > Two-player operation needs testing. The current three-game
-> build passes simulation, fitting and reported internal timing.
+> build passes simulation, fitting and reported internal timing. The new beam/glow
+> controls need visual confirmation on MiSTer.
 >
 > **Known issues:** **CRT output is untested.** Star Castle's revised explosion
 > levels still need listening confirmation. Physical colour,
@@ -36,7 +37,7 @@ Armor Attack adds two-player jeep combat through a city playfield. Solar Quest i
 | --- | --- | --- |
 | CPU | Cinematronics CCPU, two 12-bit accumulators | SystemVerilog CCPU, checked against the pinned MAME instruction reference |
 | Program | Four ROM chips, 8 or 16 KiB total | Writable program ROM, loaded through the MRA |
-| Video | Monochrome vector display with coloured screen gels | 512x384 raster framebuffer, 16 brightness levels, Star Castle colour filter and Armor Attack city overlay |
+| Video | Monochrome vector display with coloured screen gels | 512x384 raster framebuffer, 16 source intensity levels, adjustable beam glow, Star Castle colour filter and Armor Attack city overlay |
 | Sound | Game-specific discrete sound boards | Synthesized oscillators, noise and envelopes: Star Castle, Rip Off and Armor Attack models; signed mono audio |
 
 ## Controls
@@ -53,8 +54,9 @@ Armor Attack adds two-player jeep combat through a city playfield. Solar Quest i
 For Rip Off and Armor Attack, each controller operates its own player. Player 2 keyboard controls
 are **A/D** to rotate, **W** to thrust and **F** to fire.
 
-The OSD provides **Screen overlay**, **Vector brightness**, **Overlay strength**
-and **Detailed artwork**. For Armor Attack, On adds transparent building detail;
+The OSD provides **Beam brightness**, **Glow amount**, **Glow spread**,
+**Screen overlay**, **Overlay strength** and **Detailed artwork**. Glow adds
+soft light around the sharp vector lines; the default is Medium/Soft. For Armor Attack, On adds transparent building detail;
 Off retains the plain city view.
 Use MiSTer's **Save settings** to retain your choices. See
 [video controls](docs/colour.md) for details.
@@ -101,6 +103,7 @@ synthetic programs and requires no game ROMs. Technical details are in
 - Aaron Giles and MAME: CCPU instruction reference and Cinematronics board definitions.
 - MAME contributors: Star Castle sound-circuit and colour-filter references.
 - MiSTer developers: platform framework, imported through the Fire Trap core.
+- Videodr0me: [Star Wars renderer](https://github.com/Videodr0me/Arcade-StarWars_MiSTer) reference for adjustable beam/glow options.
 - Hardware documentation authors: original CPU, board and circuit references.
 - [ArcadeArtwork.org](https://www.arcadeartwork.org/picture.php?/99140): Armor Attack transparent town artwork.
 

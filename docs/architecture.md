@@ -85,8 +85,10 @@ This interface is connected to the live machine and MiSTer scanout.
 The capture test replays reference-checked CPU segments
 through the RTL video component. FRM groups the capture's frames; the final
 instruction-limited group is incomplete and excluded from framebuffer checks.
-Timing is not real-time in this capture path. No antialiasing, phosphor decay,
-cabinet overlay or normalization-dependent point brightness is implemented yet.
+Timing is not real-time in this capture path. Antialiasing, phosphor decay
+and normalization-dependent point brightness remain future work. The MiSTer
+presentation path adds adjustable spatial beam glow before the colour/artwork
+compositors; see [video controls](colour.md).
 
 ## Connected machine
 

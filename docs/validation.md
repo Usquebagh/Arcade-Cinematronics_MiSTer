@@ -44,7 +44,8 @@ Yosys; Docker image `theypsilon/quartus-lite-c5:17.0.2`.
 | Armor Attack service diagnostic | 12 frames; 301,168 checked instructions; 2,508 vectors; every framebuffer pixel passes |
 | Armor Attack sound serial latch, seven effect groups, all tank rates and headroom | Pass; settled short explosion bursts retained at 50 MHz; worst directed peak 29,131 |
 | Armor Attack audio balance | Explosions exceed beeper by at least 8x/5x RMS; firing/helicopter exceed engine/treads by at least 3x |
-| MiSTer video pipeline, including plain/detailed Armor city and overlay bypass | 24 complete RGB frames pass; every pixel and sync alignment checked |
+| Beam glow, all 48 brightness/amount/spread combinations | 144 cases and 288 frames match independent convolution; impulses, edges, lines, reset/black, sync and overdrive pass |
+| MiSTer video pipeline, including glow, plain/detailed Armor city and overlay bypass | 42 complete RGB frames pass; every pixel and sync alignment checked |
 
 The differential oracle is the original pinned MAME instruction function.
 Agreement establishes compatibility with that reference, not independent
@@ -67,7 +68,7 @@ antialiased/phosphor output.
 - Physical vector timing, point intensity,
   intensity calibration and persistence.
 - CRT output and measured analog sound fidelity.
-- Frame synchronization, glow and bloom.
+- Frame synchronization and hardware tuning of the implemented spatial glow.
 - Other games and special memory configurations, including QB-3.
 
 ## Reproducing the Checks
@@ -89,6 +90,7 @@ bash sim/run_armora_sound.sh
 python3 tools/prepare_armora_overlay.py --check
 python3 tools/prepare_armora_artwork.py --check
 bash sim/run_overlay.sh
+bash sim/run_glow.sh
 bash sim/run_mister.sh
 bash tools/synth.sh
 bash tools/synth.sh --quartus

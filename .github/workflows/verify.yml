@@ -41,3 +41,5 @@ jobs:
         run: bash sim/run_mister.sh
       - name: Colour overlay geometry, intensity and bypass
         run: bash sim/run_overlay.sh
+      - name: Beam glow convolution, overdrive, edges, blanking and reset
+        run: bash sim/run_glow.sh

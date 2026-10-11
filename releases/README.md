@@ -1,8 +1,10 @@
 # Current build — 2026-10-11
 
 One RBF supports **Star Castle (version 3)**, **Rip Off** and **Armor Attack**,
-each selected by its own MRA. All three have synthesized sound and adjustable
-brightness. Star Castle has a colour filter; Armor Attack has a static city
+each selected by its own MRA. All three have synthesized sound, adjustable
+beam brightness and spatial glow. **Glow amount** and **Glow spread** default
+to Medium/Soft; higher beam brightness increases neighbouring light. The new
+glow needs visual confirmation on MiSTer. Star Castle has a colour filter; Armor Attack has a static city
 overlay. Simulation and reported internal timing pass. Star Castle gameplay
 was confirmed on the previous two-game build.
 **Rip Off is bootable but otherwise untested/WIP**: it boots and plays on

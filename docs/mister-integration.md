@@ -59,9 +59,10 @@ progressive at 31.25 kHz and preserves all sixteen brightness levels. The HPS
 gamma capability flag is off. The roughly 38 Hz game presents framebuffers
 independently of display blanking, so visible bank swaps can tear a frame.
 
-The Star Castle colour filter, brightness and overlay-strength controls are
-implemented in a shared compositor; see [colour](colour.md). Glow, bloom and
-phosphor persistence are not implemented. CRT output remains untested.
+The shared beam stage retains brightness overdrive through a 3/5/7-tap
+spatial glow filter before final clipping. Gel/town artwork is composed
+afterward; see [video controls](colour.md). Phosphor persistence remains future
+work. CRT output and visual tuning of the new glow remain untested.
 
 The sound model observes CCPU output latches at 50 MHz and updates its
 RC/VCO/noise model at 96 kHz. Signed 16-bit mono feeds both MiSTer channels.
@@ -97,7 +98,7 @@ Every reported timing category must pass the build gate before packaging.
 malformed downloads, reload recovery, DIP isolation, keyboard/controller input
 and complete video frames. Connected machine tests compare CPU instructions
 and framebuffer pixels to references. Overlay tests cover every visible pixel
-and video settings; the real MiSTer pipeline is checked across 24 RGB frames,
+and video settings; the real MiSTer pipeline is checked across 42 RGB frames,
 including detailed Armor Attack artwork and Screen overlay bypass.
 For Verilator, `tools/prepare_video_sim.py` adapts legacy Quartus declarations
 only in a temporary simulation copy; hardware `sys/` logic is unchanged.

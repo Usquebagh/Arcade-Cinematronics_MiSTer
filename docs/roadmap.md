@@ -19,7 +19,7 @@ Next steps:
 
 - Test CRT output and additional displays and controllers.
 - Synchronize framebuffer presentation to display blanking to prevent tearing.
-- Improve vector appearance with optional glow and phosphor persistence.
+- Tune the implemented beam glow on hardware; add phosphor persistence and smoother vector edges.
 - Calibrate physical vector timing, colour, intensity and analog sound.
 - Validate Rip Off gameplay and sound on hardware.
 - Validate Armor Attack two-player operation and remaining hardware details.

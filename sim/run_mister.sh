@@ -16,7 +16,7 @@ cd "$work_dir"
 python3 tools/prepare_video_sim.py
 verilator --cc --exe --build --top-module mister_video_harness -Wno-fatal \
   --Mdir obj -CFLAGS "-std=c++17" \
-  rtl/mister/vector_scanout.sv rtl/video/vector_overlay.sv rtl/video/armora_overlay.sv rtl/video/armora_artwork.sv sim/mister_video_harness.sv \
+  rtl/mister/vector_scanout.sv rtl/video/vector_glow.sv rtl/video/vector_overlay.sv rtl/video/armora_overlay.sv rtl/video/armora_artwork.sv sim/mister_video_harness.sv \
   sys/arcade_video.v sys/video_cleaner.sv sys/video_mixer.sv \
   sys/gamma_corr.sv sys/video_freezer.sv sys/scandoubler.v sys/hq2x.sv sync_fix.v \
   "$PWD/sim/mister_video_test.cpp" >compile.log 2>&1 \

@@ -1,71 +1,67 @@
-# Colour overlays and video controls
+# Beam glow, colour overlays and video controls
 
-The first profile reproduces MAME's fixed Star Castle colour filter: a blue
-field and red, orange and yellow regions around the centre. It does not assign
-colours to objects. Any vector passing through a region receives its tint,
-like light passing through a gel. Black stays black.
-
-Rip Off bypasses the Star Castle filter and remains monochrome. Vector
-brightness still applies; overlay enable/strength affect Star Castle and Armor Attack.
-
-The OSD offers four controls:
+All three games share adjustable beam brightness and a soft glow around the
+sharp vector lines. Star Castle additionally uses a fixed screen-gel filter;
+Rip Off stays monochrome. Armor Attack adds a town reflection, tint and optional
+transparent building detail. Effects do not assign colours to game objects.
 
 | Setting | Values | Default |
 | --- | --- | --- |
+| Beam brightness | 100%, 75%, 125%, 150% | 100% |
+| Glow amount | Medium, Off, Low, High | Medium |
+| Glow spread | Soft, Tight, Wide | Soft |
 | Screen overlay | On, Off | On |
-| Vector brightness | 100%, 75%, 125%, 150% | 100% |
 | Overlay strength | 100%, 75%, 50%, 25% | 100% |
 | Detailed artwork (Armor Attack) | On, Off | On |
 
-Use MiSTer's **Save settings** to retain these choices for the game. They use
-the ordinary HPS status/configuration mechanism, not presets or game NVRAM.
-Existing aspect and service settings keep their original bit positions.
-Brightness increases saturate instead of wrapping; overlay strength blends
-the filter gains toward white, without lighting empty pixels. These are
-display preferences, not calibrated CRT circuit emulation. Bloom, glow,
-phosphor decay and cabinet artwork are not implemented by these controls.
-
-Armor Attack adds a static town/road reflection layer and transmission tint,
-generated from the CC0 MAME SVG layout. Overlay strength also dims the town
-background. Its four-clock stage is shared with the other games' bypass path;
-see [Armor Attack](armor-attack.md#town-overlay). **Detailed artwork** separately
-adds credited transparent building detail; Off keeps the plain town.
+Use MiSTer's **Save settings** to retain choices for the game. Existing status
+bits keep their meaning; Glow amount uses bits 14:13 and spread uses 16:15.
+Try 100% brightness with Medium/Soft first. Higher brightness now feeds more
+energy into the glow, even when the line centre already reaches white. With
+Glow Off, brightness still clips at output white, as before. An empty vector
+frame remains black; pixels near a lit vector receive its glow.
 
 ## Shared implementation
 
-`rtl/video/vector_overlay.sv` accepts RGB and aligned pixel coordinates,
-sync, blanking and enables. A profile supplies a row-span memory and packed
-RGB coefficients. Each span has a valid bit and inclusive left/right X bounds;
-later spans take priority. This represents Star Castle's four regions with
-512 rows of 76 bits (38,912 bits), rather than a full-screen RGB image.
-The first 384 rows are visible; padding rows contain no spans.
+The game still draws a 4-bit, 512x384 framebuffer. Scanout expands the source
+intensity to eight bits. `rtl/video/vector_glow.sv` applies beam brightness
+without clipping, retaining nine-bit energy through a separable convolution.
+The kernels are Tight `[1 2 1]/4`, Soft `[1 4 6 4 1]/16` and Wide
+`[1 6 15 20 15 6 1]/64`, applied vertically then horizontally with rounding.
+Glow gain is Low 1/4, Medium 1/2 or High 1. The narrow primary and glow are
+combined before the final 8-bit clamp. This is spatial beam glow, not temporal
+phosphor persistence or antialiased vector drawing.
 
-The game continues to draw its original 4-bit intensity framebuffer. Scanout
-provides coordinates for the exact grayscale sample, in upright screen space.
-The compositor performs a synchronous row lookup, applies brightness with
-clamping, then multiplies RGB by the selected Q8 gains. Pixel data and all
-timing signals have the same two-clock latency in both colour and bypass modes.
-The overlay precedes the MiSTer scaler, so aspect changes scale it with the game.
-Unity gain is exactly 256/256; the default bypass is bit-exact grayscale.
+Six full-raster scanline buffers and horizontal registers preserve the centre
+pixel's coordinates, sync and blanking. All settings, including Off, have the
+same delay: 2407 pixel enables (about 96 microseconds at 25 MHz). Blanking
+samples contribute zero, so opposite edges and successive frames cannot bleed
+into one another. Reset suppresses unread RAM rows until they have been filled.
+Settings change at input frame start during the delayed output's blanking.
+The filter is downstream of the drawing framebuffer and introduces no CPU
+backpressure, new memory controller or SDRAM requirement.
 
-`tools/prepare_overlay.py` compiles the supplied static MAME definition into
-`starcastle_spans.hex` and `starcastle_gains.svh`. It supports opaque rectangles
-and disks covering the screen with multiply blending, rejects unsupported
-features, and uses integer/rational pixel-centre geometry. This is a deliberately
-small subset of MAME layouts, not a general artwork loader. Another simple
-game profile can use the same compositor with different span and gain data.
-Electronic-colour games will still need their actual colour latches and an RGB
-renderer/framebuffer; accepting RGB here does not implement that hardware.
+The beam stage precedes the gel/town compositors. Neighbouring light receives
+the filter at its own screen position. Armor Attack's static reflection and
+building ink are composed afterward, keeping the artwork sharp. Coordinates
+travel with the beam through every delay so the artwork stays aligned.
 
-MAME scales an element's complete bounds to its placement in the view. The
-Star Castle element covers source Y=.125..875. Normalizing that bounding box
-to our 512x384, 4:3 viewport makes the three centre discs circular: radii
-62.72, 48.64 and 37.12 pixels, centred at (256,192). Using the source Y fractions
-directly as screen fractions would incorrectly flatten them. The reference
-gains are blue (0,.25,1), red (1,.125,.125), orange (1,.5,.0625) and yellow
-(1,1,.125). Hard pixel boundaries and Q8 integer rounding replace MAME's
-artwork antialiasing; physical gel colour, CRT bloom and display gamma are
-not calibrated.
+`rtl/video/vector_overlay.sv` retains the shared RGB/span interface and its
+two-clock latency. The top-level now selects unity brightness there, since
+beam drive has already been applied. The Star Castle map stores four spans
+per row in 512 rows of 76 bits rather than a full-screen RGB image. Later spans
+win; overlay strength blends tint gains toward white. The compositor precedes
+the MiSTer scaler, so the game, glow and artwork scale together.
+
+`tools/prepare_overlay.py` generates the map and coefficients from MAME's
+static layout. Normalizing its complete bounds maps the centre discs to radii
+62.72, 48.64 and 37.12 pixels centred at (256,192). The original gains remain
+blue (0,.25,1), red (1,.125,.125), orange (1,.5,.0625) and yellow (1,1,.125).
+Armor Attack uses the CC0 MAME town map and separately credited transparency;
+see [Armor Attack](armor-attack.md#town-overlay).
+
+These are adjustable display effects. Physical CRT beam shape, brightness,
+gamma and gel transmission have not been calibrated. CRT output is untested.
 
 ## Provenance and checks
 
@@ -77,15 +73,17 @@ from this artwork definition, not game ROMs or a scanned manual.
 - [Pinned Star Castle layout](https://github.com/mamedev/mame/blob/9eea5804dc46644dd2dc9c3bc28cbb6c2e93c54e/src/mame/layout/starcas.lay).
 - [MAME layout coordinates and colours](https://docs.mamedev.org/techspecs/layout_files.html).
 - [Videodr0me's Star Wars core](https://github.com/Videodr0me/Arcade-StarWars_MiSTer)
-  informed the request for adjustable video options. Its CRT pipeline has not
-  been imported; these controls are an original, simpler implementation.
+  was inspected at commit `64aaa04aaf333c013c1b521abb68260165fcfa01`, especially
+  `vfb_blur`, `vfb_halo_pipeline` and `vfb_readout`. It informed the separation
+  of beam, glow and future decay. No Star Wars RTL is imported; our compact
+  grayscale convolution and scanline packet pipeline are an original implementation.
 
 `bash sim/run_overlay.sh` checks every visible position at all 16 framebuffer
 brightness levels against independent circle equations, RGB input, all video
 control combinations, 8-bit levels at each band, bypass transitions, reset,
 black background, blanking and timing alignment. `bash sim/run_mister.sh`
 also checks every output RGB pixel through the real MiSTer video pipeline in
-24 frames covering colour, monochrome, plain/detailed town, adjusted settings
+42 frames covering colour, monochrome, plain/detailed town, adjusted settings
 and detailed-artwork bypass when Screen overlay is Off.
 
 An optional local machine PGM can be passed to `sim/run_overlay.sh` with a PPM
@@ -95,5 +93,6 @@ gate and has been installed on MiSTer with verified RBF/MRA hashes. MiSTer is
 running with that RBF and MRA after a launch request. On 2026-10-04 the user
 confirmed that gameplay and the brightness/overlay controls work. **CRT output
 has not been tested.** Save/reload persistence has not been explicitly verified.
-The current controls are functional colour/brightness adjustments; neon glow,
-bloom and phosphor persistence remain future work.
+The 2026-10-11 beam/glow update passes 288 component frames and 42 complete
+MiSTer RGB frames. Visual tuning of this update remains pending; phosphor
+persistence is not implemented.

@@ -12,7 +12,9 @@ module emu (
         "O[122:121],Aspect ratio,Original,Full Screen,[ARC1],[ARC2];",
         "O[7],Screen overlay,On,Off;",
         "O[12],Detailed artwork,On,Off;",
-        "O[9:8],Vector brightness,100%,75%,125%,150%;",
+        "O[9:8],Beam brightness,100%,75%,125%,150%;",
+        "O[14:13],Glow amount,Medium,Off,Low,High;",
+        "O[16:15],Glow spread,Soft,Tight,Wide;",
         "O[11:10],Overlay strength,100%,75%,50%,25%;",
         "-;DIP;O[6],Service mode,Off,On;",
         "-;R[0],Reset;",
@@ -93,23 +95,35 @@ module emu (
         .pixel_x(pixel_x), .pixel_y(pixel_y),
         .hs(hs), .vs(vs), .hblank(hblank), .vblank(vblank)
     );
+    wire [8:0] beam_x, beam_y;
+    wire [7:0] beam_gray;
+    wire beam_ce, beam_hs, beam_vs, beam_hblank, beam_vblank;
+    vector_glow beam (
+        .clk(clk_sys), .reset(!pll_locked), .brightness(status[9:8]),
+        .amount(status[14:13]), .spread(status[16:15]),
+        .x_in(pixel_x), .y_in(pixel_y), .gray_in(display_gray),
+        .ce_in(ce_pix), .hs_in(hs), .vs_in(vs), .hblank_in(hblank), .vblank_in(vblank),
+        .x_out(beam_x), .y_out(beam_y), .gray_out(beam_gray),
+        .ce_out(beam_ce), .hs_out(beam_hs), .vs_out(beam_vs),
+        .hblank_out(beam_hblank), .vblank_out(beam_vblank)
+    );
     `include "rtl/video/overlays/starcastle_gains.svh"
     wire [23:0] display_rgb;
     wire colour_ce, colour_hs, colour_vs, colour_hblank, colour_vblank;
     vector_overlay #(.SPANS(STARCASTLE_OVERLAY_SPANS),
                      .GAINS(STARCASTLE_OVERLAY_GAINS)) overlay (
         .clk(clk_sys), .reset(!pll_locked), .enabled(!status[7] && game_id == 0),
-        .brightness(status[9:8]), .strength(status[11:10]),
-        .x(pixel_x), .y(pixel_y), .rgb_in({display_gray,display_gray,display_gray}),
-        .ce_in(ce_pix), .hs_in(hs), .vs_in(vs), .hblank_in(hblank), .vblank_in(vblank),
+        .brightness(2'd0), .strength(status[11:10]),
+        .x(beam_x), .y(beam_y), .rgb_in({beam_gray,beam_gray,beam_gray}),
+        .ce_in(beam_ce), .hs_in(beam_hs), .vs_in(beam_vs), .hblank_in(beam_hblank), .vblank_in(beam_vblank),
         .rgb_out(display_rgb), .ce_out(colour_ce), .hs_out(colour_hs), .vs_out(colour_vs),
         .hblank_out(colour_hblank), .vblank_out(colour_vblank)
     );
     // Match the coordinates to the preceding two-clock Star/bypass compositor.
     logic [8:0] artwork_x1,artwork_x2,artwork_y1,artwork_y2;
     always_ff @(posedge clk_sys) begin
-        artwork_x1<=pixel_x;artwork_x2<=artwork_x1;
-        artwork_y1<=pixel_y;artwork_y2<=artwork_y1;
+        artwork_x1<=beam_x;artwork_x2<=artwork_x1;
+        artwork_y1<=beam_y;artwork_y2<=artwork_y1;
     end
     wire [23:0] final_rgb;
     wire final_ce,final_hs,final_vs,final_hblank,final_vblank;
