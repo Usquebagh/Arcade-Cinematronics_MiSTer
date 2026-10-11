@@ -69,7 +69,7 @@
     "ripoff": "boots and plays per user; otherwise untested/WIP"
   },
   "simulation": {
-    "github_ci": "pending for new source",
+    "github_ci": "passed; validated commit contains the exact built RTL",
     "starcastle": {
       "frames": 28,
       "checked_instructions": 1031753,
@@ -132,7 +132,9 @@
       ],
       "captured_game_frames": 9
     },
-    "prior_game_validation_source_commit": "bdf6453d58f80ec91a93d12fc02e9c9acb7bfd71; CPU/rasterizer/framebuffer/audio RTL unchanged"
+    "prior_game_validation_source_commit": "bdf6453d58f80ec91a93d12fc02e9c9acb7bfd71; CPU/rasterizer/framebuffer/audio RTL unchanged",
+    "github_ci_run_url": "https://github.com/Usquebagh/Arcade-Cinematronics_MiSTer/actions/runs/38122707583",
+    "github_ci_head_sha": "cbb95049540b52ebe7a7b3ec283c0b5e2b6aaeb5"
   },
   "game_rom_embedded": false,
   "audio": {
@@ -260,6 +262,7 @@
     },
     "left_selected": "Star Castle",
     "rollback_copy": "/tmp/cinematronics-before-glow",
-    "limits": "Installed paths, hashes, requested MRAs and FPGA operating state checked over SSH. Visual tuning, gameplay regression, settings save/reload and CRT output need user confirmation."
+    "limits": "Installed paths, hashes, requested MRAs and FPGA operating state checked over SSH. Visual tuning, gameplay regression, settings save/reload and CRT output need user confirmation.",
+    "published_github_rbf_sha256_matches": true
   }
 }
