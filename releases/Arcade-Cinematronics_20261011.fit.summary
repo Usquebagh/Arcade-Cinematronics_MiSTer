@@ -1,12 +1,12 @@
-Fitter Status : Successful - Sun Oct 11 08:46:31 2026
+Fitter Status : Successful - Sun Oct 11 09:19:08 2026
 Quartus Prime Version : 17.0.2 Build 602 07/19/2017 SJ Lite Edition
 Revision Name : Arcade-Cinematronics
 Top-level Entity Name : sys_top
 Family : Cyclone V
 Device : 5CSEBA6U23I7
 Timing Models : Final
-Logic utilization (in ALMs) : 13,175 / 41,910 ( 31 % )
-Total registers : 18487
+Logic utilization (in ALMs) : 13,277 / 41,910 ( 32 % )
+Total registers : 18498
 Total pins : 145 / 314 ( 46 % )
 Total virtual pins : 0
 Total block memory bits : 3,797,083 / 5,662,720 ( 67 % )

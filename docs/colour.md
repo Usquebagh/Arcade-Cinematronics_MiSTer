@@ -94,10 +94,12 @@ and detailed-artwork bypass when Screen overlay is Off.
 
 An optional local machine PGM can be passed to `sim/run_overlay.sh` with a PPM
 output path to render and check the real-game frame through the RTL. Captures
-stay under ignored `build/`. The glow build passes full fitting and reported
-internal timing, with 13,175 ALMs, 475 RAM blocks and 93 DSP blocks. Compared
-with the previous build it adds 216 ALMs and 12 RAM blocks, with no extra DSP
-blocks. It is installed on MiSTer with verified RBF/MRA hashes; all three MRA
+stay under ignored `build/`. The initial glow build passed full fitting and
+reported internal timing, with 13,175 ALMs, 475 RAM blocks and 93 DSP blocks.
+Compared with the previous artwork build it added 216 ALMs and 12 RAM blocks,
+with no extra DSP blocks. The game-specific menu build also passes fitting
+and timing; its current resource counts are in the
+[manifest](../releases/Arcade-Cinematronics_20261011.json). It is installed on MiSTer with verified RBF/MRA hashes; all three MRA
 launch requests reached FPGA state `operating`. Star Castle is left selected. On 2026-10-04 the user
 confirmed that gameplay and the brightness/overlay controls work. **CRT output
 has not been tested.** Save/reload persistence has not been explicitly verified.
