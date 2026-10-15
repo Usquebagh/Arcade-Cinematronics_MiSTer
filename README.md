@@ -1,14 +1,17 @@
 # Cinematronics vector arcade hardware for MiSTer FPGA
 
-An FPGA implementation of Cinematronics vector arcade hardware for the
-[MiSTer FPGA](https://github.com/MiSTer-devel/Main_MiSTer/wiki) platform,
-supporting **Star Castle (version 3)**, **Rip Off** and **Armor Attack** (1980) in one RBF.
+> **Project completed and archived.** This repository preserves our working
+> MiSTer implementation of Star Castle, Rip Off and Armor Attack. Development
+> has ended; for current development and broader Cinematronics game support,
+> please visit [Videodr0me’s Arcade-StarCastle_MiSTer project](https://github.com/Videodr0me/Arcade-StarCastle_MiSTer).
+>
+> Videodr0me’s work is excellent. We drew inspiration from his video ideas,
+> and his renderer and artwork treatment take these vector games to another
+> level. Many thanks to him for sharing it with the MiSTer community.
 
-Defend your ship against the central cannon, breaking through its rotating
-shield rings while avoiding mines. The core recreates the CCPU, vector display
-and discrete sound, with a colour filter based on the original screen gels.
-Rip Off adds simultaneous two-player defence of the fuel supply.
-Armor Attack adds two-player jeep combat through a city playfield. Solar Quest is planned next.
+This core targets the [MiSTer FPGA](https://github.com/MiSTer-devel/Main_MiSTer/wiki)
+platform and supports **Star Castle (version 3)**, **Rip Off** and **Armor Attack** (1980)
+in one RBF. The remainder of this README documents the project as it was left.
 
 <p align="center">
   <img src="docs/arcade_cabinet.png" alt="Star Castle arcade cabinet" height="310">
